@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 銃弾(?)を動かすモジュール
 public class MoveBall : MonoBehaviour
 {
     public float speed = 5f;
