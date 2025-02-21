@@ -24,6 +24,7 @@ public class HomingEnemy : MonoBehaviour
         }
     }
 
+    // ホーミングするターゲットを探す関数
     void FindTarget()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
