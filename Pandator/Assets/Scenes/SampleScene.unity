@@ -127,6 +127,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1025547986260409452, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+      propertyPath: _trackingOriginType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1025547986266019240, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1716509384324314208, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+      propertyPath: HandType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8716894927445767245, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -169,7 +181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9086462264381382828, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: m_Name
-      value: GameObject
+      value: KumaScene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
