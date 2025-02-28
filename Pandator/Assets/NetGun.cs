@@ -17,7 +17,11 @@ public class NetGun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //実験用
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+        {
+            Shot();
+        }
     }
 
     public void Shot() //弾の発射
