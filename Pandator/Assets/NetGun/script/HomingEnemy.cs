@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 特定の範囲内のターゲット（タグが "Enemy" のオブジェクト）を検出し，そのターゲットに向かってホーミングするモジュール
 public class HomingEnemy : MonoBehaviour
 {
     public float speed = 5f;
@@ -23,9 +24,11 @@ public class HomingEnemy : MonoBehaviour
         }
     }
 
+    // ホーミングするターゲットを探す関数
     void FindTarget()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
+// "Enemy"タグをつけたオブジェクトをホーミングするターゲットとして座標を保持する
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Enemy"))
@@ -37,9 +40,12 @@ public class HomingEnemy : MonoBehaviour
         target = null;
     }
 
-    void MoveTowardsTarget()
-    {
-        Vector3 direction = (target.position - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
-    }
+// 指定されたターゲットに向かって移動するメソッド
+void MoveTowardsTarget()
+{
+    Vector3 direction = (target.position - transform.position).normalized;
+    
+    // direction(ターゲットへの方向の単位ベクトル)に speed(5f) で移動する（時間経過を考慮するため Time.deltaTime を掛ける）
+    transform.position += direction * speed * Time.deltaTime;
+}
 }
