@@ -131,10 +131,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1945159934029030377, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
-      propertyPath: RightController
+    - target: {fileID: 5522309988223445049, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+      propertyPath: PhotonFailureObject
       value: 
-      objectReference: {fileID: 2789154638260431998}
+      objectReference: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
     - target: {fileID: 8716894927445767245, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -184,11 +184,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
---- !u!1 &2789154638260431998 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2976717959892251065, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
-  m_PrefabInstance: {fileID: 274784973}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
