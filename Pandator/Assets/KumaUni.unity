@@ -130,10 +130,14 @@ PrefabInstance:
     - target: {fileID: 1945159934029030377, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: RightController
       value: 
-      objectReference: {fileID: 562251640238119367, guid: 2476cc118710e4540a42e676f3965c85, type: 3}
+      objectReference: {fileID: 1157170497}
     - target: {fileID: 2900304778394850628, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: sceneViewId
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4348127663581250751, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+      propertyPath: m_controller
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5522309988223445049, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: PhotonPlayerObject
@@ -191,6 +195,11 @@ PrefabInstance:
       addedObject: {fileID: 385012152259495117}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+--- !u!1 &1157170497 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4348127663574080357, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
+  m_PrefabInstance: {fileID: 274784973}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1792901857 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 868840153639054337, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
