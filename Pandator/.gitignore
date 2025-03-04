@@ -86,3 +86,8 @@ Pandator_MR_BurstDebugInformation_DoNotShip/
 # utmp
 .utmp/
 
+# .vscode
+.vscode/
+
+  
+
