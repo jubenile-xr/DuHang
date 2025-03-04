@@ -89,5 +89,7 @@ Pandator_MR_BurstDebugInformation_DoNotShip/
 # .vscode
 .vscode/
 
-  
+#vsconfig
+.vsconfig.rej
+.vsconfig
 

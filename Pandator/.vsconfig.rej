@@ -1,8 +1,0 @@
-diff a/Pandator/.vsconfig b/Pandator/.vsconfig	(rejected hunks)
-@@ -0,0 +1,6 @@
-+{
-+  "version": "1.0",
-+  "components": [
-+    "Microsoft.VisualStudio.Workload.ManagedGame"
-+  ]
-+}
