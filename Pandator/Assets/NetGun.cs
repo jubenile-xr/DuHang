@@ -10,13 +10,13 @@ public class NetGun : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [Header("GunComponent")]
     [SerializeField] private GameObject BulletType;
-    [SerializeField] private float BulletSpeed = 1;
+    [SerializeField] private float BulletSpeed = 1f;
     [SerializeField] private GameObject RightController;
-    private float time = 0f;
+    [SerializeField] private float spanTime = 0f;
     private Boolean shotable = true;
     void Start()
     {
-        Debug.Log("start");
+        //Debug.Log("start");
     }
 
     // Update is called once per frame
@@ -32,11 +32,11 @@ public class NetGun : MonoBehaviour
             }
             
         }
-        time += Time.deltaTime;
-        if (time > 5.0f)
+        spanTime += Time.deltaTime;
+        if (spanTime > 5.0f)
         {
             shotable = true;
-            time = 0;
+            spanTime = 0f;
         }
     }
 
@@ -45,6 +45,6 @@ public class NetGun : MonoBehaviour
         //弾の発射位置(transform.position)は再考の余地あり
         GameObject bulletInstance = Instantiate(BulletType, RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
-        Debug.Log("shot!");
+        //Debug.Log("shot!");
     }
 }

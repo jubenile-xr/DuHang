@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9086462264381382828, guid: 8d0a17c1057fcc64587134aaee1e0beb, type: 3}
       propertyPath: m_Name
-      value: KumaScene
+      value: NetGunTestScene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
