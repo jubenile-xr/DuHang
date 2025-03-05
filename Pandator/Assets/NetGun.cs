@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Oculus.Interaction.Unity.Input;
 using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
+
 
 public class NetGun : MonoBehaviour
 {
@@ -23,7 +25,8 @@ public class NetGun : MonoBehaviour
     void Update()
     {
         //実験用
-        if (OVRInput.GetDown(OVRInput.RawButton.A) || Input.GetKeyDown(KeyCode.A))
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.A))
+
         {
             if (shotable)
             {
@@ -36,14 +39,16 @@ public class NetGun : MonoBehaviour
         if (spanTime > 5.0f)
         {
             shotable = true;
-            spanTime = 0f;
+            spanTime = 0;
+
         }
     }
 
     public void Shot() //弾の発射
     {
         //弾の発射位置(transform.position)は再考の余地あり
-        GameObject bulletInstance = Instantiate(BulletType, RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+        GameObject bulletInstance = PhotonNetwork.Instantiate(BulletType.name, RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+
         bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
         //Debug.Log("shot!");
     }
