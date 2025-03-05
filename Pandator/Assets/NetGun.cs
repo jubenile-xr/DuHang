@@ -26,6 +26,7 @@ public class NetGun : MonoBehaviour
     {
         //実験用
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.A))
+
         {
             if (shotable)
             {
@@ -39,6 +40,7 @@ public class NetGun : MonoBehaviour
         {
             shotable = true;
             spanTime = 0;
+
         }
     }
 
@@ -46,6 +48,7 @@ public class NetGun : MonoBehaviour
     {
         //弾の発射位置(transform.position)は再考の余地あり
         GameObject bulletInstance = PhotonNetwork.Instantiate(BulletType.name, RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+
         bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
         //Debug.Log("shot!");
     }
