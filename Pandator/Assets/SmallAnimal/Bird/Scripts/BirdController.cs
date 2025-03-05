@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.XR;
 
 public class BirdController : MonoBehaviour
 {
-    public float walkSpeed = 1.5f;
+    public float walkSpeed = 2.0f;
     public float flightSpeed = 5.0f;
     public float liftSpeed = 2.0f;
     public float turnSpeed = 3.0f;
@@ -17,7 +16,7 @@ public class BirdController : MonoBehaviour
 
     void Start()
     {
-        hmd = Camera.main.transform;
+        hmd = GameObject.Find("OVRCameraRig").transform;
         lastHandVelocity = Vector3.zero;
     }
 
@@ -34,37 +33,27 @@ public class BirdController : MonoBehaviour
 
         Vector3 forwardDirection = new Vector3(hmd.forward.x, 0, hmd.forward.z).normalized;
 
-        InputDevice rightHandDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
-        if (!rightHandDevice.isValid) return;
-
-        Vector2 moveInput;
-        if (rightHandDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out moveInput))
-        {
-            transform.position += forwardDirection * moveInput.y * walkSpeed * Time.deltaTime;
-        }
+        Vector2 moveInput = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, OVRInput.Controller.RTouch);
+        transform.position += forwardDirection * moveInput.y * walkSpeed * Time.deltaTime;
     }
 
     void HandleFlying()
     {
-        InputDevice rightHandDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
-        if (!rightHandDevice.isValid) return;
+        bool jumpPressed = OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch); // A °´Å¥
 
-        Vector3 velocity;
-        if (rightHandDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out velocity))
+        Vector3 velocity = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
+        float acceleration = (velocity - lastHandVelocity).magnitude / Time.deltaTime;
+        lastHandVelocity = velocity;
+
+        if (!isFlying && (jumpPressed || acceleration > flapThreshold))
         {
-            float acceleration = (velocity - lastHandVelocity).magnitude / Time.deltaTime;
-            lastHandVelocity = velocity;
-
-            if (!isFlying && acceleration > flapThreshold)
-            {
-                isFlying = true;
-                verticalVelocity = liftSpeed;
-            }
-            else if (isFlying && acceleration > flapThreshold)
-            {
-                verticalVelocity += liftSpeed * Time.deltaTime;
-                transform.position += hmd.forward * flightSpeed * Time.deltaTime;
-            }
+            isFlying = true;
+            verticalVelocity = liftSpeed;
+        }
+        else if (isFlying && acceleration > flapThreshold)
+        {
+            verticalVelocity += liftSpeed * Time.deltaTime;
+            transform.position += hmd.forward * flightSpeed * Time.deltaTime;
         }
     }
 
