@@ -658,7 +658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2795843464432969359}
   m_Layer: 0
-  m_Name: Room Colliders
+  m_Name: RoomColliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
