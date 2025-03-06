@@ -4,7 +4,7 @@ public class Rabbit : MonoBehaviour
 {
     private string name;
     [SerializeField]
-    float moveSpeed;
+    private float moveSpeed;
     private GameObject model;
     private void Start()
     {
