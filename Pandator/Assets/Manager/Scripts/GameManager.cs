@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
                 //     winner = Winner.SMALLANIMAL;
                 //     setGameState(gameState.END);
                 // }
-
                 break;
             case gameState.END:
                 break;
@@ -67,7 +66,7 @@ public class GameManager : MonoBehaviour
     {
         scoreList[animalName] = score;
     }
-
+    // 勝利した動物の名前をリストに追加する関数
     public void appendWinnerAnimalNameList(string animalName)
     {
         winnerAnimalNameList.Add(animalName);
