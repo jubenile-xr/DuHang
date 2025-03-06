@@ -27,7 +27,7 @@ public class StateManager : MonoBehaviour
             keyMove.setSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
-                Debug.Log("Interrupted");
+                //Debug.Log("Interrupted");
                 ResetState();
             }
         }
