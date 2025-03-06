@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MRScene
       objectReference: {fileID: 0}
+    - target: {fileID: 6950489356203983651, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
