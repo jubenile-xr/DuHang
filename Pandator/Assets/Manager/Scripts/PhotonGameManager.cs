@@ -44,7 +44,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        PhotonNetwork.Instantiate(PhotonFailureObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        PhotonNetwork.Instantiate(PhotonPlayerObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
 
     }
 
@@ -58,7 +58,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         if (PhotonFailureObject != null)
         {
             // ローカルにオブジェクトを Instantiate する例（PhotonNetwork.Instantiate は使用できないため）
-            PhotonNetwork.Instantiate(PhotonFailureObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+            Instantiate(PhotonFailureObject, new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
         else
         {
