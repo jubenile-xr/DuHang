@@ -9,8 +9,7 @@ public class GameManager : MonoBehaviour
         PLAY,
         END
     }
-    [SerializeField]
-    private gameState state;
+    [SerializeField] private gameState state;
     private Dictionary<string, float> scoreList;
 
     private int aliveCount;
@@ -19,8 +18,7 @@ public class GameManager : MonoBehaviour
         SMALLANIMAL,
         PANDA,
     }
-    [SerializeField]
-    private Winner winner;
+    [SerializeField] private Winner winner;
     private List<string> winnerAnimalNameList;
 
     private void Start()
