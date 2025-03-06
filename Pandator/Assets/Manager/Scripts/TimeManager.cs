@@ -24,8 +24,8 @@ public class TimeManager : MonoBehaviour
     {
         gameTime += Time.deltaTime;
         SwitchGameState();
-       
     }
+    
     // getter
     public float GetGameTime()
     {
@@ -45,7 +45,6 @@ public class TimeManager : MonoBehaviour
         if (gameTime >= gameEndTime)
         {
             gameManager.SetGameState(GameManager.gameState.END);
-            Debug.Log(gameTime);
         }
     }
     
