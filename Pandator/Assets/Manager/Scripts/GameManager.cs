@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public enum gameState
+    private enum gameState
     {
         START,
         PLAY,
         END
     }
+    [SerializeField]
     private gameState state;
     private Dictionary<string, float> scoreList;
 
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
         SMALLANIMAL,
         PANDA,
     }
+    [SerializeField]
     private Winner winner;
     private List<string> winnerAnimalNameList;
 
