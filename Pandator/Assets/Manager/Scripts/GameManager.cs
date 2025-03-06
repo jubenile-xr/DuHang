@@ -23,35 +23,15 @@ public class GameManager : MonoBehaviour
     private Winner winner;
     private List<string> winnerAnimalNameList;
 
-    void Start()
+    private void Start()
     {
         state = gameState.START;
         scoreList = new Dictionary<string, float>();
         aliveCount = 0;
     }
 
-    void Update()
+    private void Update()
     {
-        switch (state)
-        {
-            case gameState.START:
-                break;
-            case gameState.PLAY:
-                if (aliveCount == 0)
-                {
-                    winner = Winner.PANDA;
-                    setGameState(gameState.END);
-                }
-                // ここに時間による終了条件を追加 winnerはSMALLANIMAL 勝者小動物のリストにいれる
-                // if ()
-                // {
-                //     winner = Winner.SMALLANIMAL;
-                //     setGameState(gameState.END);
-                // }
-                break;
-            case gameState.END:
-                break;
-        }
     }
 
     private void setGameState(gameState newState)
@@ -62,6 +42,10 @@ public class GameManager : MonoBehaviour
     public void setAliveCount()
     {
         aliveCount--;
+        if (aliveCount == 0)
+        {
+            setGameState(gameState.END);
+        }
     }
 
     public void setScoreList(string animalName, float score)
