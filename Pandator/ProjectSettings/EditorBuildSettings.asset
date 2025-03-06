@@ -12,5 +12,6 @@ EditorBuildSettings:
     path: Assets/NetGun/Scenes/KumaUni.unity
     guid: 6888dae1927c145daab00f13294621b0
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: e95e4443513354b4992177bb2a4317e1, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7592a1c1a8c554fc4811de8d921dea7a, type: 2}
   m_UseUCBPForAssetBundles: 0
