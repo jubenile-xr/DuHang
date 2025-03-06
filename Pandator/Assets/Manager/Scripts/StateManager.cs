@@ -4,6 +4,14 @@ public class StateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
+    [Header("妨害の継続時間")]
+    [SerializeField] float interruptedTime = 3.0f;
+    [Header("妨害時の速度")]
+    [SerializeField] float interruptedSpeed = 2.0f;
+    private float time;
+    [SerializeField] private PlayerColorManager playerColorManager;
+    [SerializeField] private KeyMove keyMove;
+
 
     void Start()
     {
@@ -12,9 +20,26 @@ public class StateManager : MonoBehaviour
     }
     void Update()
     {
-
+        if(isInterrupted)
+        {
+            time += Time.deltaTime;
+            // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
+            keyMove.setSpeed(interruptedSpeed);
+            if(time > interruptedTime)
+            {
+                Debug.Log("Interrupted");
+                ResetState();
+            }
+        }
     }
-
+    // Reset the state of the player
+    private void ResetState()
+    {
+        isInterrupted = false;
+        time = 0;
+        playerColorManager.ChangeColorWhite();
+        keyMove.setSpeed(10.0f);
+    }
     public void SetInterrupted(bool value)
     {
         isInterrupted = value;
