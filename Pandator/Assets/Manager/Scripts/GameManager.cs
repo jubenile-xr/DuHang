@@ -34,12 +34,17 @@ public class GameManager : MonoBehaviour
     {
     }
 
+    public gameState GetGameState()
+    {
+        return state;
+    }
+
     public void SetGameState(gameState newState)
     {
         state = newState;
     }
 
-    public void SetAliveCount()
+    public void SetDecrementAliveCount()
     {
         aliveCount--;
         if (aliveCount == 0)
