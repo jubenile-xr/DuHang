@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2724732701890201203, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
+      propertyPath: CameraRig
+      value: 
+      objectReference: {fileID: 1082052318258841220, guid: 9abf3576987fb4ebf8b0977b6a3ce449, type: 3}
     - target: {fileID: 3319114599084836212, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

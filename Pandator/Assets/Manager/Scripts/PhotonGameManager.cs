@@ -7,7 +7,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     public GameObject PhotonPlayerObject;
     public GameObject PhotonBulletObject;
     public GameObject PhotonFailureObject;
-
+    public GameObject CameraRig;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -44,8 +44,18 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        PhotonNetwork.Instantiate(PhotonPlayerObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
-
+        GameObject player = PhotonNetwork.Instantiate(PhotonPlayerObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        camera.transform.SetParent(player.transform);
+        CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
+        if (avatarScript != null)
+        {
+            avatarScript.ExecuteCreatePhotonAvatar();
+        }
+        else
+        {
+            Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
+        }
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理

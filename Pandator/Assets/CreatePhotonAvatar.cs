@@ -10,7 +10,7 @@ using Photon.Pun;
 public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 { 
     private GameObject masterPlayerObject;
-    private GameObject[] rootTargets = new GameObject[7];
+    private GameObject[] rootTargets = new GameObject[4];
     private GameObject _stateManager;
     //private NetworkStateManagerSample _manager;
     //private IsGrabStateManage _isGrabStateManage;
@@ -36,13 +36,17 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         //_isGrabStateManage = _stateManager.GetComponent<IsGrabStateManage>();
         _controller = masterPlayerObject.GetComponent<CharacterController>();
         
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 4; i++)
         {
-            if(rootTargets[i] == null)
+            if(rootTargets[i] != null)
             {
-                Debug.Log(i);
+                Debug.Log(rootTargets[i]);
+            } else
+            {
+                Debug.Log(rootTargets[i]);
                 Debug.LogError("Target is not found");
             }
+
         }
         isCreated = true; 
     }
@@ -61,7 +65,7 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         {
             this.transform.position = masterPlayerObject.transform.position;
                 this.transform.rotation = masterPlayerObject.transform.rotation;
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     Targets[i].transform.localPosition = rootTargets[i].transform.localPosition;
                     Targets[i].transform.localRotation = rootTargets[i].transform.localRotation;
@@ -69,7 +73,7 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         }
     }
 
-    private void Start()
+    public void ExecuteCreatePhotonAvatar()
     {
         /*this.UpdateAsObservable()
             .Where(_ => photonView.IsMine && Input.GetKeyDown(KeyCode.Z) && isCreated)
@@ -77,5 +81,6 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
             {
                 _manager.AddCount(1);
             }).AddTo(this);*/
+        OnCreate();
     }
 }
