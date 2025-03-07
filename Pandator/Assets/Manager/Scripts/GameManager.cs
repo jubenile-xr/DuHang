@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
         PLAY,
         END
     }
-    
+
     [Header("ゲームの状態はこっちで完全管理")]
     [SerializeField] private gameState state;
     private Dictionary<string, float> scoreList;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     {
         state = gameState.START;
         scoreList = new Dictionary<string, float>();
-        aliveCount = 0;
+        aliveCount = 3;
     }
 
     private void Update()

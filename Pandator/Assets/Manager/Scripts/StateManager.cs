@@ -11,6 +11,8 @@ public class StateManager : MonoBehaviour
     private float time;
     [SerializeField] private TestPlayerColorManager playerColorManager;
     [SerializeField] private KeyMove keyMove;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreManager scoreManager;
 
 
     void Start()
@@ -51,11 +53,22 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
+        if(value == false)
+        {
+            DeadLogic();
+        }
         isAlive = value;
     }
 
     public bool GetAlive()
     {
         return isAlive;
+    }
+
+    // ここに死亡時の処理を書く
+    private void DeadLogic()
+    {
+        scoreManager.setAliveTime(Time.time);
+        gameManager.SetDecrementAliveCount();
     }
 }
