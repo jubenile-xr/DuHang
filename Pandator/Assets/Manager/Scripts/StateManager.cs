@@ -53,7 +53,7 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
-        if(value == false)
+        if(!value)
         {
             DeadLogic();
         }

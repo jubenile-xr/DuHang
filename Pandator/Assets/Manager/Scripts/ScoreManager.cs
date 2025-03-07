@@ -22,7 +22,7 @@ public class ScoreManager : MonoBehaviour
         aliveTime = time;
     }
 
-    public void SetInterruptedCount()
+    public void SetIncrementInterruptedCount()
     {
         interruptedCount++;
     }
