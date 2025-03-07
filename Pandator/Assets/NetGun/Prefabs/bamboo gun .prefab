@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5097346505778427336
+--- !u!1001 &2796868288040757288
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
       propertyPath: m_Name
-      value: bamboo gun without animation
+      value: 'bamboo gun '
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -58,20 +58,23 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3125982658732031168}
+      addedObject: {fileID: 8102731167259438974}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6861862336601458692}
   m_SourcePrefab: {fileID: 100100000, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
---- !u!1 &5367165346519009433 stripped
+--- !u!1 &3031222932190025081 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
-  m_PrefabInstance: {fileID: 5097346505778427336}
+  m_PrefabInstance: {fileID: 2796868288040757288}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3125982658732031168
+--- !u!114 &8102731167259438974
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5367165346519009433}
+  m_GameObject: {fileID: 3031222932190025081}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0181edd3ffd243708358bd1ae7e504a, type: 3}
@@ -81,3 +84,25 @@ MonoBehaviour:
   BulletSpeed: 1
   RightController: {fileID: 0}
   spanTime: 0
+--- !u!95 &6861862336601458692
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3031222932190025081}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
