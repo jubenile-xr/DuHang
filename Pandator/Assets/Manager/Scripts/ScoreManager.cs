@@ -17,24 +17,24 @@ public class ScoreManager : MonoBehaviour
 
     }
 
-    public void setAliveTime(float time)
+    public void SetAliveTime(float time)
     {
         aliveTime = time;
     }
 
-    public void setInterruptedCount()
+    public void SetInterruptedCount()
     {
         interruptedCount++;
     }
 
-    public float getScore()
+    public float GetScore()
     {
-        calculateScore();
+        CalculateScore();
         return score;
     }
 
     // スコア計算 10ポイント/秒 + 5ポイント/中断 これは適当
-    private void calculateScore()
+    private void CalculateScore()
     {
         score = aliveTime * 10 + interruptedCount * 5;
     }

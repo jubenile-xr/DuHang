@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Net : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         GameObject Player = collision.gameObject;
         if(Player.tag == "Player" && Player.GetComponent<StateManager>().GetAlive())

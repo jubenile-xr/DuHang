@@ -5,7 +5,7 @@ public class KeyMove : MonoBehaviour
     [Header("移動速度")]
     [SerializeField] private float speed = 10.0f;
 
-    void Update()
+    private void Update()
     {
         float vertical = Input.GetAxis("Vertical") * speed;
         float horizontal = Input.GetAxis("Horizontal") * speed;
@@ -23,7 +23,7 @@ public class KeyMove : MonoBehaviour
             transform.Rotate(0, -90, 0);
         }
     }
-    public void setSpeed(float speed)
+    public void SetSpeed(float speed)
     {
         this.speed = speed;
     }

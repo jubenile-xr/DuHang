@@ -26,7 +26,7 @@ public class StateManager : MonoBehaviour
         {
             time += Time.deltaTime;
             // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
-            keyMove.setSpeed(interruptedSpeed);
+            keyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
                 ResetState();
@@ -39,7 +39,7 @@ public class StateManager : MonoBehaviour
         isInterrupted = false;
         time = 0;
         playerColorManager.ChangeColorWhite();
-        keyMove.setSpeed(10.0f);
+        keyMove.SetSpeed(10.0f);
     }
     public void SetInterrupted(bool value)
     {
@@ -68,7 +68,7 @@ public class StateManager : MonoBehaviour
     // ここに死亡時の処理を書く
     private void DeadLogic()
     {
-        scoreManager.setAliveTime(Time.time);
+        scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
     }
 }

@@ -6,7 +6,7 @@ public class TestFallNet : MonoBehaviour
     [SerializeField] private float recastTime = 5.0f;
     private float timer = 0.0f;
 
-    void Update()
+    private void Update()
     {
         timer += Time.deltaTime;
         if(timer > recastTime)
