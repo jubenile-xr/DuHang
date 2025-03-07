@@ -11,6 +11,8 @@ public class StateManager : MonoBehaviour
     private float time;
     [SerializeField] private TestPlayerColorManager playerColorManager;
     [SerializeField] private KeyMove keyMove;
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private ScoreManager scoreManager;
 
 
     void Start()
@@ -24,7 +26,7 @@ public class StateManager : MonoBehaviour
         {
             time += Time.deltaTime;
             // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
-            keyMove.setSpeed(interruptedSpeed);
+            keyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
                 ResetState();
@@ -37,7 +39,7 @@ public class StateManager : MonoBehaviour
         isInterrupted = false;
         time = 0;
         playerColorManager.ChangeColorWhite();
-        keyMove.setSpeed(10.0f);
+        keyMove.SetSpeed(10.0f);
     }
     public void SetInterrupted(bool value)
     {
@@ -51,11 +53,22 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
+        if(!value)
+        {
+            DeadLogic();
+        }
         isAlive = value;
     }
 
     public bool GetAlive()
     {
         return isAlive;
+    }
+
+    // ここに死亡時の処理を書く
+    private void DeadLogic()
+    {
+        scoreManager.SetAliveTime(Time.time);
+        gameManager.SetDecrementAliveCount();
     }
 }
