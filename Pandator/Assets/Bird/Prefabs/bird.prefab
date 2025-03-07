@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eb829f59f5b1e1341acae12cf1194490, type: 3}
       propertyPath: m_Name
-      value: bird without animation
+      value: bird
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb829f59f5b1e1341acae12cf1194490, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8213932663691051747}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eb829f59f5b1e1341acae12cf1194490, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7983135567624374723}
   m_SourcePrefab: {fileID: 100100000, guid: eb829f59f5b1e1341acae12cf1194490, type: 3}
 --- !u!1 &8210553869509084438 stripped
 GameObject:
@@ -78,3 +81,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0
+--- !u!95 &7983135567624374723
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8210553869509084438}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a11e7cbeb3b1f4a728514e65aece11b1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
