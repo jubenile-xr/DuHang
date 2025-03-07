@@ -9,7 +9,7 @@ public class StateManager : MonoBehaviour
     [Header("妨害時の速度")]
     [SerializeField] float interruptedSpeed = 2.0f;
     private float time;
-    [SerializeField] private PlayerColorManager playerColorManager;
+    [SerializeField] private TestPlayerColorManager playerColorManager;
     [SerializeField] private KeyMove keyMove;
 
 

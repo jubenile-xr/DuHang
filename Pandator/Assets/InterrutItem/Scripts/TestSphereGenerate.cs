@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SphereGenerate : MonoBehaviour
+public class TestSphereGenerate : MonoBehaviour
 {
     [SerializeField] private GameObject spherePrefab;
     [SerializeField] private float recastTime = 5.0f;

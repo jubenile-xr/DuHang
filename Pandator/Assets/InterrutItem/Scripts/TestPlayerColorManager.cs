@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerColorManager : MonoBehaviour
+public class TestPlayerColorManager : MonoBehaviour
 {
     public void ChangeColorRed()
     {

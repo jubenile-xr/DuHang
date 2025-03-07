@@ -10,7 +10,7 @@ public class InterrupteItem : MonoBehaviour
         {
             Player.GetComponent<StateManager>().SetInterrupted(true);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
-            Player.GetComponent<PlayerColorManager>().ChangeColorRed();
+            Player.GetComponent<TestPlayerColorManager>().ChangeColorRed();
             Destroy(gameObject);
         }
     }
