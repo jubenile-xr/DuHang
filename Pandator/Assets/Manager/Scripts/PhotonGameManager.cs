@@ -44,7 +44,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        PhotonNetwork.Instantiate(PhotonPlayerObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        //PhotonNetwork.Instantiate(PhotonPlayerObject.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
 
     }
 

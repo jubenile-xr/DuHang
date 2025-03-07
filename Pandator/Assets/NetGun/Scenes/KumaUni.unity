@@ -127,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2724732701890201203, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
-      propertyPath: PhotonPlayerObject
-      value: 
-      objectReference: {fileID: 7860674900597046589, guid: 7bbea7829752f49118aaa7e99a845205, type: 3}
-    - target: {fileID: 2895578313802075775, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
-      propertyPath: RightController
-      value: 
-      objectReference: {fileID: 112276, guid: 9ebaeb35935934632a1b97e26a821074, type: 3}
     - target: {fileID: 3319114599084836212, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -175,21 +167,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4022375780756416264, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 7860674900597046589, guid: 7bbea7829752f49118aaa7e99a845205, type: 3}
-    - target: {fileID: 4022375780756416264, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
-      propertyPath: cameraRig
-      value: 
-      objectReference: {fileID: 7860674900597046589, guid: 7bbea7829752f49118aaa7e99a845205, type: 3}
+    - target: {fileID: 4473629464290431283, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5482363954990403347, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
       propertyPath: m_Name
       value: MRScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 5790356450231268357, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
