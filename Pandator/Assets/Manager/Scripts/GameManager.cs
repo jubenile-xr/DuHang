@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         if (aliveCount == 0)
         {
             SetGameState(gameState.END);
+            // ここでゲーム終了処理を行う　スコアを集める どちらが勝ったか
         }
     }
 
