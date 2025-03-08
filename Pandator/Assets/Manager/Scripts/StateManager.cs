@@ -65,7 +65,7 @@ public class StateManager : MonoBehaviour
         return isAlive;
     }
 
-    // ここに死亡時の処理を書く
+    // 死亡時の処理
     private void DeadLogic()
     {
         scoreManager.SetAliveTime(Time.time);
