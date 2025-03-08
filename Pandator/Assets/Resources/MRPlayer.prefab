@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161939956630728565}
   m_Layer: 0
-  m_Name: smallAnimal
+  m_Name: MRPanda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
