@@ -6,7 +6,7 @@ public class Bird : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
     private GameObject model;
-    
+
     private Animator animator;
     private void Start()
     {
