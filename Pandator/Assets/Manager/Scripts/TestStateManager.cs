@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StateManager : MonoBehaviour
+public class TestStateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
@@ -10,7 +10,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] float interruptedSpeed = 2.0f;
     private float time;
     [SerializeField] private TestPlayerColorManager playerColorManager;
-    [SerializeField] private KeyMove keyMove;
+    [SerializeField] private TestOtherPlayerMove keyMove;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
 
@@ -25,7 +25,7 @@ public class StateManager : MonoBehaviour
         if(isInterrupted)
         {
             time += Time.deltaTime;
-            // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
+// TODO PlayerControllerのスクリプトにアクセスする
             keyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {

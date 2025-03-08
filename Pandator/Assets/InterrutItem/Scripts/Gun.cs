@@ -3,6 +3,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float bulletSpeed = 500;
     // private Animator animator;
 
     private void Start()
@@ -15,7 +16,7 @@ public class Gun : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(transform.forward * -100);
+            bullet.GetComponent<Rigidbody>().AddForce(transform.forward * -bulletSpeed);
         }
     }
 }
