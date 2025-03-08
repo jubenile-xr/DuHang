@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
       propertyPath: m_Name
-      value: 'gun '
+      value: gun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -59,6 +59,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5179894016201721240}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 64644994485724239}
   m_SourcePrefab: {fileID: 100100000, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
 --- !u!1 &2845304526706433001 stripped
 GameObject:
@@ -87,3 +90,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &64644994485724239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2845304526706433001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510c247bcbeec4ac58fac990b27f7dce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 1054968426522594073, guid: cf9465cac68f34b2ab2a5c3a7ed40668, type: 3}
