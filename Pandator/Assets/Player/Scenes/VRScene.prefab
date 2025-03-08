@@ -166,9 +166,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5155058878920720993}
-  - component: {fileID: 5522309988223445049}
+  - component: {fileID: 8827140134399737742}
   m_Layer: 0
-  m_Name: Gamemanager
+  m_Name: PhotonManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,7 +189,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8716894927445767245}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5522309988223445049
+--- !u!114 &8827140134399737742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -198,11 +198,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8357731264260617364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0802308fff3d4f2b8cd3e32bf04809e, type: 3}
+  m_Script: {fileID: 11500000, guid: 749e8913d948844918d3b04da414a807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonPlayerObject: {fileID: 562251640238119367, guid: 2476cc118710e4540a42e676f3965c85, type: 3}
-  PhotonBulletObject: {fileID: 8868234331389898307, guid: 7ffedb5ab20a34521852eaa91ec82aad, type: 3}
+  PhotonBulletObject: {fileID: 8868234331389898307, guid: a0b2ea857afca44429abdddce2d7e3ac, type: 3}
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   CameraRig: {fileID: 5010246841524157607, guid: 70ae3ec737fc841d891f9d7b49774e4a, type: 3}
 --- !u!1 &9086462264381382828
