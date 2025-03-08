@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class InterruptGun : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletSpeed = 500;
