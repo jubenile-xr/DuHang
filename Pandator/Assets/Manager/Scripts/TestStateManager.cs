@@ -25,7 +25,7 @@ public class TestStateManager : MonoBehaviour
         if(isInterrupted)
         {
             time += Time.deltaTime;
-            // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
+// TODO PlayerControllerのスクリプトにアクセスする
             keyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
