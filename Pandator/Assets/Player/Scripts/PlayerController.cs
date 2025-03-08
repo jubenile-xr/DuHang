@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
         // カメラ回転処理
         Vector2 rightInput = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
         CameraRotate(rightInput);
+
     }
 
     void CharaTranslate(Vector2 leftInput)
@@ -52,6 +53,6 @@ public class PlayerController : MonoBehaviour
         angle.y += rightInput.x;
 
         //カメラの回転
-        cameraRig.transform.eulerAngles = angle;
+        cameraRig.transform.localEulerAngles = angle;
     }
 }

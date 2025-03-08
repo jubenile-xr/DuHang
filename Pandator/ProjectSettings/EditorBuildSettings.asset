@@ -9,15 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/KumaUni.unity
+    path: Assets/NetGun/Scenes/MRScennes.unity
     guid: 6888dae1927c145daab00f13294621b0
-
-  - enabled: 0
-    path: Assets/PhotonManji/Scenes/ManjiSample.unity
-    guid: ba03168b9fa17462380eb779f333ae2b
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: e95e4443513354b4992177bb2a4317e1, type: 2}
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 15f228ecae2c0e245b4f98e3421f9d63, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7592a1c1a8c554fc4811de8d921dea7a, type: 2}
   m_UseUCBPForAssetBundles: 0
