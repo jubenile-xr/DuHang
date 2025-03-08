@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4754269808731089047}
   - component: {fileID: 2724732701890201203}
   m_Layer: 0
-  m_Name: Gamemanager
+  m_Name: PhotonManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   PhotonPlayerObject: {fileID: 7860674900597046589, guid: 7bbea7829752f49118aaa7e99a845205, type: 3}
   PhotonBulletObject: {fileID: 8868234331389898307, guid: a0b2ea857afca44429abdddce2d7e3ac, type: 3}
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  CameraRig: {fileID: 1489355133917002706, guid: 6fe237d8cfce345e38d59e3a7e04536d, type: 3}
+  CameraRig: {fileID: 660546892413538472, guid: c87b7f7e6b87e453d8ec801117d0f139, type: 3}
 --- !u!1 &2490644844433498876
 GameObject:
   m_ObjectHideFlags: 0
