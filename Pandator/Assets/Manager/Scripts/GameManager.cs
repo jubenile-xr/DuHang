@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    private enum gameState
+    public enum gameState
     {
         START,
         PLAY,
         END
     }
+
+    [Header("ゲームの状態はこっちで完全管理")]
     [SerializeField] private gameState state;
     private Dictionary<string, float> scoreList;
 
@@ -25,28 +27,34 @@ public class GameManager : MonoBehaviour
     {
         state = gameState.START;
         scoreList = new Dictionary<string, float>();
-        aliveCount = 0;
+        aliveCount = 3;
     }
 
     private void Update()
     {
     }
 
-    private void setGameState(gameState newState)
+    public gameState GetGameState()
+    {
+        return state;
+    }
+
+    public void SetGameState(gameState newState)
     {
         state = newState;
     }
 
-    public void setAliveCount()
+    public void SetDecrementAliveCount()
     {
         aliveCount--;
         if (aliveCount == 0)
         {
-            setGameState(gameState.END);
+            SetGameState(gameState.END);
+            // ここでゲーム終了処理を行う　スコアを集める どちらが勝ったか
         }
     }
 
-    public void setScoreList(string animalName, float score)
+    public void SetScoreList(string animalName, float score)
     {
         scoreList[animalName] = score;
     }
