@@ -8,7 +8,8 @@ public class InterrupteItem : MonoBehaviour
         GameObject Player = collision.gameObject;
         if(Player.tag == "Player")
         {
-            Player.GetComponent<StateManager>().SetInterrupted(true);
+            Player.GetComponent<StateManager>()?.SetInterrupted(true);
+            Player.GetComponent<TestStateManager>()?.SetInterrupted(true);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
             Player.GetComponent<TestPlayerColorManager>().ChangeColorRed();
             Destroy(gameObject);
