@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 2724732701890201203, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
       propertyPath: CameraRig
       value: 
-      objectReference: {fileID: 1082052318258841220, guid: 9abf3576987fb4ebf8b0977b6a3ce449, type: 3}
+      objectReference: {fileID: 660546892413538472, guid: c87b7f7e6b87e453d8ec801117d0f139, type: 3}
     - target: {fileID: 3319114599084836212, guid: 4bb235ae8044d4ad3be79eb6060b53b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

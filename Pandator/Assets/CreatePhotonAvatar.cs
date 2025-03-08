@@ -26,58 +26,58 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
     private void OnCreate()
     {
        Debug.Log("Trying to find GameObject with tag 'MasterPlayer'");
-masterPlayerObject = GameObject.FindGameObjectWithTag("MasterPlayer");
-if (masterPlayerObject == null)
-{
-    Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
-}
-else
-{
-    // オブジェクトが見つかった場合は active 状態にする
-    masterPlayerObject.SetActive(true);
-}
+        masterPlayerObject = GameObject.FindGameObjectWithTag("MasterPlayer");
+        if (masterPlayerObject == null)
+        {
+            Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            // オブジェクトが見つかった場合は active 状態にする
+            masterPlayerObject.SetActive(true);
+        }
 
-rootTargets[0] = GameObject.FindGameObjectWithTag("CameraRig");
-if (rootTargets[0] == null)
-{
-    Debug.LogError("CameraRig object not found! Check the tag and its active status in the scene.");
-}
-else
-{
-    rootTargets[0].SetActive(true);
-}
+        rootTargets[0] = GameObject.FindGameObjectWithTag("CameraRig");
+        if (rootTargets[0] == null)
+        {
+            Debug.LogError("CameraRig object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            rootTargets[0].SetActive(true);
+        }
 
-rootTargets[1] = GameObject.FindGameObjectWithTag("TrackingSpace");
-if (rootTargets[1] == null)
-{
-    Debug.LogError("TrackingSpace object not found! Check the tag and its active status in the scene.");
-}
-else
-{
-    rootTargets[1].SetActive(true);
-}
+        rootTargets[1] = GameObject.FindGameObjectWithTag("TrackingSpace");
+        if (rootTargets[1] == null)
+        {
+            Debug.LogError("TrackingSpace object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            rootTargets[1].SetActive(true);
+        }
 
-// rootTargets[2] を LHandTargetAnchor で取得
-rootTargets[2] = GameObject.FindGameObjectWithTag("LHandTargetAnchor");
-if (rootTargets[2] == null)
-{
-    Debug.LogError("LHandTargetAnchor object not found! Check the tag and its active status in the scene.");
-}
-else
-{
-    rootTargets[2].SetActive(true);
-}
+        // rootTargets[2] を LHandTargetAnchor で取得
+        rootTargets[2] = GameObject.FindGameObjectWithTag("LHandTargetAnchor");
+        if (rootTargets[2] == null)
+        {
+            Debug.LogError("LHandTargetAnchor object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            rootTargets[2].SetActive(true);
+        }
 
-// rootTargets[3] を RHandTargetAnchor で取得
-rootTargets[3] = GameObject.FindGameObjectWithTag("RHandTargetAnchor");
-if (rootTargets[3] == null)
-{
-    Debug.LogError("RHandTargetAnchor object not found! Check the tag and its active status in the scene.");
-}
-else
-{
-    rootTargets[3].SetActive(true);
-}
+        // rootTargets[3] を RHandTargetAnchor で取得
+        rootTargets[3] = GameObject.FindGameObjectWithTag("RHandTargetAnchor");
+        if (rootTargets[3] == null)
+        {
+            Debug.LogError("RHandTargetAnchor object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            rootTargets[3].SetActive(true);
+        }
         //_stateManager = GameObject.FindGameObjectWithTag("StateManager");
         //_manager = _stateManager.GetComponent<NetworkStateManagerSample>();
         //_isGrabStateManage = _stateManager.GetComponent<IsGrabStateManage>();

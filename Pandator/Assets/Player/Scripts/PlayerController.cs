@@ -53,6 +53,6 @@ public class PlayerController : MonoBehaviour
         angle.y += rightInput.x;
 
         //カメラの回転
-        cameraRig.transform.eulerAngles = angle;
+        cameraRig.transform.localEulerAngles = angle;
     }
 }
