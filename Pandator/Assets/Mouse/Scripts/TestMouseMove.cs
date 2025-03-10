@@ -3,7 +3,10 @@ using UnityEngine;
 public class TestMouseMove : MonoBehaviour
 {
     private bool isCollisionWall = false;
-    [SerializeField] private float speed = 5.0f;
+    [Header("歩く速度")]
+    [SerializeField] private float walkSpeed = 5.0f;
+    [Header("登る速度")]
+    [SerializeField] private float climbSpeed = 2.0f;
     private Rigidbody rb;
 
     private void Start()
@@ -13,21 +16,20 @@ public class TestMouseMove : MonoBehaviour
 
     private void Update()
     {
-        // Move the object
         if (Input.GetKey(KeyCode.W))
         {
             if (isCollisionWall)
             {
-                transform.position += transform.up * Time.deltaTime * speed;
+                transform.position += transform.up * Time.deltaTime * climbSpeed;
             }
             else
             {
-                transform.position += transform.forward * Time.deltaTime * speed;
+                transform.position += transform.forward * Time.deltaTime * walkSpeed;
             }
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position -= transform.forward * Time.deltaTime * speed;
+            transform.position -= transform.forward * Time.deltaTime * walkSpeed;
         }
     }
 
