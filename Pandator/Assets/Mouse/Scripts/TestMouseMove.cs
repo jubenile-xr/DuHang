@@ -5,9 +5,9 @@ public class TestMouseMove : MonoBehaviour
     private bool isCollisionWall = false;
     [SerializeField] private float speed = 5.0f;
     private Rigidbody rb;
-    private float timer = 0.0f;
-    private float waitTime = 1.0f;
-    private bool isWait = false;
+    // private float timer = 0.0f;
+    // private float waitTime = 0.1f;
+    // private bool isWait = false;
 
     private void Start()
     {
@@ -21,13 +21,12 @@ public class TestMouseMove : MonoBehaviour
         {
             if (isCollisionWall)
             {
-                Debug.Log("Collision with wall");
+                Debug.Log("Crimb with wall");
                 transform.position += transform.up * Time.deltaTime * speed;
-                isWait = false;
-                timer = 0.0f;
             }
             else
             {
+                Debug.Log("Move forward");
                 transform.position += transform.forward * Time.deltaTime * speed;
             }
         }
@@ -35,17 +34,17 @@ public class TestMouseMove : MonoBehaviour
         {
             transform.position -= transform.forward * Time.deltaTime * speed;
         }
-        if(isWait)
-        {
-            timer += Time.deltaTime;
-            if(timer > waitTime)
-            {
-                isWait = false;
-                timer = 0.0f;
-                isCollisionWall = false;
-                rb.constraints = RigidbodyConstraints.None;
-            }
-        }
+        // if(isWait)
+        // {
+        //     timer += Time.deltaTime;
+        //     if(timer > waitTime)
+        //     {
+        //         Debug.Log("Wait time is over");
+        //         isWait = false;
+        //         timer = 0.0f;
+        //         isCollisionWall = false;
+        //     }
+        // }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -54,7 +53,7 @@ public class TestMouseMove : MonoBehaviour
         {
             isCollisionWall = true;
             // x,z固定
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             Debug.Log("Collision Enter with wall");
         }
     }
@@ -63,7 +62,8 @@ public class TestMouseMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Wall")
         {
-            isWait = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            isCollisionWall = false;
             Debug.Log("Exit collision with wall");
         }
     }
