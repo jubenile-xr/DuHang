@@ -10,6 +10,7 @@ TagManager:
   - TrackingSpace
   - LHandTargetAnchor
   - RHandTargetAnchor
+  - Wall
   layers:
   - Default
   - TransparentFX
