@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 9194075240619985461}
   - component: {fileID: 5909544744645476927}
   - component: {fileID: 1178441077383595741}
-  - component: {fileID: 4404973377689192361}
+  - component: {fileID: 4000615125199104777}
   m_Layer: 0
   m_Name: VRPlayerHaveGun
   m_TagString: MasterPlayer
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626a1c262a6b64400862dee5fbfc93ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4404973377689192361
+--- !u!114 &4000615125199104777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2208272362337012921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c48ef639248d45ee8de782228ba9a35, type: 3}
+  m_Script: {fileID: 11500000, guid: 13a6b88370a7d4c5dbbbc9d9911b373d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
@@ -538,7 +538,7 @@ PrefabInstance:
       addedObject: {fileID: 8319147752046704350}
     - targetCorrespondingSourceObject: {fileID: 5116117809054436176, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4513664268548882904}
+      addedObject: {fileID: 8628377778251404972}
   m_SourcePrefab: {fileID: 100100000, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
 --- !u!1 &4048920317404332119 stripped
 GameObject:
@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3b720a9aa5148fd82ba67681f7c79f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4513664268548882904
+--- !u!114 &8628377778251404972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -566,13 +566,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4048920317404332119}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58de875ac99fa4a598de1c81268caba7, type: 3}
+  m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interruptedTime: 3
   interruptedSpeed: 2
   playerColorManager: {fileID: 8319147752046704350}
-  keyMove: {fileID: 4404973377689192361}
+  photonKeyMove: {fileID: 4000615125199104777}
   gameManager: {fileID: 5909544744645476927}
   scoreManager: {fileID: 1178441077383595741}
 --- !u!4 &4167470345949567513 stripped
