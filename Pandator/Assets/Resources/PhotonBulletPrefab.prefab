@@ -52,7 +52,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9657fc60ad4eb49e2869680794f2d611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionDeleteTime: 0.1
 --- !u!114 &8150355044750573786
 MonoBehaviour:
   m_ObjectHideFlags: 0
