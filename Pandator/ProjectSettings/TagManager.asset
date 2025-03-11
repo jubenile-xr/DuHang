@@ -11,6 +11,7 @@ TagManager:
   - LHandTargetAnchor
   - RHandTargetAnchor
   - Wall
+  - GameManager
   layers:
   - Default
   - TransparentFX
