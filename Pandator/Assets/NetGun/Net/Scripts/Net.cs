@@ -6,6 +6,7 @@ public class Net : MonoBehaviour
     {
         GameObject Player = collision.gameObject;
         Debug.Log("Hit");
+        Debug.Log(Player.tag);
         if(Player.tag == "Player")
         {
             Debug.Log("Hit Player");
