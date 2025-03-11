@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public enum gameState
+    public enum GameState
     {
         START,
         PLAY,
@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField] private gameState state;
+    [SerializeField] private GameState state;
     private Dictionary<string, float> scoreList;
 
     private int aliveCount;
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        state = gameState.START;
+        state = GameState.START;
         scoreList = new Dictionary<string, float>();
         aliveCount = 3;
         winner = Winner.NONE;
@@ -36,12 +36,12 @@ public class GameManager : MonoBehaviour
     {
     }
 
-    public gameState GetGameState()
+    public GameState GetGameState()
     {
         return state;
     }
 
-    public void SetGameState(gameState newState)
+    public void SetGameState(GameState newState)
     {
         state = newState;
     }
@@ -51,10 +51,16 @@ public class GameManager : MonoBehaviour
         aliveCount--;
         if (aliveCount == 0)
         {
-            SetGameState(gameState.END);
+            SetGameState(GameState.END);
             winner = Winner.PANDA;
+            Debug.Log("Panda Win");
             // TODO　スコアを集める
         }
+    }
+    public void SetIncrementAliveCount()
+    {
+        aliveCount++;
+        Debug.Log("aliveCount: " + aliveCount);
     }
 
     public void SetScoreList(string animalName, float score)
