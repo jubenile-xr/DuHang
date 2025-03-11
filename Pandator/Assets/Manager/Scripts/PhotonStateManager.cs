@@ -20,6 +20,10 @@ public class PhotonStateManager : MonoBehaviour
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager == null)
+        {
+            Debug.LogError("GameManager is not found.");
+        }
     }
     void Update()
     {
@@ -69,6 +73,7 @@ public class PhotonStateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
+        Debug.Log("Dead");
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
     }
