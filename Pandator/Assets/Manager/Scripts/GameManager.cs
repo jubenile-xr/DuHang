@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         winnerAnimalNameList.Add(animalName);
     }
 
+    // 同期用の関数だが，今回使ってなさそう，今後のために一応置いておく
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
             // 自身のアバターのスタミナを送信する
