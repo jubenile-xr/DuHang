@@ -8,9 +8,15 @@ public class PhotonVRManager : MonoBehaviourPunCallbacks
     public GameObject PhotonBulletObject;
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
+    private GameManager gameManager;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager == null)
+        {
+            Debug.LogError("GameManager is not found.");
+        }
     }
 
     // ルームに参加する処理
@@ -18,6 +24,7 @@ public class PhotonVRManager : MonoBehaviourPunCallbacks
     {
         // 固定ルーム "SampleRoomName" に参加
         PhotonNetwork.JoinRoom("SampleRoomName");
+
     }
 
     // ルーム参加に失敗した場合(通常，指定したルーム名が存在しなかった場合)の処理
@@ -55,6 +62,9 @@ public class PhotonVRManager : MonoBehaviourPunCallbacks
         }
 
         avatarScript.ExecuteCreatePhotonAvatar();
+
+        // ルームに入室したらGameManagerのプレイヤー数を更新する
+        gameManager.SetIncrementAliveCount();
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理

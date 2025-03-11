@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     {
         state = gameState.START;
         scoreList = new Dictionary<string, float>();
-        aliveCount = 3;
+        aliveCount = 0;
         winner = Winner.NONE;
     }
 
@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
             winner = Winner.PANDA;
             // TODO　スコアを集める
         }
+    }
+
+    public void SetIncrementAliveCount()
+    {
+        aliveCount++;
     }
 
     public void SetScoreList(string animalName, float score)

@@ -2,14 +2,32 @@ using UnityEngine;
 
 public class Net : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private float time = 0.0f;
+    [SerializeField]private float collisionDeleteTime = 0.1f;
+    private float collisionTime = 0.0f;
+
+    private bool isCollision = false;
+    private void Update()
     {
-        GameObject Player = collision.gameObject;
-        Debug.Log("Hit");
-        Debug.Log(Player.tag);
+        // 3秒後に消える
+        time += Time.deltaTime;
+        if(time > 3.0f)
+        {
+            Destroy(gameObject);
+        }
+        if(isCollision)
+        {
+            collisionTime += Time.deltaTime;
+            if(collisionTime > collisionDeleteTime)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    private void OnTriggerEnter(Collision collision)
+    {
         if(Player.tag == "Player")
         {
-            Debug.Log("Hit Player");
             Player.GetComponent<StateManager>()?.SetAlive(false);
             Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
