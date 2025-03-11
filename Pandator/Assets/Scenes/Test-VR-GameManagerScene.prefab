@@ -237,4 +237,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
-  IsVR: 0
+  IsVR: 1

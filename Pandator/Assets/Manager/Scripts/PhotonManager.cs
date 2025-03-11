@@ -7,8 +7,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
     [SerializeField] public bool IsVR;
-
     private GameObject player;
+    private GameObject gameManager;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -42,7 +42,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         else
         {
             player = PhotonNetwork.Instantiate("Player/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager = PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
 
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
