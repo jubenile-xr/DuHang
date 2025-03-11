@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 224267548846101444}
   m_Layer: 0
   m_Name: VRCameraRig
-  m_TagString: Untagged
+  m_TagString: CameraRig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 5974511580166504906}
   m_Layer: 0
   m_Name: LeftControllerAnchor
-  m_TagString: Untagged
+  m_TagString: LHandTargetAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 2421728379772338789}
   m_Layer: 0
   m_Name: TrackingSpace
-  m_TagString: Untagged
+  m_TagString: TrackingSpace
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1104,6 +1104,10 @@ PrefabInstance:
     - target: {fileID: 112276, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_Name
       value: OVRControllerPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 112276, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
+      propertyPath: m_TagString
+      value: RHandTargetAnchor
       objectReference: {fileID: 0}
     - target: {fileID: 488160, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
       propertyPath: m_LocalPosition.x
