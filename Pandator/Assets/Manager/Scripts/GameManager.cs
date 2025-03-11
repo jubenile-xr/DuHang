@@ -56,14 +56,15 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
+            Debug.Log("GameEND・Winner: " + winner);
             // TODO　スコアを集める
         }
     }
 
     public void SetIncrementAliveCount()
     {
-        Debug.Log("SetIncrementAliveCount");
         aliveCount++;
+        Debug.Log("aliveCount: "+aliveCount);
     }
 
     public void SetScoreList(string animalName, float score)
