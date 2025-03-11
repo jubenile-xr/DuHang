@@ -77,7 +77,6 @@ GameObject:
   - component: {fileID: 5587404909679129317}
   - component: {fileID: 4839454631909842585}
   - component: {fileID: 9194075240619985461}
-  - component: {fileID: 5909544744645476927}
   - component: {fileID: 1178441077383595741}
   - component: {fileID: 4000615125199104777}
   m_Layer: 0
@@ -161,20 +160,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
---- !u!114 &5909544744645476927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2208272362337012921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9e175eb33cf749eda9952113117397c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
-  winner: 0
 --- !u!114 &1178441077383595741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -573,7 +558,6 @@ MonoBehaviour:
   interruptedSpeed: 2
   playerColorManager: {fileID: 8319147752046704350}
   photonKeyMove: {fileID: 4000615125199104777}
-  gameManager: {fileID: 5909544744645476927}
   scoreManager: {fileID: 1178441077383595741}
 --- !u!4 &4167470345949567513 stripped
 Transform:

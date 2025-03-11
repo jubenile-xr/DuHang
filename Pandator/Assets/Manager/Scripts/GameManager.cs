@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     {
         state = GameState.START;
         scoreList = new Dictionary<string, float>();
-        aliveCount = 3;
+        aliveCount = 0;
         winner = Winner.NONE;
     }
 
