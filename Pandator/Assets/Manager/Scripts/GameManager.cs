@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     public void SetIncrementAliveCount()
     {
+        Debug.Log("SetIncrementAliveCount");
         aliveCount++;
     }
 

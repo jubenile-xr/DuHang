@@ -8,15 +8,9 @@ public class PhotonVRManager : MonoBehaviourPunCallbacks
     public GameObject PhotonBulletObject;
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
-    private GameManager gameManager;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
-        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-        if(gameManager == null)
-        {
-            Debug.LogError("GameManager is not found.");
-        }
     }
 
     // ルームに参加する処理
@@ -61,10 +55,8 @@ public class PhotonVRManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        avatarScript.ExecuteCreatePhotonAvatar();
 
-        // ルームに入室したらGameManagerのプレイヤー数を更新する
-        gameManager.SetIncrementAliveCount();
+        avatarScript.ExecuteCreatePhotonAvatar();
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理

@@ -20,6 +20,7 @@ public class PhotonStateManager : MonoBehaviour
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        gameManager.SetIncrementAliveCount();
         if(gameManager == null)
         {
             Debug.LogError("GameManager is not found.");
