@@ -24,7 +24,7 @@ public class Net : MonoBehaviour
             }
         }
     }
-    private void OnTriggerEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         GameObject Player = collision.gameObject;
         if(Player.tag == "Player")
