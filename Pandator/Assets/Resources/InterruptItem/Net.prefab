@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 2857808274748319085}
   - component: {fileID: -4805845811040421668}
   - component: {fileID: 3355786388988509910}
+  - component: {fileID: 1761290922325850145}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Net
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,7 +106,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -177,3 +178,16 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &1761290922325850145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8868234331389898307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9657fc60ad4eb49e2869680794f2d611, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionDeleteTime: 0.1
