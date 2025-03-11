@@ -26,8 +26,10 @@ public class Net : MonoBehaviour
     }
     private void OnTriggerEnter(Collision collision)
     {
+        GameObject Player = collision.gameObject;
         if(Player.tag == "Player")
         {
+            isCollision = true;
             Player.GetComponent<StateManager>()?.SetAlive(false);
             Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
