@@ -2,13 +2,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class PhotonMRGameManager : MonoBehaviourPunCallbacks
+public class PhotonVRManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonPlayerObject;
     public GameObject PhotonBulletObject;
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
-    
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -43,12 +42,9 @@ public class PhotonMRGameManager : MonoBehaviourPunCallbacks
             Debug.LogError("PhotonBulletObject is not set in the inspector.");
             return;
         }
-        
-        //MRPlayerが入室できたらGameManagerを生成するように
-        PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
-        
+
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        GameObject player = PhotonNetwork.Instantiate("Players/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        GameObject player = PhotonNetwork.Instantiate("Players/VRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
