@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     public void SetDecrementAliveCount()
     {
         aliveCount--;
+        Debug.Log("aliveCountDecrement: " + aliveCount);
         if (aliveCount <= 0)
         {
             SetGameState(GameState.END);
