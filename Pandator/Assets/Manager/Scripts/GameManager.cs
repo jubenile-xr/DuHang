@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private int aliveCount;
     private enum Winner
     {
+        NONE,
         SMALLANIMAL,
         PANDA,
     }
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
         state = gameState.START;
         scoreList = new Dictionary<string, float>();
         aliveCount = 3;
+        winner = Winner.NONE;
     }
 
     private void Update()
@@ -50,7 +52,8 @@ public class GameManager : MonoBehaviour
         if (aliveCount == 0)
         {
             SetGameState(gameState.END);
-            // ここでゲーム終了処理を行う　スコアを集める どちらが勝ったか
+            winner = Winner.PANDA;
+            // TODO　スコアを集める
         }
     }
 
