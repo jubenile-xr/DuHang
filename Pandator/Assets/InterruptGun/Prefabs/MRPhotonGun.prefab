@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
       propertyPath: m_Name
-      value: PhotonGun
+      value: MRPhotonGun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -77,7 +77,7 @@ PrefabInstance:
       addedObject: {fileID: 7516239329978330876}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1719001319085925856}
+      addedObject: {fileID: 5427235587575191624}
   m_SourcePrefab: {fileID: 100100000, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
 --- !u!1 &635333640970596493 stripped
 GameObject:
@@ -106,7 +106,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1719001319085925856
+--- !u!114 &5427235587575191624
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0181edd3ffd243708358bd1ae7e504a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletType: {fileID: 8868234331389898307, guid: a0b2ea857afca44429abdddce2d7e3ac, type: 3}
+  BulletType: {fileID: 0}
   BulletSpeed: 1
   RightController: {fileID: 0}
   spanTime: 0
