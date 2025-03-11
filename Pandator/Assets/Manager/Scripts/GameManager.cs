@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     public void SetDecrementAliveCount()
     {
         aliveCount--;
-        if (aliveCount == 0)
+        if (aliveCount <= 0)
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     public void SetIncrementAliveCount()
     {
         aliveCount++;
-        Debug.Log("aliveCount: " + aliveCount);
+        Debug.Log("aliveCountIncrement: " + aliveCount);
     }
 
     public void SetScoreList(string animalName, float score)

@@ -16,7 +16,6 @@ public class NetGun : MonoBehaviour
     private Boolean shotable = true;
     void Start()
     {
-        //Debug.Log("start");
     }
 
     // Update is called once per frame
@@ -46,8 +45,6 @@ public class NetGun : MonoBehaviour
     {
         //弾の発射位置(transform.position)は再考の余地あり
         GameObject bulletInstance = PhotonNetwork.Instantiate("Bullet/Net", RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
-
         bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
-        //Debug.Log("shot!");
     }
 }
