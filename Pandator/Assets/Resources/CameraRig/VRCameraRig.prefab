@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 2416649789414078557}
   - component: {fileID: 224267548846101444}
   m_Layer: 0
-  m_Name: VRCameraHaveGun
+  m_Name: VRCameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1075,6 +1075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PhotonGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1719001319085925856, guid: 49267e21d2ec744339c558fb05d33673, type: 3}
+      propertyPath: RightController
+      value: 
+      objectReference: {fileID: 8381788459151815160}
     - target: {fileID: 6373321931383893299, guid: 49267e21d2ec744339c558fb05d33673, type: 3}
       propertyPath: RightController
       value: 

@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 1178441077383595741}
   - component: {fileID: 4000615125199104777}
   m_Layer: 0
-  m_Name: VRPlayerHaveGun
+  m_Name: MRPlayer
   m_TagString: MasterPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

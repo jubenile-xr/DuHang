@@ -77,7 +77,7 @@ PrefabInstance:
       addedObject: {fileID: 7516239329978330876}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6373321931383893299}
+      addedObject: {fileID: 1719001319085925856}
   m_SourcePrefab: {fileID: 100100000, guid: af3fc12ef32a49e41bdc7fdb4e8ee569, type: 3}
 --- !u!1 &635333640970596493 stripped
 GameObject:
@@ -106,7 +106,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6373321931383893299
+--- !u!114 &1719001319085925856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,10 +115,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 635333640970596493}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e73208c2cbb6400e9716cd5dc4f1415, type: 3}
+  m_Script: {fileID: 11500000, guid: f0181edd3ffd243708358bd1ae7e504a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 1681413547175787533, guid: ff0b32a5cc815422e8c36f46a5d045d8, type: 3}
+  BulletType: {fileID: 8868234331389898307, guid: a0b2ea857afca44429abdddce2d7e3ac, type: 3}
+  BulletSpeed: 1
   RightController: {fileID: 0}
-  bulletSpeed: 500
-  spanTime: 5
+  spanTime: 0
