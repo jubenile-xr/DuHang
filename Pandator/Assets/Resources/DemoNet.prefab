@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -4805845811040421668}
   - component: {fileID: 3355786388988509910}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: DemoNet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
