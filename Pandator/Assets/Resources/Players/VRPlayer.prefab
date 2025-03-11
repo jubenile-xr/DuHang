@@ -108,7 +108,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 4365315415342946850}
-  sceneViewId: 4
+  sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &4365315415342946850
@@ -508,7 +508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8414555110698491737, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
       propertyPath: sceneViewId
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -545,9 +545,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interruptedTime: 3
   interruptedSpeed: 2
-  playerColorManager: {fileID: 0}
-  photonKeyMove: {fileID: 0}
-  scoreManager: {fileID: 0}
+  playerColorManager: {fileID: 8397218811756186413}
+  photonKeyMove: {fileID: 3868729845221154968}
+  scoreManager: {fileID: 247593422036286312}
 --- !u!114 &8397218811756186413
 MonoBehaviour:
   m_ObjectHideFlags: 0
