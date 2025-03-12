@@ -44,10 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0802308fff3d4f2b8cd3e32bf04809e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PhotonPlayerObject: {fileID: 7860674900597046589, guid: 7bbea7829752f49118aaa7e99a845205, type: 3}
-  PhotonBulletObject: {fileID: 8868234331389898307, guid: a0b2ea857afca44429abdddce2d7e3ac, type: 3}
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  CameraRig: {fileID: 660546892413538472, guid: c87b7f7e6b87e453d8ec801117d0f139, type: 3}
+  CameraRig: {fileID: 9100459135702439978, guid: ab6f3ed891a6449e9a3f54b6ce6a8291, type: 3}
+  IsVR: 0
 --- !u!1 &2490644844433498876
 GameObject:
   m_ObjectHideFlags: 0
