@@ -10,7 +10,7 @@ using Photon.Pun;
 public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 {
     private GameObject masterPlayerObject;
-    private GameObject[] rootTargets = new GameObject[4];
+    private GameObject[]    rootTargets = new GameObject[4];
     private GameObject _stateManager;
     //private NetworkStateManagerSample _manager;
     //private IsGrabStateManage _isGrabStateManage;
