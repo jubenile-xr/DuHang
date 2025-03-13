@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public enum gameState
+    public enum GameState
     {
         START,
         PLAY,
@@ -11,12 +11,13 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField] private gameState state;
+    [SerializeField] private GameState state;
     private Dictionary<string, float> scoreList;
 
     private int aliveCount;
     private enum Winner
     {
+        NONE,
         SMALLANIMAL,
         PANDA,
     }
@@ -25,21 +26,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        state = gameState.START;
+        state = GameState.START;
         scoreList = new Dictionary<string, float>();
-        aliveCount = 3;
+        aliveCount = 0;
+        winner = Winner.NONE;
     }
 
     private void Update()
     {
     }
 
-    public gameState GetGameState()
+    public GameState GetGameState()
     {
         return state;
     }
 
-    public void SetGameState(gameState newState)
+    public void SetGameState(GameState newState)
     {
         state = newState;
     }
@@ -47,11 +49,19 @@ public class GameManager : MonoBehaviour
     public void SetDecrementAliveCount()
     {
         aliveCount--;
-        if (aliveCount == 0)
+        Debug.Log("aliveCountDecrement: " + aliveCount);
+        if (aliveCount <= 0)
         {
-            SetGameState(gameState.END);
-            // ここでゲーム終了処理を行う　スコアを集める どちらが勝ったか
+            SetGameState(GameState.END);
+            winner = Winner.PANDA;
+            Debug.Log("Panda Win");
+            // TODO　スコアを集める
         }
+    }
+    public void SetIncrementAliveCount()
+    {
+        aliveCount++;
+        Debug.Log("aliveCountIncrement: " + aliveCount);
     }
 
     public void SetScoreList(string animalName, float score)

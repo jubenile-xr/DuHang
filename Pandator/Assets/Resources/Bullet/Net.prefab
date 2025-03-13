@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2857808274748319085}
   - component: {fileID: -4805845811040421668}
   - component: {fileID: 3355786388988509910}
-  - component: {fileID: 1761290922325850145}
+  - component: {fileID: 3080717948172960302}
   m_Layer: 0
   m_Name: Net
   m_TagString: Untagged
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &1761290922325850145
+--- !u!114 &3080717948172960302
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8868234331389898307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9657fc60ad4eb49e2869680794f2d611, type: 3}
+  m_Script: {fileID: 11500000, guid: f6269b08ab68d40a59ba6db4e0cd5da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDeleteTime: 0.1

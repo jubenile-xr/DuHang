@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InterrupteItem : MonoBehaviour
+public class Net : MonoBehaviour
 {
     private float time = 0.0f;
     [SerializeField]private float collisionDeleteTime = 0.1f;
@@ -31,10 +31,10 @@ public class InterrupteItem : MonoBehaviour
         if(Player.tag == "Player")
         {
             isCollision = true;
-            Player.GetComponent<StateManager>()?.SetInterrupted(true);
-            Player.GetComponent<PhotonStateManager>()?.SetInterrupted(true);
+            Player.GetComponent<StateManager>()?.SetAlive(false);
+            Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
-            Player.GetComponent<TestPlayerColorManager>()?.ChangeColorRed();
+            Player.GetComponent<TestPlayerColorManager>()?.ChangeColorBlack();
         }
     }
 }

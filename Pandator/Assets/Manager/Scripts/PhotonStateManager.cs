@@ -11,7 +11,7 @@ public class PhotonStateManager : MonoBehaviour
     private float time;
     [SerializeField] private TestPlayerColorManager playerColorManager;
     [SerializeField] private PhotonKeyMove photonKeyMove;
-    [SerializeField] private GameManager gameManager;
+    private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
 
 
@@ -19,6 +19,8 @@ public class PhotonStateManager : MonoBehaviour
     {
         isInterrupted = false;
         isAlive = true;
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        Debug.Log("GameManager: " + gameManager);
     }
     void Update()
     {
@@ -70,5 +72,6 @@ public class PhotonStateManager : MonoBehaviour
     {
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
+        Debug.Log("Dead");
     }
 }

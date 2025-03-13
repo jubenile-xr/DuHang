@@ -8,7 +8,7 @@ using Photon.Pun;
 //using UniRx.Triggers;
 
 public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
-{ 
+{
     private GameObject masterPlayerObject;
     private GameObject[] rootTargets = new GameObject[4];
     private GameObject _stateManager;
@@ -25,7 +25,7 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 
     private void OnCreate()
     {
-       Debug.Log("Trying to find GameObject with tag 'MasterPlayer'");
+        Debug.Log("Trying to find GameObject with tag 'MasterPlayer'");
         masterPlayerObject = GameObject.FindGameObjectWithTag("MasterPlayer");
         if (masterPlayerObject == null)
         {
@@ -90,7 +90,7 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(isCreated)
+        if (isCreated)
         {
             this.transform.position = masterPlayerObject.transform.position;
                 this.transform.rotation = masterPlayerObject.transform.rotation;
