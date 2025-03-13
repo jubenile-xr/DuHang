@@ -20,6 +20,7 @@ public class PhotonStateManager : MonoBehaviour
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        Debug.Log("GameManager: " + gameManager);
     }
     void Update()
     {
@@ -71,5 +72,6 @@ public class PhotonStateManager : MonoBehaviour
     {
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
+        Debug.Log("Dead");
     }
 }

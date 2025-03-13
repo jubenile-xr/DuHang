@@ -16,16 +16,16 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         gameTime = 0;
-        
+
         gameManager = gameManagerObject.GetComponent<GameManager>();
-        gameManager.SetGameState(GameManager.gameState.START);
+        gameManager.SetGameState(GameManager.GameState.START);
     }
     void Update()
     {
         gameTime += Time.deltaTime;
         SwitchGameState();
     }
-    
+
     // getter
     public float GetGameTime()
     {
@@ -44,9 +44,9 @@ public class TimeManager : MonoBehaviour
     {
         if (gameTime >= gameEndTime)
         {
-            gameManager.SetGameState(GameManager.gameState.END);
+            gameManager.SetGameState(GameManager.GameState.END);
         }
     }
-    
+
 
 }

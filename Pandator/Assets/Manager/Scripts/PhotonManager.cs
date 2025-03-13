@@ -2,13 +2,13 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class PhotonMRManager : MonoBehaviourPunCallbacks
+public class PhotonManager : MonoBehaviourPunCallbacks
 {
-    public GameObject PhotonPlayerObject;
-    public GameObject PhotonBulletObject;
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
-
+    [SerializeField] public bool IsVR;
+    private GameObject player;
+    private GameObject gameManager;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -33,22 +33,19 @@ public class PhotonMRManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
-        if (PhotonPlayerObject == null)
-        {
-            Debug.LogError("PhotonObject is not set in the inspector.");
-            return;
-        }
-        if (PhotonBulletObject == null)
-        {
-            Debug.LogError("PhotonBulletObject is not set in the inspector.");
-            return;
-        }
-
-        //MRPlayerが入室できたらGameManagerを生成するように
-        PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        GameObject player = PhotonNetwork.Instantiate("Players/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        if (IsVR)
+        {
+            player = PhotonNetwork.Instantiate("Player/VRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        }
+        else
+        {
+            player = PhotonNetwork.Instantiate("Player/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager = PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+        }
+
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
