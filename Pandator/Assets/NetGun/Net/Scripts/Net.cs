@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class Net : MonoBehaviour
@@ -5,10 +6,21 @@ public class Net : MonoBehaviour
     private float time = 0.0f;
     [SerializeField]private float collisionDeleteTime = 0.1f;
     private float collisionTime = 0.0f;
+    private Animator animator;
 
     private bool isCollision = false;
+
+    private void Start()
+    {
+        animator = this.GetComponent<Animator>();
+        
+        animator.SetTrigger("Capture");
+        
+    }
     private void Update()
     {
+        animator.SetTrigger("Idle");
+        
         // 3秒後に消える
         time += Time.deltaTime;
         if(time > 3.0f)
