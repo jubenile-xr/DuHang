@@ -200,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 822415951253519290}
-  - component: {fileID: 7446373714051635105}
+  - component: {fileID: 9115544057882919323}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -223,7 +223,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1295255931325412875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7446373714051635105
+--- !u!114 &9115544057882919323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8627518934312566564}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0802308fff3d4f2b8cd3e32bf04809e, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b9508a642da74343a2480dfc5f9b636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
