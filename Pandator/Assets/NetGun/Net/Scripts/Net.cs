@@ -1,3 +1,4 @@
+using Meta.XR.Editor.Tags;
 using Photon.Pun;
 using UnityEngine;
 
@@ -9,13 +10,13 @@ public class Net : MonoBehaviour
     private Animator animator;
 
     private bool isCollision = false;
+    [SerializeField]private string targetTag;
 
     private void Start()
     {
         animator = this.GetComponent<Animator>();
         
         animator.SetTrigger("Capture");
-        
     }
     private void Update()
     {
@@ -27,14 +28,16 @@ public class Net : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if(isCollision)
-        {
-            collisionTime += Time.deltaTime;
-            if(collisionTime > collisionDeleteTime)
-            {
-                Destroy(gameObject);
-            }
-        }
+        // if(isCollision)
+        // {
+        //     collisionTime += Time.deltaTime;
+        //     if(collisionTime > collisionDeleteTime)
+        //     {
+        //         Destroy(gameObject);
+        //     }
+        // }
+        
+   
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -42,7 +45,12 @@ public class Net : MonoBehaviour
         GameObject Player = collision.gameObject;
         if(Player.tag == "Player")
         {
+            //Netの中に入れる
+            Player.GetComponent<SphereCollider>().isTrigger = true;
+            //速度を0に
+            GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
             isCollision = true;
+            transform.position = Player.transform.position;
             Player.GetComponent<StateManager>()?.SetAlive(false);
             Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
