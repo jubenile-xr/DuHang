@@ -51,8 +51,8 @@ public class NetGun : MonoBehaviour
         animator.SetTrigger("Fire");
 
         //弾の発射位置(transform.position)は再考の余地あり
-        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", -RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
-        bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
+        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
 
     }
 }
