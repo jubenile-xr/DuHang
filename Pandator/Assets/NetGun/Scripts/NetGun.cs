@@ -24,8 +24,6 @@ public class NetGun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // animator.SetInteger("State",0);
-        
         //実験用
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
 
@@ -37,15 +35,13 @@ public class NetGun : MonoBehaviour
             }
 
         }
-        
         spanTime += Time.deltaTime;
-        
+
         //銃を初期状態に戻す
         if (spanTime > 5.0f)
         {
             shotable = true;
             spanTime = 0;
-            
 
         }
     }
@@ -55,9 +51,8 @@ public class NetGun : MonoBehaviour
         animator.SetTrigger("Fire");
 
         //弾の発射位置(transform.position)は再考の余地あり
-        //前方になぜか飛ばなかったため、方向は-1してます。
-        GameObject bulletInstance = PhotonNetwork.Instantiate("Bullet/Net", Tip.transform.position, Quaternion.LookRotation(-1 * RightController.transform.forward));
+        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", -RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
-        
+
     }
 }
