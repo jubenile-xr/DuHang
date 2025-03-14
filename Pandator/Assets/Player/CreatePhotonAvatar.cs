@@ -10,7 +10,7 @@ using Photon.Pun;
 public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 {
     private GameObject masterPlayerObject;
-    private GameObject[] rootTargets = new GameObject[4];
+    private GameObject[]    rootTargets = new GameObject[4];
     private GameObject _stateManager;
     //private NetworkStateManagerSample _manager;
     //private IsGrabStateManage _isGrabStateManage;
@@ -93,12 +93,12 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         if (isCreated)
         {
             this.transform.position = masterPlayerObject.transform.position;
-            this.transform.rotation = masterPlayerObject.transform.rotation;
-            for (int i = 0; i < 4; i++)
-            {
-                Targets[i].transform.localPosition = rootTargets[i].transform.localPosition;
-                Targets[i].transform.localRotation = rootTargets[i].transform.localRotation;
-            }
+                this.transform.rotation = masterPlayerObject.transform.rotation;
+                for (int i = 0; i < 4; i++)
+                {
+                    Targets[i].transform.position = rootTargets[i].transform.position;
+                    Targets[i].transform.rotation = rootTargets[i].transform.rotation;
+                }
         }
     }
 
