@@ -1,7 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &-8420001307127093515
-
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -30,7 +29,6 @@ MonoBehaviour:
   m_LoaderManagerInstance: {fileID: 2532917024597481194}
   m_InitManagerOnStart: 1
 --- !u!114 &-2539795529744046803
-
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,9 +44,8 @@ MonoBehaviour:
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
   m_Loaders:
-  - {fileID: 11400000, guid: 375e527274c68407680928883d1d711f, type: 2}
+  - {fileID: 11400000, guid: cf87bee2ca177774dbfc7c7765876642, type: 2}
 --- !u!114 &11400000
-
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,4 +77,4 @@ MonoBehaviour:
   m_AutomaticLoading: 0
   m_AutomaticRunning: 0
   m_Loaders:
-  - {fileID: 11400000, guid: 375e527274c68407680928883d1d711f, type: 2}
+  - {fileID: 11400000, guid: cf87bee2ca177774dbfc7c7765876642, type: 2}
