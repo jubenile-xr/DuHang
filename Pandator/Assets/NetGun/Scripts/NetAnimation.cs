@@ -24,11 +24,11 @@ public class NetAnimation : MonoBehaviour
 
     private void Update()
     {
-        // 発射後、かつまだ衝突していない間は、オブジェクトの下側が世界の下(Vector3.down)を向くように補正する。
+        // 発射後、かつまだ衝突していない間は、オブジェクトの下側が世界の下(Vector3.down)を向くように補正する
         if (!hasCollided)
         {
-            // 現在の下方向 (ローカル Vector3.down をワールド空間に変換)
-            // と目標の下方向（Vector3.down）との差分を元に回転を求める
+            // 現在の下方向 (ローカル Vector3.up をワールド空間に変換)と目標の下方向（Vector3.down）との差分を元に回転を求める
+            // これどうしよう，初めから回転方向が決まってるのは大丈夫か？
             Quaternion targetRotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.up), Vector3.up) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime / alignDuration);
         }
@@ -39,22 +39,15 @@ public class NetAnimation : MonoBehaviour
         // 複数回処理されないように
         if (hasCollided) return;
 
-        // 速度と角速度をリセットして、物理運動を停止する
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         hasCollided = true;
 
-        // 衝突時、最初のコンタクト点から衝突面の法線を取得
+        // 衝突時、最初のコンタクト点から衝突面の法線を取得(法線ベクトル方向にオブジェクトを向かせれば壁についた形になる？)
         Vector3 contactNormal = collision.contacts[0].normal;
 
-        /*
-            衝突時の目標回転は、オブジェクトの下側（ローカル Vector3.down ）が
-            衝突面の法線に一致するように計算します。
-            すなわち、Quaternion.FromToRotation(現在の下方向, 接触面の法線) を現在の回転に掛け合わせる
-        */
         Quaternion targetRotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.up), contactNormal) * transform.rotation;
 
-        // なめらかに回転を補正するコルーチンを開始
         StartCoroutine(SmoothAlign(targetRotation));
     }
 
@@ -68,9 +61,8 @@ public class NetAnimation : MonoBehaviour
             transform.rotation = Quaternion.Slerp(startRot, targetRot, t);
             yield return null;
         }
-        transform.rotation = targetRot; // 補正完了
+        transform.rotation = targetRot;
 
-        // 必要に応じて、回転補正後は物理運動を完全に停止させる
         if (setKinematicAfterAlignment)
         {
             rb.isKinematic = true;
