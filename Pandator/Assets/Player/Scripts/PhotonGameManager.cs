@@ -44,7 +44,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
             player = PhotonNetwork.Instantiate("Player/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
-        GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        GameObject camera = Instantiate(CameraRig, new Vector3(0f, 5f, 0f), Quaternion.identity);
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
