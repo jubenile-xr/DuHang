@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class ImageSpawner : MonoBehaviour
+public class PandatorViewAmmoSpawner : MonoBehaviour
 {
     public GameObject AmmoImage;
     public Transform parentPanel;

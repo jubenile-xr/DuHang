@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class CameraPositionLogger : MonoBehaviour
+public class PositionSpawner : MonoBehaviour
 {
     public Camera targetCamera;
     public TextMeshProUGUI XText;
