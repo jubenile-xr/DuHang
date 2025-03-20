@@ -444,6 +444,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BirdPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 7110975815405626333, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110975815405626333, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.501
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110975815405626333, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.066
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
