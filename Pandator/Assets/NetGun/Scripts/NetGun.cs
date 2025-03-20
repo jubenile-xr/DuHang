@@ -50,9 +50,9 @@ public class NetGun : MonoBehaviour
     {
         animator.SetTrigger("Fire");
 
-        //弾の発射位置(transform.position)は再考の余地あり
-        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
-        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
-
+        // 弾の発射位置をz軸正方向に1進んだ位置に変更
+        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+        // Increase the force applied to the bullet to make it fly further
+        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 2 * Time.deltaTime * 1000 * BulletSpeed);
     }
 }

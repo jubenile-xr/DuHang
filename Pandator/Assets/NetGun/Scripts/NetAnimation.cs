@@ -8,10 +8,10 @@ public class NetAnimation : MonoBehaviour
     private bool hasCollided = false;
 
     [Header("回転補正の設定")]
-    [Tooltip("下側がターゲット方向（空中では世界の下、衝突時は衝突面）へ向く補正にかける時間（秒）")]
+    [Tooltip("下側がターゲット方向（空中では世界の下，衝突時は衝突面）へ向く補正にかける時間（秒）")]
     public float alignDuration = 1.0f;
 
-    [Tooltip("回転補正完了後、物理演算を無効にする場合はtrueにする（衝突時のみ有効です）")]
+    [Tooltip("回転補正完了後，物理演算を無効にする場合はtrueにする（衝突時のみ有効）")]
     public bool setKinematicAfterAlignment = false;
 
     private void Start()
@@ -20,6 +20,8 @@ public class NetAnimation : MonoBehaviour
 
         // 物理演算による自動回転を抑制する（コードで回転補正を行うため）
         rb.freezeRotation = true;
+        Quaternion targetRotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.down), Vector3.up) * transform.rotation;
+        transform.rotation = targetRotation;
     }
 
     private void Update()
