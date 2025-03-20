@@ -1,6 +1,6 @@
 using Photon.Realtime;
 using System.Runtime.CompilerServices;
-using Unity.Android.Gradle.Manifest;
+//using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 
@@ -15,21 +15,21 @@ public class BirdMoveController : MonoBehaviour
     public float moveSpeed = 1.0f; //Walking speed
 
     //threshold
-    public float flapThreshold = 5f;  // ´¥·¢·ÉÏèµÄÊÖ±Û°Ú¶¯ãÐÖµ
-    public float flapStartThreshold = 2.3f;  // ³¬¹ýÕâ¸öÖµ²ÅÈÏÎª¿ªÊ¼°Ú¶¯
-    public float flapStopThreshold = 0.8f;   // µÍÓÚÕâ¸öÖµ²ÅÈÏÎªÍ£Ö¹°Ú¶¯
+    public float flapThreshold = 5f;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Û°Ú¶ï¿½ï¿½ï¿½Öµ
+    public float flapStartThreshold = 2.3f;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Ê¼ï¿½Ú¶ï¿½
+    public float flapStopThreshold = 0.8f;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ÎªÍ£Ö¹ï¿½Ú¶ï¿½
                                              
-    public int framesToStart = 3;   // Á¬Ðø¶àÉÙÖ¡³¬¹ýãÐÖµ²ÅÈÏÎªÆô¶¯
-    public int framesToStop = 5;    // Á¬Ðø¶àÉÙÖ¡µÍÓÚãÐÖµ²ÅÈÏÎªÍ£Ö¹
+    public int framesToStart = 3;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
+    public int framesToStop = 5;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ÎªÍ£Ö¹
 
-    private int aboveCount = 0;     // ¼ÇÂ¼Á¬Ðø³¬¹ýãÐÖµµÄÖ¡Êý
-    private int belowCount = 0;     // ¼ÇÂ¼Á¬ÐøµÍÓÚãÐÖµµÄÖ¡Êý
+    private int aboveCount = 0;     // ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Ö¡ï¿½ï¿½
+    private int belowCount = 0;     // ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Ö¡ï¿½ï¿½
   
     //force
-    public float gravityForce = 9.8f; // Ä£ÄâÖØÁ¦
-    public float gravityForceInAir = 0f; // ·ÉÐÐÖÐÖØÁ¦
-    public float liftForce = 4f; // ÉÏÉýÁ¦
-    public float verticalVelocity = 0f;       // µ±Ç°ÊúÖ±·½ÏòËÙ¶È£¨ÏòÉÏÎªÕý£©
+    public float gravityForce = 9.8f; // Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float gravityForceInAir = 0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float liftForce = 4f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float verticalVelocity = 0f;       // ï¿½ï¿½Ç°ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 
 
     bool isFlying = false;
@@ -58,25 +58,25 @@ public class BirdMoveController : MonoBehaviour
     }
     void TellBirdMode() 
     {
-        //»ñÈ¡ÊÖ²¿ËÙ¶È£¨ÓÃÓÚ¼ì²âÊÖ±Û°Ú¶¯·ù¶È£©
+        //ï¿½ï¿½È¡ï¿½Ö²ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½Ö±Û°Ú¶ï¿½ï¿½ï¿½ï¿½È£ï¿½
         Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
         Vector3 rightHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
 
         
                                                                         //bool isFlap= handFlapStrength > flapThreshold;     
 
-        // ¼ÆËãÆ½¾ù°Ú¶¯Ç¿¶È (¿ÉÒÔÊÇ y ·ÖÁ¿£¬Ò²¿ÉÒÔÓÃ magnitude)
+        // ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½Ú¶ï¿½Ç¿ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ y ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ magnitude)
         float leftStrength = leftHandVel.magnitude;
         float rightStrength = rightHandVel.magnitude;
         float avgStrength = (leftStrength + rightStrength) * 0.5f;
 
-        // ÅÐ¶ÏÊÇ·ñ³¬¹ýãÐÖµ
+        // ï¿½Ð¶ï¿½ï¿½Ç·ñ³¬¹ï¿½ï¿½ï¿½Öµ
         //bool isFlap = (avgStrength > flapThreshold);
         ////bool isFlap = OVRInput.Get(OVRInput.Button.One);
-        //// µ±¼ì²âµ½°Ú¶¯²¢ÇÒµ±Ç°²»ÊÇ·ÉÐÐ -> ½øÈë·ÉÐÐ
+        //// ï¿½ï¿½ï¿½ï¿½âµ½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½Òµï¿½Ç°ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         //if (isFlap)
         //{
-        //    // ¸Õ´Ó²»·ÉÐÐ -> ·ÉÐÐ£¬¿ÉÒÔ¸øÒ»´Î liftForce
+        //    // ï¿½Õ´Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ô¸ï¿½Ò»ï¿½ï¿½ liftForce
         //    //if (!isFlying)
         //    //{
         //    //    verticalVelocity = liftForce;
@@ -112,10 +112,10 @@ public class BirdMoveController : MonoBehaviour
     }
     void HandleWalking()
     {
-        // ÓÒÒ¡¸ËÊäÈë
+        // ï¿½ï¿½Ò¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector2 input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
 
-        // Ë®Æ½³¯Ïò
+        // Ë®Æ½ï¿½ï¿½ï¿½ï¿½
         Vector3 forward = CenterEyeAnchor.forward;
         forward.y = 0f;
         forward.Normalize();
@@ -126,13 +126,13 @@ public class BirdMoveController : MonoBehaviour
 
         Vector3 move = (forward * input.y + right * input.x) * moveSpeed;
 
-        // Õý³£ÖØÁ¦
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         verticalVelocity -= gravityForce * Time.deltaTime;
         move.y = verticalVelocity;
 
         CharacterController.Move(move * Time.deltaTime);
 
-        // Èç¹ûÅöµ½µØÃæ£¬ÖØÖÃËÙ¶È
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
         if (CharacterController.isGrounded && verticalVelocity < 0f)
         {
             verticalVelocity = 0f;
@@ -142,10 +142,10 @@ public class BirdMoveController : MonoBehaviour
 
     void HandleFlight()
     {
-        //// ¼ì²â ¡°¸Õ¸Õ°´ÏÂ A¡±
+        //// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Õ¸Õ°ï¿½ï¿½ï¿½ Aï¿½ï¿½
         //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
 
-        //// ¼ì²â ¡°ÊÇ·ñ³ÖÐø°´×¡ A¡±
+        //// ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¡ Aï¿½ï¿½
         //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One); 
 
         //if(!isFlap)
@@ -153,26 +153,26 @@ public class BirdMoveController : MonoBehaviour
         //    isFlying = false;
         //}
 
-        // 3) ¸ù¾ÝÊÇ·ñ°´×¡·ÉÐÐ°´Å¥À´Ê©¼ÓÖØÁ¦
+        // 3) ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½×¡ï¿½ï¿½ï¿½Ð°ï¿½Å¥ï¿½ï¿½Ê©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (isFlying)
         {
             
-            // ·ÉÐÐÖÐ¼õÈõ»ò²»ÊÜÖØÁ¦
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             verticalVelocity -=  gravityForceInAir * Time.deltaTime;
            
-            // ÈÃÍæ¼Ò³¯Í·ÏÔ·½ÏòÒÆ¶¯£¬²»ÏÞÖÆ y£¬¿ÉÒÔÏòÉÏ/ÏòÏÂ
+            // ï¿½ï¿½ï¿½ï¿½Ò³ï¿½Í·ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½
             Vector3 direction = CenterEyeAnchor.forward;
             direction.Normalize();
 
             Vector3 movement = direction * flightSpeed;
             movement.y += verticalVelocity;
 
-            // CharacterController ÒÆ¶¯
+            // CharacterController ï¿½Æ¶ï¿½
             CharacterController.Move(movement * Time.deltaTime);
         }
         else
         {
-            // ²»°´·ÉÐÐ°´Å¥ÔòÕý³£ÖØÁ¦ÏÂÂä
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             verticalVelocity -= gravityForce * Time.deltaTime;
         }
 
