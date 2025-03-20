@@ -42,20 +42,22 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         if (IsBird)
         {
             player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
         else if(IsRabbit)
         {
             player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
         else if(IsMouse)
         {
             player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
         else if(IsPanda)
         {
             player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager = PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+            PhotonNetwork.Instantiate(gameManager.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
