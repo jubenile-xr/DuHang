@@ -1,6 +1,3 @@
-using Photon.Realtime;
-using System.Runtime.CompilerServices;
-//using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 

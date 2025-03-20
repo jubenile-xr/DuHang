@@ -1,5 +1,3 @@
-//using Meta.XR.Editor.Tags;
-using Photon.Pun;
 using UnityEngine;
 
 public class Net : MonoBehaviour

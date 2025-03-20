@@ -1,16 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Oculus.Interaction.Unity.Input;
-using Unity.VisualScripting;
 using UnityEngine;
 using Photon.Pun;
 
-
-public class NetGun : MonoBehaviour
+public class NetGun : MonoBehaviourPun
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private float BulletSpeed = 1f;
+    [SerializeField] private float BulletSpeed = 0.5f;
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     [SerializeField] private float spanTime = 0f;
@@ -28,7 +23,7 @@ public class NetGun : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
 
         {
-            if (shotable)
+            if (shotable && photonView.IsMine)
             {
                 Shot();
                 shotable = false;
@@ -50,9 +45,7 @@ public class NetGun : MonoBehaviour
     {
         animator.SetTrigger("Fire");
 
-        //弾の発射位置(transform.position)は再考の余地あり
-        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", -RightController.transform.position, Quaternion.LookRotation(RightController.transform.forward));
-        bulletInstance.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * 10 * Time.deltaTime * 1000 * BulletSpeed);
-
+        GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
+        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
     }
 }
