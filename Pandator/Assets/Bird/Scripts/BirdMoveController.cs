@@ -58,8 +58,8 @@ public class BirdMoveController : MonoBehaviour
     }
     void TellBirdMode() 
     {
-        //��ȡ�ֲ��ٶȣ����ڼ���ֱ۰ڶ����ȣ�
-        Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
+// 获取手部速度（用于检测手臂摆动幅度）  // 手の速度を取得（腕の振れ幅の検出に利用）
+Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
         Vector3 rightHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
 
         
