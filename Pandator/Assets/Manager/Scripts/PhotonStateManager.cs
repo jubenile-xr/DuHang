@@ -13,14 +13,19 @@ public class PhotonStateManager : MonoBehaviour
     [SerializeField] private PhotonKeyMove photonKeyMove;
     private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
+    private Renderer renderer;
 
 
     void Start()
     {
+        renderer = GetComponent<Renderer>();
+        renderer.material.SetFloat("_Surface", 1); //透明にするためにTransparentにしてる
+        
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
+       
     }
     void Update()
     {
@@ -73,5 +78,10 @@ public class PhotonStateManager : MonoBehaviour
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
         Debug.Log("Dead");
+        
+        //死んだら透明化
+        Color transparentColor = renderer.material.color;
+        transparentColor.a = 0f;
+        renderer.material.color = transparentColor;
     }
 }
