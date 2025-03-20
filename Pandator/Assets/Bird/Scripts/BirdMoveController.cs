@@ -34,11 +34,13 @@ public class BirdMoveController : MonoBehaviour
 
     bool isFlying = false;
 
-
+    //animation
+    private Animator animator;
 
     void Start()
     {
         CharacterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();  // 获取 Animator 组件
     }
 
 
@@ -54,6 +56,8 @@ public class BirdMoveController : MonoBehaviour
         {
             HandleFlight();
         }
+        animator.SetBool("isFlying", isFlying);  // 控制飞行动画
+        animator.SetFloat("Speed", CharacterController.velocity.magnitude); // 控制速度动画
 
     }
     void TellBirdMode() 
