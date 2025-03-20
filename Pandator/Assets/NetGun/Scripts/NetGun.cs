@@ -5,7 +5,7 @@ using Photon.Pun;
 public class NetGun : MonoBehaviourPun
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private float BulletSpeed = 1f;
+    [SerializeField] private float BulletSpeed = 5f;
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     [SerializeField] private float spanTime = 0f;
