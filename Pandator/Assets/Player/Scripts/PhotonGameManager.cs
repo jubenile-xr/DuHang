@@ -10,7 +10,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     [SerializeField] public bool IsBird;
     [SerializeField] public bool IsMouse;
     [SerializeField] public bool IsPanda;
-    private GameObject gameManager;
+    [SerializeField] public GameObject gameManager;
 
     private GameObject player;
     void Start()
