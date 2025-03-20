@@ -5,7 +5,7 @@ using Photon.Pun;
 public class NetGun : MonoBehaviourPun
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField] private float BulletSpeed = 5f;
+    [SerializeField] private float BulletSpeed = 0.5f;
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     [SerializeField] private float spanTime = 0f;
@@ -46,6 +46,6 @@ public class NetGun : MonoBehaviourPun
         animator.SetTrigger("Fire");
 
         GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
-        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 2 * Time.deltaTime * 1000 * BulletSpeed);
+        bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
     }
 }
