@@ -1,13 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Oculus.Interaction.Unity.Input;
-using Unity.VisualScripting;
 using UnityEngine;
 using Photon.Pun;
 
-
-public class NetGun : MonoBehaviour
+public class NetGun : MonoBehaviourPun
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private float BulletSpeed = 1f;
@@ -28,7 +23,7 @@ public class NetGun : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
 
         {
-            if (shotable)
+            if (shotable && photonView.IsMine)
             {
                 Shot();
                 shotable = false;

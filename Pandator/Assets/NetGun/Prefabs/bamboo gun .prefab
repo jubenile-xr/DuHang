@@ -81,7 +81,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 077960a53996eec4e8a6dba9fa666cee, type: 3}
       propertyPath: m_Name
-      value: 'bamboo gun '
+      value: bamboo gun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
