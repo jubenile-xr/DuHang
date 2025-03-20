@@ -6,7 +6,11 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
-    [SerializeField] public bool IsVR;
+    [SerializeField] public bool IsRabbit;
+    [SerializeField] public bool IsBird;
+    [SerializeField] public bool IsMouse;
+    [SerializeField] public bool IsPanda;
+    [SerializeField] public GameObject gameManager;
 
     private GameObject player;
     void Start()
@@ -35,16 +39,28 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     {
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
-        if (IsVR)
+        if (IsBird)
         {
-            player = PhotonNetwork.Instantiate("Player/VRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
-        else
+        else if(IsRabbit)
         {
-            player = PhotonNetwork.Instantiate("Player/MRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+        }
+        else if(IsMouse)
+        {
+            player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+        }
+        else if(IsPanda)
+        {
+            player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            PhotonNetwork.Instantiate(gameManager.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
-        GameObject camera = Instantiate(CameraRig, new Vector3(0f, 5f, 0f), Quaternion.identity);
+        GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
