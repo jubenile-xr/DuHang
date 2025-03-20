@@ -10,6 +10,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     [SerializeField] public bool IsBird;
     [SerializeField] public bool IsMouse;
     [SerializeField] public bool IsPanda;
+    private GameObject gameManager;
 
     private GameObject player;
     void Start()
@@ -53,6 +54,8 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         else if(IsPanda)
         {
             player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager = PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
         }
 
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
