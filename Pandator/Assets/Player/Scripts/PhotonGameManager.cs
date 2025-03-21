@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     [SerializeField] public bool IsBird;
     [SerializeField] public bool IsMouse;
     [SerializeField] public bool IsPanda;
-    [SerializeField] public GameObject gameManager;
+    private GameManager gameManager;
 
     private GameObject player;
     void Start()
@@ -37,27 +38,32 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        
+        if (!IsPanda)
+        {
+            StartCoroutine(WaitForGameManager());
+        }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
         if (IsBird)
         {
             player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsRabbit)
         {
             player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsMouse)
         {
             player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsPanda)
         {
             player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            PhotonNetwork.Instantiate(gameManager.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
+            PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
@@ -70,6 +76,35 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         avatarScript.ExecuteCreatePhotonAvatar();
+    }
+    
+    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
+    //GameManagerの取得とaliveCountのインクリメントを行う
+    private IEnumerator WaitForGameManager()
+    {
+        while (!gameManager)
+        {
+            GameObject gmObj = GameObject.FindWithTag("GameManager");
+            if (gmObj)
+            {
+                gameManager = gmObj.GetComponent<GameManager>();
+                if (gameManager)
+                {
+                    Debug.Log("GameManager found.");
+                    gameManager.SetIncrementAliveCount();
+                    yield break;
+                }
+                else
+                {
+                    Debug.LogError("GameManager object found, but component is missing.");
+                }
+            }
+            else
+            {
+                Debug.Log("GameManager object not found. Waiting...");
+            }
+            yield return null; // 1フレーム待機
+        }
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理

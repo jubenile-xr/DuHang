@@ -13,6 +13,8 @@ public class PhotonStateManager : MonoBehaviour
     [SerializeField] private PhotonKeyMove photonKeyMove;
     private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
+    
+    [Header("親オブジェクト操作用"),SerializeField] private GameObject parentObject;
 
 
     void Start()
@@ -72,6 +74,9 @@ public class PhotonStateManager : MonoBehaviour
     {
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
+        //地面に落とす
+        //TODO: 実際の地面との調整が必要
+        parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
     }
 }
