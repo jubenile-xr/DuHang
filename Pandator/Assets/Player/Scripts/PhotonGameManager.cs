@@ -37,12 +37,14 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        Debug.Log("Joined Room");
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
         if (IsBird)
         {
             player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
             gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+            Debug.Log("BirdJoin");
         }
         else if(IsRabbit)
         {
