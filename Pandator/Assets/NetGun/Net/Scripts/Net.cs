@@ -35,16 +35,16 @@ public class Net : MonoBehaviour
         //     }
         // }
         
-   
     }
 
     private void OnTriggerEnter(Collider collision)
     {
+        if(isCollision) return;
         GameObject Player = collision.gameObject;
         if(Player.tag == "Player")
         {
+            isCollision = true;
             //Netの中に入れる
-
             Player.GetComponent<SphereCollider>().isTrigger = true;
             //速度を0に
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
