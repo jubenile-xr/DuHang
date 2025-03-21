@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraRig: {fileID: 1034191405493846421}
   player: {fileID: 1034191405493846421}
-  moveSpeed: 2
+  moveSpeed: 0.5
   maxRotationLimit: 80
 --- !u!1 &2780945554104328006
 GameObject:
