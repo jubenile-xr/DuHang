@@ -74,8 +74,9 @@ public class PhotonStateManager : MonoBehaviour
     {
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
-        //地面の落とす
-        parentObject.transform.position = new Vector3(0, 0, 0);
+        //地面に落とす
+        //TODO: 実際の地面との調整が必要
+        parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
     }
 }
