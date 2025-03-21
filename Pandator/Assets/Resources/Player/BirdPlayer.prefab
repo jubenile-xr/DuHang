@@ -617,7 +617,7 @@ MonoBehaviour:
   interruptedSpeed: 2
   playerColorManager: {fileID: 574348892424421017}
   photonKeyMove: {fileID: 0}
-  scoreManager: {fileID: 0}
+  scoreManager: {fileID: 2832062454768295434}
 --- !u!114 &2197287181607288087
 MonoBehaviour:
   m_ObjectHideFlags: 0
