@@ -53,6 +53,7 @@ public class Net : MonoBehaviour
             Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
             Player.GetComponent<TestPlayerColorManager>()?.ChangeColorBlack();
+            Debug.Log("hit");
         }
     }
 }
