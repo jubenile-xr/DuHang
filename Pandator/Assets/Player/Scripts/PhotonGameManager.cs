@@ -49,17 +49,17 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         if (IsBird)
         {
             player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsRabbit)
         {
             player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsMouse)
         {
             player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-            gameManager.SetIncrementAliveCount();
+            // gameManager.SetIncrementAliveCount();
         }
         else if(IsPanda)
         {
@@ -90,6 +90,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
                 if (gameManager != null)
                 {
                     Debug.Log("GameManager found.");
+                    gameManager.SetIncrementAliveCount();
                     yield break;
                 }
                 else
