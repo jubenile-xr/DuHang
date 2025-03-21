@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3314031006577484802}
   - component: {fileID: 526698571786711140}
   - component: {fileID: 6948068072552014036}
+  - component: {fileID: 282658328934607013}
   m_Layer: 0
   m_Name: AllWeaponHit
   m_TagString: Untagged
@@ -140,6 +141,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a57a0755b29dd8d448473ed28831ac83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 526698571786711140}
+--- !u!114 &282658328934607013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5931678168604845033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3facfa4563604b34a9e3e496a6287d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 526698571786711140}
