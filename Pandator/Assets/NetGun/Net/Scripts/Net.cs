@@ -44,8 +44,8 @@ public class Net : MonoBehaviour
         if(Player.tag == "Player")
         {
             //Netの中に入れる
-            // Player.GetComponent<MeshCollider>().isCon = true;
-            // Player.GetComponent<MeshCollider>().isTrigger = true;
+
+            Player.GetComponent<SphereCollider>().isTrigger = true;
             //速度を0に
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
             isCollision = true;
