@@ -10,6 +10,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     [SerializeField] public bool IsBird;
     [SerializeField] public bool IsMouse;
     [SerializeField] public bool IsPanda;
+    [SerializeField] public bool IsVR;
     [SerializeField] public GameObject gameManager;
 
     private GameObject player;
@@ -53,6 +54,10 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         {
             player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
             gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
+        }
+        else if (IsVR)
+        {
+            player = PhotonNetwork.Instantiate("Player/VRPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
         else if(IsPanda)
         {
