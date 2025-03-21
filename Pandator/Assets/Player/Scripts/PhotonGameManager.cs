@@ -61,6 +61,12 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
+    
+        if (camera == null)
+        {
+            Debug.LogError("CameraRig is missing in the inspector.");
+        }
+        Debug.Log("kakunin");
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
