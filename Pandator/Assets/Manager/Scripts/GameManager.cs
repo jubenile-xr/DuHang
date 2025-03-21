@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void SetDecrementAliveCount()
     {
+        Debug.Log("SetDecrementAliveCount called");
         aliveCount--;
         Debug.Log("aliveCountDecrement: " + aliveCount);
 

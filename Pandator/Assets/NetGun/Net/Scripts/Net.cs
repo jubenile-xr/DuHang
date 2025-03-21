@@ -42,6 +42,7 @@ public class Net : MonoBehaviour
     {
         if(isCollision) return;
         GameObject Player = collision.gameObject;
+        
         if(Player.tag == "Player")
         {
             isCollision = true;

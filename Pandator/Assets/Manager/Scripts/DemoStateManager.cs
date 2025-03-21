@@ -69,6 +69,6 @@ public class StateManager : MonoBehaviour
     private void DeadLogic()
     {
         scoreManager.SetAliveTime(Time.time);
-        gameManager.SetDecrementAliveCount();
+        // gameManager.SetDecrementAliveCount();
     }
 }
