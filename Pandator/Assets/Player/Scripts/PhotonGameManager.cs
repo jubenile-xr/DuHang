@@ -41,7 +41,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         //Panda以外はGameManagerをタグから検索するように
         if (!IsPanda)
         {
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
