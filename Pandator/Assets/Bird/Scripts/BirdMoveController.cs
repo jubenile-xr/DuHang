@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class BirdMoveController : MonoBehaviour
 {
-    public Transform OvrPlayer;
     public Transform CenterEyeAnchor;
 
     private CharacterController CharacterController;

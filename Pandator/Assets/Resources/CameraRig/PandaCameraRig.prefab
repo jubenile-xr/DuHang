@@ -827,7 +827,7 @@ GameObject:
   - component: {fileID: 4568037325082774258}
   - component: {fileID: 6909870897642661040}
   m_Layer: 0
-  m_Name: MRCameraRig
+  m_Name: PandaCameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
