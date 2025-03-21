@@ -16,7 +16,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     }
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
-
+    
     private GameObject player;
     void Start()
     {
