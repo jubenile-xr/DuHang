@@ -5,7 +5,7 @@ public class BirdMoveController : MonoBehaviour
 {
     public Transform CenterEyeAnchor;
 
-    private CharacterController CharacterController;
+    [SerializeField]public CharacterController CharacterController;
 
     public float flightSpeed = 10f;
     public float moveSpeed = 1.0f; //Walking speed
