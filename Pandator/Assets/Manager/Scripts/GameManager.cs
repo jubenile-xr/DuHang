@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    private static GameManager Instance;
     public enum GameState
     {
         START,
@@ -25,6 +26,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     [SerializeField] private Winner winner;
     private List<string> winnerAnimalNameList;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
 
     private void Start()
     {
