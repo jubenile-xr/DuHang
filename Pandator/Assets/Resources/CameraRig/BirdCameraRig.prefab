@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 7586539467188613217}
   m_Layer: 0
   m_Name: BirdCameraRig
-  m_TagString: CameraRig
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -389,7 +389,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2030391483082193312}
   m_Father: {fileID: 2421728379772338789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &8943130456774586163
@@ -927,7 +928,7 @@ GameObject:
   - component: {fileID: 1606067485555259393}
   m_Layer: 0
   m_Name: RightControllerAnchor
-  m_TagString: Untagged
+  m_TagString: RHandTargetAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -980,6 +981,37 @@ Transform:
   - {fileID: 5974511580166504906}
   - {fileID: 4581835375101103544}
   m_Father: {fileID: 2421728379772338789}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9129633786059850214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2030391483082193312}
+  m_Layer: 0
+  m_Name: TrackEyeAnchor
+  m_TagString: CameraRig
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2030391483082193312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9129633786059850214}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773392716593774749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3022971275028982522
 PrefabInstance:
