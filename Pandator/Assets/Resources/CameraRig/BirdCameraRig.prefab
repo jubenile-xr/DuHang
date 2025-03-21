@@ -171,8 +171,9 @@ GameObject:
   - component: {fileID: 287829237816166381}
   - component: {fileID: 2416649789414078557}
   - component: {fileID: 224267548846101444}
+  - component: {fileID: 7586539467188613217}
   m_Layer: 0
-  m_Name: VRCameraRig
+  m_Name: BirdCameraRig
   m_TagString: CameraRig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -333,6 +334,30 @@ MonoBehaviour:
   - <Keyboard>/leftAlt
   - <Keyboard>/rightAlt
   - <Keyboard>/f2
+--- !u!114 &7586539467188613217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528499836265461033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c249dccf5f092a94da98d49c1726cc53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CenterEyeAnchor: {fileID: 773392716593774749}
+  flightSpeed: 10
+  moveSpeed: 1
+  flapThreshold: 5
+  flapStartThreshold: 2.3
+  flapStopThreshold: 0.8
+  framesToStart: 3
+  framesToStop: 5
+  gravityForce: 9.8
+  gravityForceInAir: 0
+  liftForce: 4
+  verticalVelocity: 0
 --- !u!1 &3785578283397347163
 GameObject:
   m_ObjectHideFlags: 0
