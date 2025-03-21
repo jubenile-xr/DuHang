@@ -551,6 +551,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6083628404130050952, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8081409527495488000}
+    - targetCorrespondingSourceObject: {fileID: 6083628404130050952, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1772619438540807029}
   m_SourcePrefab: {fileID: 100100000, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
 --- !u!1 &193298545371936864 stripped
 GameObject:
@@ -591,6 +594,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3209554841506446676, guid: 46ceacc95eaaaaf4a91f9bde129e5f56, type: 3}
+--- !u!114 &1772619438540807029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193298545371936864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interruptedTime: 3
+  interruptedSpeed: 2
+  playerColorManager: {fileID: 574348892424421017}
+  photonKeyMove: {fileID: 0}
+  scoreManager: {fileID: 2832062454768295434}
 --- !u!4 &6637949111263282345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 782892143590788929, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
