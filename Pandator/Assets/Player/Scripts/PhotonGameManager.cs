@@ -11,7 +11,6 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     [SerializeField] public bool IsBird;
     [SerializeField] public bool IsMouse;
     [SerializeField] public bool IsPanda;
-    // [SerializeField] public GameObject gameManager;
     private GameManager gameManager;
 
     private GameObject player;
@@ -39,7 +38,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
-        //Panda以外はGameManagerをタグから検索するように
+        
         if (!IsPanda)
         {
             StartCoroutine(WaitForGameManager());
@@ -79,15 +78,17 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         avatarScript.ExecuteCreatePhotonAvatar();
     }
     
-    IEnumerator WaitForGameManager()
+    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
+    //GameManagerの取得とaliveCountのインクリメントを行う
+    private IEnumerator WaitForGameManager()
     {
-        while (gameManager == null)
+        while (!gameManager)
         {
             GameObject gmObj = GameObject.FindWithTag("GameManager");
-            if (gmObj != null)
+            if (gmObj)
             {
                 gameManager = gmObj.GetComponent<GameManager>();
-                if (gameManager != null)
+                if (gameManager)
                 {
                     Debug.Log("GameManager found.");
                     gameManager.SetIncrementAliveCount();
