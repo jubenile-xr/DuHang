@@ -1,3 +1,4 @@
+using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -41,11 +42,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         //Panda以外はGameManagerをタグから検索するように
         if (!IsPanda)
         {
-            while (!gameManager)
-            {
-                gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-
-            }
+            StartCoroutine(WaitForGameManager());
         }
 
         // ルームに入室できたら、PhotonObject(本記事ではSphere)を生成する
@@ -80,6 +77,32 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         }
 
         avatarScript.ExecuteCreatePhotonAvatar();
+    }
+    
+    IEnumerator WaitForGameManager()
+    {
+        while (gameManager == null)
+        {
+            GameObject gmObj = GameObject.FindWithTag("GameManager");
+            if (gmObj != null)
+            {
+                gameManager = gmObj.GetComponent<GameManager>();
+                if (gameManager != null)
+                {
+                    Debug.Log("GameManager found.");
+                    yield break;
+                }
+                else
+                {
+                    Debug.LogError("GameManager object found, but component is missing.");
+                }
+            }
+            else
+            {
+                Debug.Log("GameManager object not found. Waiting...");
+            }
+            yield return null; // 1フレーム待機
+        }
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
