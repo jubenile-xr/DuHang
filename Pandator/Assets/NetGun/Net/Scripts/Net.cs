@@ -7,6 +7,7 @@ public class Net : MonoBehaviour
     private float collisionTime = 0.0f;
     private Animator animator;
 
+    //一度当たったらonにする
     private bool isCollision = false;
     [SerializeField]private string targetTag;
 
@@ -48,7 +49,6 @@ public class Net : MonoBehaviour
             Player.GetComponent<SphereCollider>().isTrigger = true;
             //速度を0に
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
-            isCollision = true;
             transform.position = Player.transform.position;
             transform.position += new Vector3(0, 1, 0);
             Player.GetComponent<StateManager>()?.SetAlive(false);
