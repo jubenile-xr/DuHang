@@ -201,6 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3419985038092814920}
   - component: {fileID: 6895725137154997951}
+  - component: {fileID: 8644836662646175154}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7147521052643004252}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0abb712ca7780471187bc8fa58470776, type: 3}
   m_Name: 
@@ -238,3 +239,21 @@ MonoBehaviour:
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
   IsVR: 1
+--- !u!114 &8644836662646175154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7147521052643004252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b9508a642da74343a2480dfc5f9b636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PhotonFailureObject: {fileID: 1890013534520859082}
+  CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
+  IsRabbit: 0
+  IsBird: 1
+  IsMouse: 0
+  IsPanda: 0
