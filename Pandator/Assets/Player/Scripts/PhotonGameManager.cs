@@ -77,7 +77,7 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
 
         avatarScript.ExecuteCreatePhotonAvatar();
     }
-
+    
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
     //GameManagerの取得とaliveCountのインクリメントを行う
     private IEnumerator WaitForGameManager()
