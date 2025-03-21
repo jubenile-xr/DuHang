@@ -78,6 +78,15 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
 
             camera.transform.SetParent(player.transform);
         }
+
+        CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
+        if (avatarScript == null)
+        {
+            Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
+            return;
+        }
+
+        avatarScript.ExecuteCreatePhotonAvatar();
     }
 
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
