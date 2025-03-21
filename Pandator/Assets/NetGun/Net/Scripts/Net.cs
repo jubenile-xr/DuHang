@@ -50,6 +50,7 @@ public class Net : MonoBehaviour
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero; 
             isCollision = true;
             transform.position = Player.transform.position;
+            transform.position += new Vector3(0, 1, 0);
             Player.GetComponent<StateManager>()?.SetAlive(false);
             Player.GetComponent<PhotonStateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
