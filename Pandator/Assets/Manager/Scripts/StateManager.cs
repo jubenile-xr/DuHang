@@ -72,6 +72,7 @@ public class StateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
+        if (!isAlive) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
         //地面に落とす

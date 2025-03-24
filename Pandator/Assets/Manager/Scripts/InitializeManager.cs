@@ -16,7 +16,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     }
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
-
+    
     private GameObject player;
     private GameObject camera;
     void Start()
