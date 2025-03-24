@@ -200,10 +200,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3419985038092814920}
-  - component: {fileID: 6895725137154997951}
   - component: {fileID: 8644836662646175154}
   m_Layer: 0
-  m_Name: Gamemanager
+  m_Name: initializeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,21 +223,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5950301702196987436}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6895725137154997951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7147521052643004252}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0abb712ca7780471187bc8fa58470776, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
-  IsVR: 1
 --- !u!114 &8644836662646175154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +237,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 1890013534520859082}
   CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
-  IsRabbit: 0
-  IsBird: 1
-  IsMouse: 0
-  IsPanda: 0
+  character: 0
