@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class PhotonGameManager : MonoBehaviourPunCallbacks
+public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
     public GameObject CameraRig;
@@ -60,6 +60,8 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
                 break;
             case GameCharacter.PANDA:
                 player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+                
+                // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
                 PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
         }
