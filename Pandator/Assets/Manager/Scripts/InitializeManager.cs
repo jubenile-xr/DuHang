@@ -67,7 +67,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 break;
             case GameCharacter.PANDA:
                 player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                // PhotonNetwork.Instantiate(gameManager.name, new Vector3(0f, 0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
                 
                 // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
@@ -80,8 +79,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             Debug.LogError("CameraRig is missing in the inspector.");
         }
-
-        // GameObject camera = Instantiate(CameraRig, new Vector3(0f, 0f, 0f), Quaternion.identity);
         camera.transform.SetParent(player.transform);
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
