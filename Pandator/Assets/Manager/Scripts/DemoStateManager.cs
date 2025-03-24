@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StateManager : MonoBehaviour
+public class DemoStateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;

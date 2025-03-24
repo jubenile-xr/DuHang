@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public enum GameState
     {
@@ -50,6 +52,9 @@ public class GameManager : MonoBehaviour
     {
         aliveCount--;
         Debug.Log("aliveCountDecrement: " + aliveCount);
+
+        UpdateAliveCountProperty();
+
         if (aliveCount <= 0)
         {
             SetGameState(GameState.END);
@@ -62,6 +67,8 @@ public class GameManager : MonoBehaviour
     {
         aliveCount++;
         Debug.Log("aliveCountIncrement: " + aliveCount);
+
+        UpdateAliveCountProperty();
     }
 
     public void SetScoreList(string animalName, float score)
@@ -72,5 +79,25 @@ public class GameManager : MonoBehaviour
     public void appendWinnerAnimalNameList(string animalName)
     {
         winnerAnimalNameList.Add(animalName);
+    }
+
+    private void UpdateAliveCountProperty()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+            
+            properties.Add("aliveCount", aliveCount);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+        }
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        if(propertiesThatChanged.ContainsKey("aliveCount"))
+        {
+            aliveCount = (int)propertiesThatChanged["aliveCount"];
+            Debug.Log("aliveCount: " + aliveCount);
+        }
     }
 }

@@ -32,7 +32,6 @@ public class InterrupteItem : MonoBehaviour
         {
             isCollision = true;
             Player.GetComponent<StateManager>()?.SetInterrupted(true);
-            Player.GetComponent<PhotonStateManager>()?.SetInterrupted(true);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
             Player.GetComponent<TestPlayerColorManager>()?.ChangeColorRed();
         }
