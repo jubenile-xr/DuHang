@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PhotonStateManager : MonoBehaviour
+public class StateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
