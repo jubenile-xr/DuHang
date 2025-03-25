@@ -7,8 +7,11 @@ public class MouseMove : MonoBehaviour
     [Header("登る速度")]
     [SerializeField] private float climbSpeed = 2.0f;
     private Rigidbody rb;
-    [Header("ねずみのモデル")]
-    [SerializeField] private GameObject mouseModel;
+
+    [Header("OVRカメラ")]
+    [SerializeField] private OVRCameraRig ovrCameraRig;
+    [Header("カメラオブジェクト")]
+    [SerializeField] private GameObject camera;
 
     private void Start()
     {
@@ -32,9 +35,6 @@ public class MouseMove : MonoBehaviour
         forwardDirection.y = 0; // 水平移動のみ考慮
         forwardDirection.Normalize();
 
-        // カメラの向きに合わせてオブジェクトを回転
-        mouseModel.transform.rotation = Quaternion.LookRotation(forwardDirection);
-
         // 移動処理
         if (isCollisionWall)
         {
@@ -44,7 +44,11 @@ public class MouseMove : MonoBehaviour
         {
             transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
         }
-
+        // カメラの位置をねずみの位置に合わせる
+        camera.transform.position = transform.position;
+        // カメラの向きをねずみの向きに合わせる
+        Quaternion targetRotation = Quaternion.Euler(0, ovrCameraRig.centerEyeAnchor.eulerAngles.y, 0);
+        transform.rotation = targetRotation;
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -52,7 +56,7 @@ public class MouseMove : MonoBehaviour
         {
             isCollisionWall = true;
             // x,z, rotait固定
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = false;
         }
     }
 
@@ -60,7 +64,7 @@ public class MouseMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Wall")
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = true;
             isCollisionWall = false;
         }
     }
