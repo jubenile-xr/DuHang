@@ -1,14 +1,11 @@
-using Photon.Realtime;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
 public class BirdMoveController : MonoBehaviour
 {
-    public Transform OvrPlayer;
     public Transform CenterEyeAnchor;
 
-    private CharacterController CharacterController;
+    [SerializeField]public CharacterController CharacterController;
 
     public float flightSpeed = 10f;
     public float moveSpeed = 1.0f; //Walking speed
@@ -17,13 +14,13 @@ public class BirdMoveController : MonoBehaviour
     public float flapThreshold = 5f;  // ����������ֱ۰ڶ���ֵ
     public float flapStartThreshold = 2.3f;  // �������ֵ����Ϊ��ʼ�ڶ�
     public float flapStopThreshold = 0.8f;   // �������ֵ����Ϊֹͣ�ڶ�
-
+                                             
     public int framesToStart = 3;   // ��������֡������ֵ����Ϊ����
     public int framesToStop = 5;    // ��������֡������ֵ����Ϊֹͣ
 
     private int aboveCount = 0;     // ��¼����������ֵ��֡��
     private int belowCount = 0;     // ��¼����������ֵ��֡��
-
+  
     //force
     public float gravityForce = 9.8f; // ģ������
     public float gravityForceInAir = 0f; // ����������
@@ -42,25 +39,27 @@ public class BirdMoveController : MonoBehaviour
 
 
     void Update()
+
     {
         TellBirdMode();
         if (!isFlying)
-        {
-            HandleWalking();
+        { 
+            HandleWalking(); 
         }
         else
         {
             HandleFlight();
         }
+
     }
-    void TellBirdMode()
+    void TellBirdMode() 
     {
-        //��ȡ�ֲ��ٶȣ����ڼ���ֱ۰ڶ����ȣ�
-        Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
+// 获取手部速度（用于检测手臂摆动幅度）  // 手の速度を取得（腕の振れ幅の検出に利用）
+Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
         Vector3 rightHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
 
-
-        //bool isFlap= handFlapStrength > flapThreshold;
+        
+                                                                        //bool isFlap= handFlapStrength > flapThreshold;     
 
         // ����ƽ���ڶ�ǿ�� (������ y ������Ҳ������ magnitude)
         float leftStrength = leftHandVel.magnitude;
@@ -85,7 +84,7 @@ public class BirdMoveController : MonoBehaviour
         //    isFlying = false;
         //}
         if (avgStrength > flapStartThreshold)
-        {
+        { 
             aboveCount++;
             belowCount = 0;
 
@@ -105,6 +104,7 @@ public class BirdMoveController : MonoBehaviour
                 isFlying = false;
             }
         }
+
     }
     void HandleWalking()
     {
@@ -142,7 +142,7 @@ public class BirdMoveController : MonoBehaviour
         //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
 
         //// ��� ���Ƿ������ס A��
-        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
+        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One); 
 
         //if(!isFlap)
         //{
@@ -152,10 +152,10 @@ public class BirdMoveController : MonoBehaviour
         // 3) �����Ƿ�ס���а�ť��ʩ������
         if (isFlying)
         {
-
+            
             // �����м�����������
             verticalVelocity -=  gravityForceInAir * Time.deltaTime;
-
+           
             // ����ҳ�ͷ�Է����ƶ��������� y����������/����
             Vector3 direction = CenterEyeAnchor.forward;
             direction.Normalize();

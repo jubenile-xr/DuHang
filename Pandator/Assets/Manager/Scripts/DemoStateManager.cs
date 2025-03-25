@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StateManager : MonoBehaviour
+public class DemoStateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
@@ -69,6 +69,6 @@ public class StateManager : MonoBehaviour
     private void DeadLogic()
     {
         scoreManager.SetAliveTime(Time.time);
-        gameManager.SetDecrementAliveCount();
+        // gameManager.SetDecrementAliveCount();
     }
 }

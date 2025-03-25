@@ -117,9 +117,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5830548512897584415}
-  - component: {fileID: 9183470170424292401}
+  - component: {fileID: 4111732809125880781}
   m_Layer: 0
-  m_Name: Gamemanager
+  m_Name: InitializeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7790491450378488731}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9183470170424292401
+--- !u!114 &4111732809125880781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,12 +149,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1945330621863560058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0abb712ca7780471187bc8fa58470776, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b9508a642da74343a2480dfc5f9b636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   CameraRig: {fileID: 9100459135702439978, guid: ab6f3ed891a6449e9a3f54b6ce6a8291, type: 3}
-  IsVR: 0
+  character: 3
 --- !u!1 &2880618035509870481
 GameObject:
   m_ObjectHideFlags: 0
