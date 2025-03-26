@@ -229,9 +229,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRig: {fileID: 2208272362337012921}
-  player: {fileID: 2208272362337012921}
+  player: {fileID: 145043604715290082}
   moveSpeed: 2
   maxRotationLimit: 80
+  IsBird: 0
 --- !u!1 &5966090466825205821
 GameObject:
   m_ObjectHideFlags: 0

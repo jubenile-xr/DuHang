@@ -237,10 +237,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd943ce1051a140acb3e5117b251cc1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraRig: {fileID: 1034191405493846421}
+  cameraRig: {fileID: 0}
   player: {fileID: 1034191405493846421}
   moveSpeed: 0.5
   maxRotationLimit: 80
+  IsBird: 1
+  IsRabbit: 0
+  IsPanda: 0
+  IsMouse: 0
 --- !u!1 &2780945554104328006
 GameObject:
   m_ObjectHideFlags: 0

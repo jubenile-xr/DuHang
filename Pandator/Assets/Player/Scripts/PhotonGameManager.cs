@@ -78,8 +78,15 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
         return;
     }
-
     avatarScript.ExecuteCreatePhotonAvatar();
+    Debug.Log("avatarScript");
+    PlayerController playerController = player.GetComponentInChildren<PlayerController>();
+    if (playerController == null)
+    {
+        Debug.LogError("PlayerController script is missing on the instantiated player object!");
+        return;
+    }
+    playerController.setCamera();
 }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理

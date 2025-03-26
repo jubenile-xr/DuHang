@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -11,6 +12,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float moveSpeed = 2.0f; // 移動速度
     [SerializeField] private float maxRotationLimit = 80.0f; // 上下回転の制限
+    public bool IsBird;
+    public bool IsRabbit;
+    public bool IsPanda;
+    public bool IsMouse;
     void Start()
     {
         
@@ -19,6 +24,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //キャラ移動処理
         Vector2 leftInput = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
         CharaTranslate(leftInput);
@@ -26,12 +32,22 @@ public class PlayerController : MonoBehaviour
         // カメラ回転処理
         Vector2 rightInput = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
         CameraRotate(rightInput);
-
     }
 
     void CharaTranslate(Vector2 leftInput)
     {
-        Vector3 moveDirection = new Vector3(leftInput.x, 0f, leftInput.y);
+
+        Vector3 forward = cameraRig.transform.forward;
+        Vector3 right = cameraRig.transform.right;
+
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 moveDirection = (forward * leftInput.x + right * leftInput.y).normalized;
+        moveDirection.y = 0f;
         player.transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.Self);
     }
 
@@ -54,5 +70,22 @@ public class PlayerController : MonoBehaviour
 
         //カメラの回転
         cameraRig.transform.localEulerAngles = angle;
+    }
+
+    public void setCamera()
+    {
+        if (IsBird)
+        {
+            cameraRig = GameObject.Find("BirdPlayer(Clone)");
+        } else if (IsRabbit)
+        {
+            cameraRig = GameObject.Find("RabbitCameraRig(Clone)");
+        } else if (IsMouse)
+        {
+            cameraRig = GameObject.Find("MouseCameraRig(Clone)");
+        } else if (IsPanda)
+        {
+            cameraRig = GameObject.Find("PandaCameraRig(Clone)");
+        }
     }
 }
