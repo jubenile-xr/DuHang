@@ -79,7 +79,6 @@ public class PhotonGameManager : MonoBehaviourPunCallbacks
         return;
     }
     avatarScript.ExecuteCreatePhotonAvatar();
-    Debug.Log("avatarScript");
     PlayerController playerController = player.GetComponentInChildren<PlayerController>();
     if (playerController == null)
     {
