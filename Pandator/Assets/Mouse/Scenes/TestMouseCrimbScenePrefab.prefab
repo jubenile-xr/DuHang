@@ -606,6 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 5
   climbSpeed: 2
+  camera: {fileID: 0}
 --- !u!54 &912530512876716415
 Rigidbody:
   m_ObjectHideFlags: 0
