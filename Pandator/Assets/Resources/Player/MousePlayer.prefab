@@ -289,6 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4273329359839979668}
   - component: {fileID: 6016896546213559570}
+  - component: {fileID: 3619345892754457282}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -318,7 +319,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6723169715011381612}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd943ce1051a140acb3e5117b251cc1c, type: 3}
   m_Name: 
@@ -327,6 +328,20 @@ MonoBehaviour:
   player: {fileID: 1493936698039859339}
   moveSpeed: 2
   maxRotationLimit: 80
+--- !u!114 &3619345892754457282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6723169715011381612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0991086074f9e4e5696c7e3a225d7412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveObject: {fileID: 3501089031356488867}
+  moveSpeedMultiplier: 1
 --- !u!1 &7844121596422517463
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,7 +592,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5527711675090325831, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.11
       objectReference: {fileID: 0}
     - target: {fileID: 5527711675090325831, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
       propertyPath: m_LocalPosition.z
