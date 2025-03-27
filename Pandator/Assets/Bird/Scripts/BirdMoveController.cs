@@ -28,8 +28,8 @@ public class BirdMoveController : MonoBehaviour
     public float verticalVelocity = 0f;       // ��ǰ��ֱ�����ٶȣ�����Ϊ����
 
 
-    bool isFlying = false;
-
+    public bool isFlying = false;
+    public bool isWalking = false;
 
 
     void Start()
