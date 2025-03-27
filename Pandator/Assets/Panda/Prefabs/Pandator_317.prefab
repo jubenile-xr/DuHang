@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pandator_317
       objectReference: {fileID: 0}
+    - target: {fileID: 2664098864995057252, guid: d239137ec54534c2985fee34c1e6c421, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8c7cab48bf30a49f3a912f8a21110a77, type: 2}
     - target: {fileID: 5866666021909216657, guid: d239137ec54534c2985fee34c1e6c421, type: 3}
       propertyPath: m_Controller
       value: 
@@ -150,5 +154,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandTarget: {fileID: 0}
   rightHandTarget: {fileID: 0}
-  waist: {fileID: 0}
-  Panda: {fileID: 0}
