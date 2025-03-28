@@ -8,6 +8,8 @@ public class TestMouseMove : MonoBehaviour
     [Header("登る速度")]
     [SerializeField] private float climbSpeed = 2.0f;
     private Rigidbody rb;
+    [Header("ねずみのオブジェクト")]
+    [SerializeField] private GameObject camera;
 
     private void Start()
     {
@@ -31,6 +33,8 @@ public class TestMouseMove : MonoBehaviour
         {
             transform.position -= transform.forward * Time.deltaTime * walkSpeed;
         }
+        camera.transform.position = transform.position;
+        transform.rotation = camera.transform.rotation;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -39,7 +43,7 @@ public class TestMouseMove : MonoBehaviour
         {
             isCollisionWall = true;
             // x,z, rotait固定
-            rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = false;
         }
     }
 
@@ -47,7 +51,7 @@ public class TestMouseMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Wall")
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotation;
+            rb.useGravity = true;
             isCollisionWall = false;
         }
     }
