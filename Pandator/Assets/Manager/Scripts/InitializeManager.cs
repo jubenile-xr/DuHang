@@ -19,7 +19,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     
     private GameObject player;
     private GameObject camera;
-    // [SerializeField] private GameObject eyePos;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
