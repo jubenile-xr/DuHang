@@ -6,7 +6,6 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
-    public GameObject PandaCanvas;
     private enum GameCharacter
     {
         BIRD,
