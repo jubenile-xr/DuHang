@@ -273,7 +273,7 @@ GameObject:
   - component: {fileID: 7880738248832671553}
   - component: {fileID: 450008275505236172}
   - component: {fileID: 8266330710734263740}
-  - component: {fileID: 8752758377788379925}
+  - component: {fileID: 2511080028432108759}
   m_Layer: 14
   m_Name: Time
   m_TagString: Untagged
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &8752758377788379925
+--- !u!114 &2511080028432108759
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -408,7 +408,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8250780456045936281}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4292c5e549fc4caa9cca2440fa5fb27, type: 3}
+  m_Script: {fileID: 11500000, guid: e289b2f07925c4fc89c9cfd0e3367fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeText: {fileID: 8266330710734263740}
