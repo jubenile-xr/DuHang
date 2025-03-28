@@ -6,7 +6,6 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
-   
     private enum GameCharacter
     {
         BIRD,
@@ -16,9 +15,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     }
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
-    
     private GameObject player;
     private GameObject camera;
+    
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -70,7 +69,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.PANDA:
                 player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
-                
                 // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
                 PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
@@ -88,8 +86,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
             return;
         }
-
         avatarScript.ExecuteCreatePhotonAvatar();
+        CanvasCameraSetter.Instance.SetCanvasCamera();
+        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
     
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように

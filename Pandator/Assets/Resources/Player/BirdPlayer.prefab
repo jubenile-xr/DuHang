@@ -550,6 +550,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
 --- !u!4 &3621555379604008764 stripped
+
 Transform:
   m_CorrespondingSourceObject: {fileID: 3776558255737789738, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
   m_PrefabInstance: {fileID: 444553267706491414}

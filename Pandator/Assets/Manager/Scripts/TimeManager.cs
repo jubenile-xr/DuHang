@@ -8,36 +8,50 @@ public class TimeManager : MonoBehaviour
 
     [Header("ゲームの終了時間")]
     [SerializeField]private float gameEndTime = 5;
-
-    [Header("gameState変更用のためのGameManagerオブジェクト")]
-    [SerializeField]private GameObject gameManagerObject;
     private GameManager gameManager;
+    private CanvasDispTime canvasDispTime;
 
-    void Start()
+    private void Start()
     {
         gameTime = 0;
-
-        gameManager = gameManagerObject.GetComponent<GameManager>();
+        gameManager = this.GetComponent<GameManager>();
+        if (gameManager == null)
+        {
+            Debug.Log("GameManagerがアタッチされていません");
+        }
         gameManager.SetGameState(GameManager.GameState.START);
+
+        // CanvasDispTimeのインスタンスを取得
+        // PandaCanvasの中にある子オブジェクトのTimeからCanvasDispTimeを取得
+        GameObject canvasObj = GameObject.Find("PandaCanvas");
+        if (canvasObj == null)
+        {
+            Debug.Log("PandaCanvasが見つかりません");
+        }else{
+            canvasDispTime = canvasObj.GetComponentInChildren<CanvasDispTime>();
+        }
     }
-    void Update()
+    private void Update()
     {
         gameTime += Time.deltaTime;
         SwitchGameState();
+        // SmallAnimalはまだ作成していない
+        if(canvasDispTime != null){
+            canvasDispTime.SetTimeText(FormatTime(gameTime));
+        }
+    }
+
+    private string FormatTime(float time)
+    {
+        int minutes = (int)time / 60;
+        int seconds = (int)time % 60;
+        return minutes.ToString("00") + ":" + seconds.ToString("00");
     }
 
     // getter
     public float GetGameTime()
     {
         return gameTime;
-    }
-
-    // formatter 00:00
-    private string FormatTime(float time)
-    {
-        int minutes = (int)time / 60;
-        int seconds = (int)time % 60;
-        return minutes.ToString("00") + ":" + seconds.ToString("00");
     }
 
     private void SwitchGameState()
