@@ -86,14 +86,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             return;
         }
         avatarScript.ExecuteCreatePhotonAvatar();
-
-        CanvasCameraSetter canvasCameraSetter = PandaCanvas.GetComponent<CanvasCameraSetter>();
-        if (canvasCameraSetter == null)
-        {
-            Debug.LogError("CanvasCameraSetter script is missing on the instantiated camera object!");
-            return;
-        }
-        //canvasCameraSetter.SetCanvasCamera();
+        CanvasCameraSetter.Instance.SetCanvasCamera();
+        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
     
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
