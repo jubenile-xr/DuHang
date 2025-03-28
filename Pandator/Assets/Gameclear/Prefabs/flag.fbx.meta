@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 618ed3c489601d042a636ede0b893202
+guid: 5fb75b5a2c7bbf444953f30f8dd81023
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Mousr|Victory
-      takeName: "\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2|\u30A2\u30FC\u30DE\u30C1\u30E5\u30A2\u52A8\u4F5C.001"
-      internalID: -6686187264734082083
+      name: Armature|Swing
+      takeName: Armature|Swing
+      internalID: 6336031161177774121
       firstFrame: 0
-      lastFrame: 10
+      lastFrame: 199
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
