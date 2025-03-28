@@ -19,6 +19,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     
     private GameObject player;
     private GameObject camera;
+    // [SerializeField] private GameObject eyePos;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -52,7 +53,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             case GameCharacter.BIRD:
                 player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                GameObject eyePos = player.transform.Find("eyePos").gameObject;
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), eyePos.transform.position, Quaternion.identity);
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 Debug.Log("BirdJoin");
                 break;
