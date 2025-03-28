@@ -44,6 +44,7 @@ public class MouseMove : MonoBehaviour
         {
             transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
         }
+
         // カメラの位置をねずみの位置に合わせる
         camera.transform.position = transform.position;
         // カメラの向きをねずみの向きに合わせる
