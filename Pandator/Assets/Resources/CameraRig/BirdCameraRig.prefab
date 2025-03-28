@@ -171,6 +171,8 @@ GameObject:
   - component: {fileID: 287829237816166381}
   - component: {fileID: 2416649789414078557}
   - component: {fileID: 224267548846101444}
+  - component: {fileID: 8599862878374220504}
+  - component: {fileID: 6831179902423674472}
   m_Layer: 0
   m_Name: BirdCameraRig
   m_TagString: Untagged
@@ -296,7 +298,7 @@ MonoBehaviour:
   requestRecordAudioPermissionOnStartup: 0
   _localDimming: 1
   _trackingOriginType: 1
-  usePositionTracking: 1
+  usePositionTracking: 0
   useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
@@ -333,6 +335,57 @@ MonoBehaviour:
   - <Keyboard>/leftAlt
   - <Keyboard>/rightAlt
   - <Keyboard>/f2
+--- !u!143 &8599862878374220504
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528499836265461033}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.01
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6831179902423674472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528499836265461033}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c249dccf5f092a94da98d49c1726cc53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OvrPlayer: {fileID: 0}
+  CenterEyeAnchor: {fileID: 773392716593774749}
+  flightSpeed: 10
+  moveSpeed: 1
+  flapStartThreshold: 2.3
+  flapStopThreshold: 0.8
+  framesToStart: 3
+  framesToStop: 30
+  gravityForce: 9.8
+  gravityForceInAir: 0
+  liftForce: 4
+  verticalVelocity: 0
+  isFlying: 0
+  isWalking: 0
 --- !u!1 &3785578283397347163
 GameObject:
   m_ObjectHideFlags: 0

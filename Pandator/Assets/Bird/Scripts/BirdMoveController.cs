@@ -1,11 +1,12 @@
 using Photon.Realtime;
 using System.Runtime.CompilerServices;
-using Unity.Android.Gradle.Manifest;
+// using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 
 public class BirdMoveController : MonoBehaviour
 {
+    private bool isInitialized = false;
     public Transform OvrPlayer;
     public Transform CenterEyeAnchor;
     private CharacterController CharacterController;
@@ -42,6 +43,7 @@ public class BirdMoveController : MonoBehaviour
     void Update()
 
     {
+        if (!isInitialized) return;
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
@@ -52,6 +54,13 @@ public class BirdMoveController : MonoBehaviour
         {
             HandleFlight();
         }
+
+        // //初始化 //initialize
+        // if (!isInitialized)
+        // {
+        //     CenterEyeAnchor = GameObject.FindWithTag("MainCamera").transform;
+        //     isInitialized = true;
+        // }
 
     }
     void TellBirdMode() 
@@ -171,5 +180,11 @@ public class BirdMoveController : MonoBehaviour
             verticalVelocity -= gravityForce * Time.deltaTime;
         }
 
+    }
+    
+    public void SetCenterEyeAnchor(Transform centerEyeAnchor)
+    {
+        CenterEyeAnchor = centerEyeAnchor;
+        isInitialized = true;
     }
 }

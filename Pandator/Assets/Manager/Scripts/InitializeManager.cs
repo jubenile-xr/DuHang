@@ -53,6 +53,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.BIRD:
                 player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 Debug.Log("BirdJoin");
                 break;
             case GameCharacter.RABBIT:
