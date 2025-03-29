@@ -47,6 +47,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             StartCoroutine(WaitForGameManager());
         }
 
+        // プレイヤーキャラクターの生成およびカメラの生成
         switch (character)
         {
             case GameCharacter.BIRD:
@@ -56,12 +57,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 break;
             case GameCharacter.RABBIT:
                 player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:
                 player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
@@ -72,12 +71,15 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 break;
         }
 
-        
+        //カメラ生成の確認
         if (camera == null)
         {
             Debug.LogError("CameraRig is missing in the inspector.");
         }
+        //カメラの親子関係を設定
         camera.transform.SetParent(player.transform);
+
+        //CreatePhotonAvatarのOnCreate()を実行
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
         {
@@ -85,8 +87,26 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             return;
         }
         avatarScript.ExecuteCreatePhotonAvatar();
-        CanvasCameraSetter.Instance.SetCanvasCamera();
-        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+
+        //PANDAのCanvasの設定
+        if (character == GameCharacter.PANDA)
+        {
+            CanvasCameraSetter.Instance.SetCanvasCamera();
+            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+        }
+
+        //MouseMoveで使用するカメラの設定
+        if (character == GameCharacter.MOUSE)
+        {
+            MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+            if (mouseMoveScript == null)
+            {
+                Debug.LogError("MouseMove script is missing on the instantiated player object!");
+                return;
+            }
+            mouseMoveScript.SetMouseOVRCameraRig();
+        }
+        
     }
     
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように

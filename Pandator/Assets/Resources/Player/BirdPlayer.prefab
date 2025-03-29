@@ -433,6 +433,41 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!1 &9104038087331929175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 2926167309310515135, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+  m_PrefabInstance: {fileID: 6252086782131407848}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6637949111263282345}
+  - component: {fileID: 8180098588260192613}
+  - component: {fileID: 2197287181607288087}
+  - component: {fileID: 1477839798540655611}
+  - component: {fileID: 1052531183480298667}
+  m_Layer: 0
+  m_Name: 'BirdPrefab (Missing Prefab with guid: 41ff294a57e37994ea4f79b1016fcc6d)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6637949111263282345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 782892143590788929, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
+  m_PrefabInstance: {fileID: 6252086782131407848}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9104038087331929175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0162}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1730072629680953954}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6252086782131407848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -592,16 +627,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1052531183480298667}
   m_SourcePrefab: {fileID: 100100000, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
---- !u!4 &6637949111263282345 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 782892143590788929, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
-  m_PrefabInstance: {fileID: 6252086782131407848}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &9104038087331929175 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2926167309310515135, guid: 41ff294a57e37994ea4f79b1016fcc6d, type: 3}
-  m_PrefabInstance: {fileID: 6252086782131407848}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8180098588260192613
 MonoBehaviour:
   m_ObjectHideFlags: 0

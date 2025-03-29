@@ -237,11 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  IsRabbit: 0
-  IsBird: 1
-  IsMouse: 0
-  IsPanda: 0
-  gameManager: {fileID: 1311808036470301148, guid: af600104e230249f5b2670fdda1eb993, type: 3}
+  character: 2
 --- !u!1001 &5307801085638398823
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -306,6 +302,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1199196412067348372, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
       propertyPath: m_Name
       value: room_complete
@@ -314,10 +314,39 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -1199196412067348372, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8533122882172216766}
     - targetCorrespondingSourceObject: {fileID: 9169064512787607963, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9056223729625492565}
   m_SourcePrefab: {fileID: 100100000, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
+--- !u!1 &2806448182209630987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1199196412067348372, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
+  m_PrefabInstance: {fileID: 5307801085638398823}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &8533122882172216766
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2806448182209630987}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.51792306, y: 1.0020468, z: 2.9041154}
+  m_Center: {x: 0.00000017881393, y: -0.01503323, z: -0.000000059604645}
 --- !u!1 &3933357090343527164 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9169064512787607963, guid: dbfd8d7124a30474085af465c03cca77, type: 3}
