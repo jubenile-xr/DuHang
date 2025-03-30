@@ -55,6 +55,24 @@ public class Net : MonoBehaviour
             Player.GetComponent<StateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
             Player.GetComponent<TestPlayerColorManager>()?.ChangeColorBlack();
+            // 子オブジェクト内のすべての Renderer を取得する
+            Renderer[] renderers = Player.GetComponentsInChildren<Renderer>();
+            // 各Rendererの元の色を保存するための配列
+            Color[] originalColors = new Color[renderers.Length];
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                // 元の色を保存する
+                originalColors[i] = renderers[i].material.color;
+
+                // URP Litの場合、_Surfaceプロパティを1に設定するとTransparentモードになる
+                renderers[i].material.SetFloat("_Surface", 1);
+
+                // まず色を赤にして不透明（alpha=1）に設定する
+                Color newColor = Color.black;
+                newColor.a = 1f;
+                renderers[i].material.color = newColor;
+            }
             Debug.Log("hit");
         }
     }
