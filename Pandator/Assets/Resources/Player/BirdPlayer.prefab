@@ -582,7 +582,7 @@ MonoBehaviour:
   playerColorManager: {fileID: 5164755693211121568}
   photonKeyMove: {fileID: 5823670346237709383}
   scoreManager: {fileID: 8028601576095073563}
-  parentObject: {fileID: 0}
+  parentObject: {fileID: 787599850650099246}
 --- !u!135 &5253004324674076423
 SphereCollider:
   m_ObjectHideFlags: 0
