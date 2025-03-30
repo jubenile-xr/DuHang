@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class InterrupteItem : MonoBehaviour
@@ -9,7 +10,7 @@ public class InterrupteItem : MonoBehaviour
 
     private void Update()
     {
-        // 3秒後に消える
+        // 3秒後に自身を消す
         time += Time.deltaTime;
         if(time > 3.0f)
         {
@@ -25,13 +26,13 @@ public class InterrupteItem : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter(Collider collision)
     {
         GameObject player = collision.gameObject;
         if (player.CompareTag("Player"))
         {
             isCollision = true;
+
             // プレイヤーの状態を Interrupted に設定する
             player.GetComponent<StateManager>()?.SetInterrupted(true);
 
@@ -42,14 +43,31 @@ public class InterrupteItem : MonoBehaviour
                 // URP Litの場合、_Surfaceプロパティを1に設定するとTransparentモードになる
                 rend.material.SetFloat("_Surface", 1);
 
-                // 色を赤に変更し、alpha値を0に設定して完全な透明状態にする
+                // まず色を赤にして不透明（alpha=1）に設定する
                 Color newColor = Color.red;
-                newColor.a = 0f; // 必要に応じて透明度を調整してください
-
+                newColor.a = 1f;
                 rend.material.color = newColor;
             }
 
+            // 1秒後に透明化する処理を開始する
+            StartCoroutine(DelayedTransparency(player, 1.0f));
+
             Debug.Log("hit!");
+        }
+    }
+
+    private IEnumerator DelayedTransparency(GameObject player, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // 再度子オブジェクト内のすべての Renderer を取得して透明化する
+        Renderer[] renderers = player.GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            // alpha値を0に変更して透明にする
+            Color newColor = rend.material.color;
+            newColor.a = 0f;
+            rend.material.color = newColor;
         }
     }
 }
