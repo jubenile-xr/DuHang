@@ -50,25 +50,25 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         switch (character)
         {
             case GameCharacter.BIRD:
-                player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), eyePos.transform.position, Quaternion.identity);
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 Debug.Log("BirdJoin");
                 break;
             case GameCharacter.RABBIT:
-                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:
-                player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
-                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
                 PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;

@@ -12,14 +12,14 @@ public class InterrupteItem : MonoBehaviour
     {
         // 3秒後に自身を消す
         time += Time.deltaTime;
-        if(time > 3.0f)
+        if (time > 3.0f)
         {
             Destroy(gameObject);
         }
-        if(isCollision)
+        if (isCollision)
         {
             collisionTime += Time.deltaTime;
-            if(collisionTime > collisionDeleteTime)
+            if (collisionTime > collisionDeleteTime)
             {
                 Destroy(gameObject);
             }
@@ -36,38 +36,43 @@ public class InterrupteItem : MonoBehaviour
             // プレイヤーの状態を Interrupted に設定する
             player.GetComponent<StateManager>()?.SetInterrupted(true);
 
-            // 子オブジェクト内のすべての Renderer を取得して処理する
+            // 子オブジェクト内のすべての Renderer を取得する
             Renderer[] renderers = player.GetComponentsInChildren<Renderer>();
-            foreach (Renderer rend in renderers)
+            // 各Rendererの元の色を保存するための配列
+            Color[] originalColors = new Color[renderers.Length];
+
+            for (int i = 0; i < renderers.Length; i++)
             {
+                // 元の色を保存する
+                originalColors[i] = renderers[i].material.color;
+
                 // URP Litの場合、_Surfaceプロパティを1に設定するとTransparentモードになる
-                rend.material.SetFloat("_Surface", 1);
+                renderers[i].material.SetFloat("_Surface", 1);
 
                 // まず色を赤にして不透明（alpha=1）に設定する
                 Color newColor = Color.red;
                 newColor.a = 1f;
-                rend.material.color = newColor;
+                renderers[i].material.color = newColor;
             }
 
-            // 1秒後に透明化する処理を開始する
-            StartCoroutine(DelayedTransparency(player, 1.0f));
+            // 1秒後に元の色に戻す処理を開始する
+            StartCoroutine(ResetColorAfterDelay(renderers, originalColors, 1.0f));
 
             Debug.Log("hit!");
         }
     }
 
-    private IEnumerator DelayedTransparency(GameObject player, float delay)
+    private IEnumerator ResetColorAfterDelay(Renderer[] renderers, Color[] originalColors, float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        // 再度子オブジェクト内のすべての Renderer を取得して透明化する
-        Renderer[] renderers = player.GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in renderers)
+        for (int i = 0; i < renderers.Length; i++)
         {
-            // alpha値を0に変更して透明にする
-            Color newColor = rend.material.color;
-            newColor.a = 0f;
-            rend.material.color = newColor;
+            if (renderers[i] != null)
+            {
+                // 元の色に戻す
+                renderers[i].material.color = originalColors[i];
+            }
         }
     }
 }
