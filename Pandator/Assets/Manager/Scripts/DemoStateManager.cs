@@ -9,7 +9,7 @@ public class DemoStateManager : MonoBehaviour
     [Header("妨害時の速度")]
     [SerializeField] float interruptedSpeed = 2.0f;
     private float time;
-    [SerializeField] private TestPlayerColorManager playerColorManager;
+    [SerializeField] private PlayerColorManager playerColorManager;
     [SerializeField] private KeyMove keyMove;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
@@ -38,7 +38,7 @@ public class DemoStateManager : MonoBehaviour
     {
         isInterrupted = false;
         time = 0;
-        playerColorManager.ChangeColorWhite();
+        // playerColorManager.ChangeColorWhite();
         keyMove.SetSpeed(10.0f);
     }
     public void SetInterrupted(bool value)
