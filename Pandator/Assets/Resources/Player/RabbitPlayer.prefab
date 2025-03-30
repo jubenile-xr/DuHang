@@ -502,6 +502,7 @@ MonoBehaviour:
   playerColorManager: {fileID: 772552675340296840}
   photonKeyMove: {fileID: 9198865818353753367}
   scoreManager: {fileID: 8702145046178103223}
+  parentObject: {fileID: 0}
 --- !u!4 &9028976466450388474 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5108605535101276446, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
@@ -662,6 +663,7 @@ MonoBehaviour:
   playerColorManager: {fileID: 0}
   photonKeyMove: {fileID: 0}
   scoreManager: {fileID: 0}
+  parentObject: {fileID: 0}
 --- !u!114 &8748531932361618275
 MonoBehaviour:
   m_ObjectHideFlags: 0

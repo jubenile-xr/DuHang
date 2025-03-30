@@ -39,7 +39,7 @@ public class PhotonInterruptGun : MonoBehaviour
     }
     private void Shot()
     {
-        GameObject bullet = PhotonNetwork.Instantiate("Bullet/InterruptItem", transform.position, transform.rotation);
-        bullet.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * Time.deltaTime * 1000 * bulletSpeed);
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, transform.position, transform.rotation);
+        bullet.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * Time.deltaTime * 100 * bulletSpeed);
     }
 }

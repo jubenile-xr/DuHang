@@ -114,7 +114,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.Log("GameManager object not found. Waiting...");
+                // Debug.Log("GameManager object not found. Waiting...");
             }
             yield return null; // 1フレーム待機
         }
