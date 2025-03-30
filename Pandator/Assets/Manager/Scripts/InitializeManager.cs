@@ -17,7 +17,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameManager gameManager;
     private GameObject player;
     private GameObject camera;
-    
+
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -92,27 +92,39 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
         avatarScript.ExecuteCreatePhotonAvatar();
 
-        //PANDAのCanvasの設定
-        if (character == GameCharacter.PANDA)
+        switch (character)
         {
-            CanvasCameraSetter.Instance.SetCanvasCamera();
-            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+            case GameCharacter.PANDA:
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                break;
+            case GameCharacter.MOUSE:
+                MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+                if (mouseMoveScript == null)
+                {
+                    Debug.LogError("MouseMove script is missing on the instantiated player object!");
+                    return;
+                }
+                mouseMoveScript.SetMouseOVRCameraRig();
+                break;
+            case GameCharacter.RABBIT:
+                RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
+                if (rabbitMoveScript == null)
+                {
+                    Debug.LogError("RabbitMove script is missing on the instantiated player object!");
+                    return;
+                }
+                rabbitMoveScript.SetRabbitOVRCameraRig();
+                break;
+            case GameCharacter.BIRD:
+                // BIRD用の処理があれば追加
+                break;
+            default:
+                Debug.LogWarning("未処理のキャラクタータイプです: " + character);
+                break;
         }
-
-        //MouseMoveで使用するカメラの設定
-        if (character == GameCharacter.MOUSE)
-        {
-            MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
-            if (mouseMoveScript == null)
-            {
-                Debug.LogError("MouseMove script is missing on the instantiated player object!");
-                return;
-            }
-            mouseMoveScript.SetMouseOVRCameraRig();
-        }
-        
     }
-    
+
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
     //GameManagerの取得とaliveCountのインクリメントを行う
     private IEnumerator WaitForGameManager()

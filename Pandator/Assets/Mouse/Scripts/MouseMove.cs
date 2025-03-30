@@ -12,7 +12,7 @@ public class MouseMove : MonoBehaviour
     [Header("OVRカメラ")]
     [SerializeField] private GameObject mouseCamera;
     [Header("カメラオブジェクト")]
-    [SerializeField] private GameObject mouseOVRCameraRig;
+    private GameObject mouseOVRCameraRig;
 
     private void Start()
     {
@@ -56,7 +56,7 @@ public class MouseMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
         }
-        
+
     }
 
     public void SetMouseOVRCameraRig()
