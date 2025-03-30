@@ -11,7 +11,7 @@ public class BirdMoveController : MonoBehaviour
     public Transform CenterEyeAnchor;
     private CharacterController CharacterController;
 
-    public float flightSpeed = 2.0f; //Flight speed // 飛行速度
+    public float flightSpeed = 1.0f; //Flight speed // 飛行速度
     public float moveSpeed = 1.0f; //Walking speed // 歩行速度
 
     //threshold // 閾値
@@ -28,7 +28,7 @@ public class BirdMoveController : MonoBehaviour
     //force // 力
     public float gravityForce = 9.8f;
     public float gravityForceInAir = 0f; // 飞行中重力 // gravity in air // 飛行中の重力
-    public float liftForce = 4f; // 上升力 // when the first time fly will give the bird a lift force // 初めて飛行モードに入った際に鳥に与える上昇力
+    public float liftForce = 2f; // 上升力 // when the first time fly will give the bird a lift force // 初めて飛行モードに入った際に鳥に与える上昇力
     public float verticalVelocity = 0f;       // 当前竖直方向速度（向上为正） // current vertical velocity // 現在の垂直方向速度（上方向が正）
 
     public bool isFlying = false; //判断是否进入飞行模式 // 飛行モードに入っているかどうかを示す
@@ -172,7 +172,7 @@ public class BirdMoveController : MonoBehaviour
             Vector3 movement = direction * flightSpeed;
             movement.y += verticalVelocity;
 
-            CharacterController.Move(movement * Time.deltaTime);
+            CharacterController.Move(movement * 0.5f * Time.deltaTime);
         }
         else
         {
