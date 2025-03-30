@@ -9,14 +9,12 @@ public class StateManager : MonoBehaviour
     [Header("妨害時の速度")]
     [SerializeField] float interruptedSpeed = 2.0f;
     private float time;
-    [SerializeField] private TestPlayerColorManager playerColorManager;
+    [SerializeField] private PlayerColorManager playerColorManager;
     [SerializeField] private PhotonKeyMove photonKeyMove;
     private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
-    
+
     [Header("親オブジェクト操作用"),SerializeField] private GameObject parentObject;
-
-
 
     void Start()
     {
@@ -30,7 +28,7 @@ public class StateManager : MonoBehaviour
         if(isInterrupted)
         {
             time += Time.deltaTime;
-            // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
+            // TODO: 動物のインターフェースのスクリプトにアクセスする
             // photonKeyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
@@ -43,11 +41,18 @@ public class StateManager : MonoBehaviour
     {
         isInterrupted = false;
         time = 0;
-        // playerColorManager.ChangeColorWhite();
+        // TODO: 動物のインターフェースでスピードを元に戻す
         // photonKeyMove.SetSpeed(10.0f);
+        playerColorManager?.ChangeColorOriginal();
     }
     public void SetInterrupted(bool value)
     {
+        if (value)
+        {
+            // TODO: 動物のインターフェースでスピードを遅くする
+            // photonKeyMove.SetSpeed(10.0f);
+            playerColorManager?.ChangeColorRed();
+        }
         isInterrupted = value;
     }
 
@@ -78,7 +83,7 @@ public class StateManager : MonoBehaviour
         gameManager.SetDecrementAliveCount();
         //地面に落とす
         //TODO: 実際の地面との調整が必要
-        parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
+        // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
     }
 }
