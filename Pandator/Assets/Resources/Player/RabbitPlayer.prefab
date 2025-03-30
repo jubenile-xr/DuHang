@@ -46,8 +46,8 @@ GameObject:
   - component: {fileID: 4625016986160437275}
   - component: {fileID: 8702145046178103223}
   - component: {fileID: 9198865818353753367}
-  - component: {fileID: 3331890187406254893}
   - component: {fileID: 7675650918383908761}
+  - component: {fileID: 1392999883016705892}
   m_Layer: 0
   m_Name: RabbitPlayer
   m_TagString: MasterPlayer
@@ -152,21 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
---- !u!114 &3331890187406254893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391600836212121089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 620f8f47b744b40f09fe31625a807b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RabbitPrefab: {fileID: 0}
-  jumpForce: 5
-  cameraRig: {fileID: 0}
 --- !u!54 &7675650918383908761
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -192,8 +177,21 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &1392999883016705892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2391600836212121089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be0ac449244f4ff8aa5a68355fe4227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpForce: 5
 --- !u!1 &4324452589322641707
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +554,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2028105217231033212, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5728162004362765285}
+    - targetCorrespondingSourceObject: {fileID: 2028105217231033212, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5487782063824229116}
   m_SourcePrefab: {fileID: 100100000, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
 --- !u!4 &5353689806776365984 stripped
 Transform:
@@ -636,3 +637,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b7416fc37c44b30b73190a94051c6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5487782063824229116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7101920377453909280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620f8f47b744b40f09fe31625a807b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeedMultiplier: 1
+  rabbitCamera: {fileID: 8089823379617580532}
