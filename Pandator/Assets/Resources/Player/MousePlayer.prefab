@@ -358,6 +358,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3568641594332558225, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 5527711675090325831, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -503,7 +507,6 @@ MonoBehaviour:
   moveSpeedMultiplier: 1
   climbSpeed: 2
   mouseCamera: {fileID: 6163444777555909702}
-  mouseOVRCameraRig: {fileID: 0}
 --- !u!114 &6669165011117861530
 MonoBehaviour:
   m_ObjectHideFlags: 0

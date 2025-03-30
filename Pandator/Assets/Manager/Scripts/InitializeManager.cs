@@ -59,12 +59,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 break;
             case GameCharacter.RABBIT:
                 player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:
                 player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:

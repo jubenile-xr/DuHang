@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: 4625016986160437275}
   - component: {fileID: 8702145046178103223}
   - component: {fileID: 9198865818353753367}
-  - component: {fileID: 3331890187406254893}
   - component: {fileID: 7675650918383908761}
   - component: {fileID: 1392999883016705892}
   m_Layer: 0
@@ -153,20 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
---- !u!114 &3331890187406254893
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2391600836212121089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 620f8f47b744b40f09fe31625a807b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeedMultiplier: 1
-  rabbitCamera: {fileID: 0}
 --- !u!54 &7675650918383908761
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -192,7 +177,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &1392999883016705892
 MonoBehaviour:

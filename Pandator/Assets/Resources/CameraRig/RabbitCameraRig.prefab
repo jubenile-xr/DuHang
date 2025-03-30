@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 2416649789414078557}
   - component: {fileID: 224267548846101444}
   m_Layer: 0
-  m_Name: RabbbitCameraRig
+  m_Name: RabbitCameraRig
   m_TagString: CameraRig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
