@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3865694044942732503}
   m_Layer: 0
   m_Name: Floar
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -236,5 +236,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 1890013534520859082}
-  CameraRig: {fileID: 3528499836265461033, guid: c3d046adbbe854907a94fc50e1079197, type: 3}
   character: 0
