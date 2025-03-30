@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2421728379772338789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &969361570461970199
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 782969322415612930}
+  m_Layer: 0
+  m_Name: CameraTracking
+  m_TagString: CameraRig
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &782969322415612930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969361570461970199}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 773392716593774749}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1017150686795947785
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +204,7 @@ GameObject:
   - component: {fileID: 224267548846101444}
   m_Layer: 0
   m_Name: MouseCameraRig
-  m_TagString: CameraRig
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -296,7 +327,7 @@ MonoBehaviour:
   requestRecordAudioPermissionOnStartup: 0
   _localDimming: 1
   _trackingOriginType: 1
-  usePositionTracking: 1
+  usePositionTracking: 0
   useRotationTracking: 1
   useIPDInPositionTracking: 1
   resetTrackerOnLoad: 0
@@ -364,7 +395,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 782969322415612930}
   m_Father: {fileID: 2421728379772338789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &8943130456774586163
@@ -902,7 +934,7 @@ GameObject:
   - component: {fileID: 1606067485555259393}
   m_Layer: 0
   m_Name: RightControllerAnchor
-  m_TagString: Untagged
+  m_TagString: RHandTargetAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
