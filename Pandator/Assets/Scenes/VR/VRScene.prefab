@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  character: 2
+  character: 0
 --- !u!1001 &5307801085638398823
 PrefabInstance:
   m_ObjectHideFlags: 0
