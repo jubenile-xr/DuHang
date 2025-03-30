@@ -237,11 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  IsRabbit: 0
-  IsBird: 1
-  IsMouse: 0
-  IsPanda: 0
-  gameManager: {fileID: 1311808036470301148, guid: af600104e230249f5b2670fdda1eb993, type: 3}
+  character: 0
 --- !u!1001 &5307801085638398823
 PrefabInstance:
   m_ObjectHideFlags: 0
