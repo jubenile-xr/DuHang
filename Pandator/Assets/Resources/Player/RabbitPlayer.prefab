@@ -46,6 +46,8 @@ GameObject:
   - component: {fileID: 4625016986160437275}
   - component: {fileID: 8702145046178103223}
   - component: {fileID: 9198865818353753367}
+  - component: {fileID: 3331890187406254893}
+  - component: {fileID: 7675650918383908761}
   m_Layer: 0
   m_Name: RabbitPlayer
   m_TagString: MasterPlayer
@@ -108,7 +110,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 4625016986160437275}
-  sceneViewId: 0
+  sceneViewId: 3
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &4625016986160437275
@@ -152,6 +154,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+--- !u!114 &3331890187406254893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2391600836212121089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620f8f47b744b40f09fe31625a807b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RabbitPrefab: {fileID: 0}
+  jumpForce: 5
+--- !u!54 &7675650918383908761
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2391600836212121089}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4324452589322641707
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8414555110698491737, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
       propertyPath: sceneViewId
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -584,15 +627,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.35107264
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.07685524
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.053113192
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalRotation.w
@@ -600,15 +643,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3811857847585306108, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -622,7 +665,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9178471358841473460, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -700,6 +744,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8748531932361618275}
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
