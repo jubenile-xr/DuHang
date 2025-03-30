@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     [SerializeField] private Winner winner;
     private List<string> winnerAnimalNameList;
-
+    
     private void Start()
     {
         state = GameState.START;
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     private void Update()
-    {
+    { 
     }
 
     public GameState GetGameState()
@@ -56,12 +56,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         UpdateAliveCountProperty();
 
-        if (aliveCount <= 0)
+        //0以下じゃないと動かない
+        if (aliveCount <= 0) 
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
             Debug.Log("Panda Win");
             // TODO　スコアを集める
+            if (aliveCount == 0)
+            {
+                PhotonNetwork.Instantiate("GameOverCube",new Vector3(0f, 0f, 0f), Quaternion.identity, 0);　//TODO パンダが優勝した時の遷移にする
+            }
         }
     }
     public void SetIncrementAliveCount()
