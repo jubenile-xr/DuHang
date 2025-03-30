@@ -1,4 +1,3 @@
-
 using Photon.Realtime;
 using System.Runtime.CompilerServices;
 // using Unity.Android.Gradle.Manifest;
@@ -12,7 +11,7 @@ public class BirdMoveController : MonoBehaviour
     public Transform CenterEyeAnchor;
     private CharacterController CharacterController;
 
-    public float flightSpeed = 10f; //Flight speed // 飛行速度
+    public float flightSpeed = 2.0f; //Flight speed // 飛行速度
     public float moveSpeed = 1.0f; //Walking speed // 歩行速度
 
     //threshold // 閾値

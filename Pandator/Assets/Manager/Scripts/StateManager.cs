@@ -17,6 +17,7 @@ public class StateManager : MonoBehaviour
     [Header("親オブジェクト操作用"),SerializeField] private GameObject parentObject;
 
 
+
     void Start()
     {
         isInterrupted = false;
@@ -30,7 +31,7 @@ public class StateManager : MonoBehaviour
         {
             time += Time.deltaTime;
             // ここは本来はkeyMoveではなく、PlayerControllerのスクリプトにアクセスする
-            photonKeyMove.SetSpeed(interruptedSpeed);
+            // photonKeyMove.SetSpeed(interruptedSpeed);
             if(time > interruptedTime)
             {
                 ResetState();
@@ -42,8 +43,8 @@ public class StateManager : MonoBehaviour
     {
         isInterrupted = false;
         time = 0;
-        playerColorManager.ChangeColorWhite();
-        photonKeyMove.SetSpeed(10.0f);
+        // playerColorManager.ChangeColorWhite();
+        // photonKeyMove.SetSpeed(10.0f);
     }
     public void SetInterrupted(bool value)
     {
