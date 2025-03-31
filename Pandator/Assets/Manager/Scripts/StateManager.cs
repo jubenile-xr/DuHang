@@ -4,17 +4,23 @@ public class StateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
-    [Header("妨害の継続時間")]
-    [SerializeField] float interruptedTime = 3.0f;
-    [Header("妨害時の速度")]
-    [SerializeField] float interruptedSpeed = 2.0f;
+    [Header("妨害の継続時間")]private const float interruptedTime = 3.0f;
     private float time;
     [SerializeField] private PlayerColorManager playerColorManager;
-    [SerializeField] private PhotonKeyMove photonKeyMove;
-    private GameManager gameManager;
+    [Header("ゲームマネージャー")] private GameManager gameManager;
     [SerializeField] private ScoreManager scoreManager;
-
-    [Header("親オブジェクト操作用"),SerializeField] private GameObject parentObject;
+    [Header("親オブジェクト操作用"), SerializeField] private GameObject parentObject;
+    [SerializeField] private RabbitMove rabbitMove;
+    [SerializeField] private RabbitJump rabbitJump;
+    [SerializeField] private BirdMoveController birdMoveController;
+    [SerializeField] private MouseMove mouseMove;
+    private enum GameCharacter
+    {
+        BIRD,
+        RABBIT,
+        MOUSE
+    }
+    [Header("キャラクターの種類"), SerializeField] private GameCharacter character;
 
     void Start()
     {
@@ -23,35 +29,47 @@ public class StateManager : MonoBehaviour
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
     }
+
     void Update()
     {
-        if(isInterrupted)
+        if (isInterrupted)
         {
             time += Time.deltaTime;
-            // TODO: 動物のインターフェースのスクリプトにアクセスする
-            // photonKeyMove.SetSpeed(interruptedSpeed);
-            if(time > interruptedTime)
+            if (time > interruptedTime)
             {
                 ResetState();
             }
         }
     }
-    // Reset the state of the player
+
     private void ResetState()
     {
         isInterrupted = false;
         time = 0;
-        // TODO: 動物のインターフェースでスピードを元に戻す
-        // photonKeyMove.SetSpeed(10.0f);
         playerColorManager?.ChangeColorOriginal();
+        switch (character)
+        {
+            case GameCharacter.BIRD:
+                birdMoveController.SetMoveSpeedNormal();
+                break;
+            case GameCharacter.RABBIT:
+                rabbitMove.SetMoveSpeedNormal();
+                rabbitJump.SetJumpSpeedNormal();
+                break;
+            case GameCharacter.MOUSE:
+                mouseMove.SetMoveSpeedNormal();
+                break;
+            default:
+                Debug.Log("Unknown character type: " + character);
+                break;
+        }
     }
+
     public void SetInterrupted(bool value)
     {
         if (value)
         {
-            // TODO: 動物のインターフェースでスピードを遅くする
-            // photonKeyMove.SetSpeed(10.0f);
-            playerColorManager?.ChangeColorRed();
+            InterruptLogic();
         }
         isInterrupted = value;
     }
@@ -63,7 +81,7 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
-        if(!value)
+        if (!value)
         {
             DeadLogic();
         }
@@ -85,5 +103,26 @@ public class StateManager : MonoBehaviour
         //TODO: 実際の地面との調整が必要
         // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
+    }
+
+    private void InterruptLogic()
+    {
+        playerColorManager?.ChangeColorRed();
+        switch (character)
+        {
+            case GameCharacter.BIRD:
+                birdMoveController.SetMoveSpeedSlow();
+                break;
+            case GameCharacter.RABBIT:
+                rabbitMove.SetMoveSpeedSlow();
+                rabbitJump.SetJumpSpeedSlow();
+                break;
+            case GameCharacter.MOUSE:
+                mouseMove.SetMoveSpeedSlow();
+                break;
+            default:
+                Debug.Log("Unknown character type: " + character);
+                break;
+        }
     }
 }
