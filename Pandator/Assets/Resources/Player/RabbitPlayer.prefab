@@ -191,7 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be0ac449244f4ff8aa5a68355fe4227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 5
 --- !u!1 &4324452589322641707
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,12 +473,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interruptedTime: 3
-  interruptedSpeed: 2
   playerColorManager: {fileID: 0}
-  photonKeyMove: {fileID: 9198865818353753367}
   scoreManager: {fileID: 8702145046178103223}
   parentObject: {fileID: 0}
+  rabbitMove: {fileID: 0}
+  rabbitJump: {fileID: 0}
+  birdMoveController: {fileID: 0}
+  mouseMove: {fileID: 0}
+  character: 0
 --- !u!4 &9028976466450388474 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5108605535101276446, guid: 3b91ea418cbb24211ab761ba1e61846f, type: 3}
@@ -580,12 +581,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interruptedTime: 3
-  interruptedSpeed: 2
   playerColorManager: {fileID: 5728162004362765285}
-  photonKeyMove: {fileID: 9198865818353753367}
   scoreManager: {fileID: 8702145046178103223}
   parentObject: {fileID: 2391600836212121089}
+  rabbitMove: {fileID: 5487782063824229116}
+  rabbitJump: {fileID: 1392999883016705892}
+  birdMoveController: {fileID: 0}
+  mouseMove: {fileID: 0}
+  character: 1
 --- !u!114 &8748531932361618275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,5 +652,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620f8f47b744b40f09fe31625a807b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: 1
   rabbitCamera: {fileID: 8089823379617580532}

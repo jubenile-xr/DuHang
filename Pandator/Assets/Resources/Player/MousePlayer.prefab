@@ -447,12 +447,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interruptedTime: 3
-  interruptedSpeed: 2
   playerColorManager: {fileID: 6669165011117861530}
-  photonKeyMove: {fileID: 6314878593413762173}
   scoreManager: {fileID: 6904615155179378973}
   parentObject: {fileID: 1493936698039859339}
+  rabbitMove: {fileID: 0}
+  rabbitJump: {fileID: 0}
+  birdMoveController: {fileID: 0}
+  mouseMove: {fileID: 356489298021999254}
+  character: 2
 --- !u!114 &2221944217194432063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,8 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0991086074f9e4e5696c7e3a225d7412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: 1
-  climbSpeed: 2
   mouseCamera: {fileID: 6163444777555909702}
 --- !u!114 &6669165011117861530
 MonoBehaviour:

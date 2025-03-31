@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class RabbitMove : MonoBehaviour
 {
-    [SerializeField] private float moveSpeedMultiplier = 1.0f; // 移動速度倍率
+    private float moveSpeed; // 移動速度倍率
+    private const float slowSpeed = 0.5f; // スローモーション時の移動速度倍率
+    private const float normalSpeed = 0.8f; // 通常時の移動速度倍率
 
     private Rigidbody rb;
 
@@ -15,6 +17,7 @@ public class RabbitMove : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        moveSpeed = normalSpeed; // 初期値を通常速度に設定
     }
 
     private void Update()
@@ -26,10 +29,13 @@ public class RabbitMove : MonoBehaviour
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
 
+            // 右手のAボタンが押されたかチェック
+            bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
+
             // XZ平面上の速度の合計を計算
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
-            float totalSpeed = (speedR + speedL) * moveSpeedMultiplier;
+            float totalSpeed = (speedR + speedL) * moveSpeed;
 
             // 頭（カメラ）の向きを取得して移動方向を決定
             Transform headTransform = Camera.main.transform;
@@ -38,7 +44,9 @@ public class RabbitMove : MonoBehaviour
             forwardDirection.Normalize();
 
             // 移動処理
-            transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+            if (!isAButtonPressed){
+                transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+            }
 
             // カメラの位置をうさぎの位置に合わせる
             rabbitOVRCameraRig.transform.position = transform.position;
@@ -47,11 +55,18 @@ public class RabbitMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(0, rabbitCamera.transform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
         }
-
     }
 
     public void SetRabbitOVRCameraRig()
     {
         rabbitOVRCameraRig = GameObject.Find("RabbitCameraRig(Clone)");
+    }
+    public void SetMoveSpeedNormal()
+    {
+        moveSpeed = normalSpeed;
+    }
+    public void SetMoveSpeedSlow()
+    {
+        moveSpeed = slowSpeed;
     }
 }
