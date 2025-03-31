@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
-  character: 0
+  character: 1
 --- !u!1 &9086462264381382828
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +127,7 @@ Transform:
   - {fileID: 4042747435562204682}
   - {fileID: 5535853823434844382}
   - {fileID: 4124175714379813708}
+  - {fileID: 7264709180971487057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4519004383892714663
