@@ -538,8 +538,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6287078839626181962, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9178471358841473460, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
+    - {fileID: 6287078839626181962, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -558,6 +563,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2028105217231033212, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5487782063824229116}
+    - targetCorrespondingSourceObject: {fileID: 2028105217231033212, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1981804675182001005}
   m_SourcePrefab: {fileID: 100100000, guid: 357556d6730a3a94db3ab2f3a80e1050, type: 3}
 --- !u!4 &5353689806776365984 stripped
 Transform:
@@ -653,3 +661,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rabbitCamera: {fileID: 8089823379617580532}
+--- !u!65 &1981804675182001005
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7101920377453909280}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.25, z: 0.34}
+  m_Center: {x: 0, y: 0, z: -0.07}
