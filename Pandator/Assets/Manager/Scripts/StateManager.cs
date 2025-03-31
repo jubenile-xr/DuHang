@@ -50,14 +50,14 @@ public class StateManager : MonoBehaviour
         switch (character)
         {
             case GameCharacter.BIRD:
-                birdMoveController.SetMoveSpeedNormal();
+                birdMoveController?.SetMoveSpeedNormal();
                 break;
             case GameCharacter.RABBIT:
-                rabbitMove.SetMoveSpeedNormal();
-                rabbitJump.SetJumpSpeedNormal();
+                rabbitMove?.SetMoveSpeedNormal();
+                rabbitJump?.SetJumpSpeedNormal();
                 break;
             case GameCharacter.MOUSE:
-                mouseMove.SetMoveSpeedNormal();
+                mouseMove?.SetMoveSpeedNormal();
                 break;
             default:
                 Debug.Log("Unknown character type: " + character);
@@ -111,14 +111,14 @@ public class StateManager : MonoBehaviour
         switch (character)
         {
             case GameCharacter.BIRD:
-                birdMoveController.SetMoveSpeedSlow();
+                birdMoveController?.SetMoveSpeedSlow();
                 break;
             case GameCharacter.RABBIT:
-                rabbitMove.SetMoveSpeedSlow();
-                rabbitJump.SetJumpSpeedSlow();
+                rabbitMove?.SetMoveSpeedSlow();
+                rabbitJump?.SetJumpSpeedSlow();
                 break;
             case GameCharacter.MOUSE:
-                mouseMove.SetMoveSpeedSlow();
+                mouseMove?.SetMoveSpeedSlow();
                 break;
             default:
                 Debug.Log("Unknown character type: " + character);
