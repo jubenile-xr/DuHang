@@ -12,6 +12,8 @@ public class BirdMoveController : MonoBehaviour
     private CharacterController CharacterController;
 
     public float flightSpeed = 1.0f; //Flight speed // 飛行速度
+    private const float moveSpeedSlow = 0.5f; // Slow flight speed // スローフライト速度
+    private const float moveSpeedNormal = 1.0f; // Normal flight speed // 通常の飛行速度
     public float moveSpeed = 1.0f; //Walking speed // 歩行速度
 
     //threshold // 閾値
@@ -47,8 +49,8 @@ public class BirdMoveController : MonoBehaviour
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
-        { 
-            HandleWalking(); 
+        {
+            HandleWalking();
         }
         else
         {
@@ -63,7 +65,7 @@ public class BirdMoveController : MonoBehaviour
         // }
 
     }
-    void TellBirdMode() 
+    void TellBirdMode()
     {
         //获取手部速度（用于检测手臂摆动幅度）//get the hand velocity to detect the flapping // 手の速度を取得する（腕の振り幅を検出するため）
         Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
@@ -150,11 +152,11 @@ public class BirdMoveController : MonoBehaviour
 
     void HandleFlight()
     {
-        //// 刚刚按下 A 
+        //// 刚刚按下 A
         //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
 
         ////是否持续按住 A
-        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One); 
+        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
         //这部分为后续添加的飞行控制或者技能代码提供接口，暂时不需要
         //*this part is for the future flight control or skill code, not needed for now
 
@@ -181,10 +183,21 @@ public class BirdMoveController : MonoBehaviour
         }
 
     }
-    
+
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
     {
         CenterEyeAnchor = centerEyeAnchor;
         isInitialized = true;
+    }
+
+    public void SetMoveSpeedNormal()
+    {
+        flightSpeed = moveSpeedNormal;
+        moveSpeed = moveSpeedNormal;
+    }
+    public void SetMoveSpeedSlow()
+    {
+        flightSpeed = moveSpeedSlow;
+        moveSpeed = moveSpeedSlow;
     }
 }

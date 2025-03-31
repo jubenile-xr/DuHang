@@ -5,17 +5,20 @@ using Photon.Pun;
 
 public class RabbitJump : MonoBehaviourPun
 {
-    [SerializeField] private float jumpForce = 5.0f; // ジャンプ力
-    private float handSpeedThreshold = 1.5f; // 手の振りの速度の閾値
-    private float speedSyncThreshold = 0.5f; // 両手の速度差の閾値（同時判定用）
+    private float jumpForce; // ジャンプ力
+    private const float jumpSlow = 5.0f;
+    private const float jumpNormal = 3.0f;
+    private const float handSpeedThreshold = 1.5f; // 手の振りの速度の閾値
+    private const float speedSyncThreshold = 0.5f; // 両手の速度差の閾値（同時判定用）
     private float maxR, maxL, maxAbs;
     private Rigidbody rb;
     private bool isGrounded = true; // 地面にいるかの判定
     private Queue<(float timestamp, float value)> valueHistory = new Queue<(float, float)>();
-    private float timeToKeep = 0.2f;
+    private const float timeToKeep = 0.2f;
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+        jumpForce = jumpNormal; // 初期値を通常ジャンプ力に設定
         if (rb == null)
         {
             Debug.LogError("Rigidbodyがアタッチされていません");
@@ -49,6 +52,7 @@ public class RabbitJump : MonoBehaviourPun
         // 0.2秒前の値を取得（無ければ最新値）
         float previousValue = valueHistory.Count > 0 ? valueHistory.Peek().value : currentValue;
 
+        // スイングアップの判定（現在の値が過去の値より大きいか）
         bool isSwingUp = currentValue > previousValue;
 
         // XZ平面上の速度を計算（上下の動きを除外）
@@ -69,33 +73,34 @@ public class RabbitJump : MonoBehaviourPun
         // 速度の条件を満たしているか（両手の速度が一定値以上 & 速度差が小さい）
         bool isHandSwinging = (speedR > handSpeedThreshold && speedL > handSpeedThreshold) && (Mathf.Abs(speedR - speedL) < speedSyncThreshold);
 
-        // statusText.text = " pre" + previousValue + "cur" + currentValue + "up" + isSwingUp;
         bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
         // 条件を満たしたらジャンプ
         if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || TestKeySpace)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // 空中にいると判定
-            // statusText.text = "jump";
         }
     }
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        // 地面に着地したか判定（タグ "Ground" のオブジェクトと接触）
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
-            Debug.Log("on ground");
-            // statusText.text = "on ground";
         }
     }
-    void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
-        // 地面から離れた場合（タグ "Ground" のオブジェクトから離れる）
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
-            // statusText.text = "air";
         }
+    }
+    public void SetJumpSpeedNormal()
+    {
+        jumpForce = jumpNormal;
+    }
+    public void SetJumpSpeedSlow()
+    {
+        jumpForce = jumpSlow;
     }
 }

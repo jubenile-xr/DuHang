@@ -577,12 +577,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105cda999ff504f72badfe60b9666abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interruptedTime: 3
-  interruptedSpeed: 2
   playerColorManager: {fileID: 5164755693211121568}
-  photonKeyMove: {fileID: 5823670346237709383}
   scoreManager: {fileID: 8028601576095073563}
   parentObject: {fileID: 787599850650099246}
+  rabbitMove: {fileID: 0}
+  rabbitJump: {fileID: 0}
+  birdMoveController: {fileID: 6172448218825311844}
+  mouseMove: {fileID: 0}
+  character: 1
 --- !u!135 &5253004324674076423
 SphereCollider:
   m_ObjectHideFlags: 0

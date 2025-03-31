@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class MouseMove : MonoBehaviour
 {
-    [SerializeField] private float moveSpeedMultiplier = 1.0f; // 移動速度倍率
+    private float moveSpeed; // 移動速度倍率
+    private const float slowSpeed = 0.5f; // スローモーション時の移動速度倍率
+    private const float normalSpeed = 0.8f; // 通常時の移動速度倍率
     private bool isCollisionWall = false;
     [Header("登る速度")]
-    [SerializeField] private float climbSpeed = 2.0f;
+    private const float climbSpeed = 2.0f;
     private Rigidbody rb;
 
     [Header("OVRカメラ")]
@@ -17,6 +19,7 @@ public class MouseMove : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        moveSpeed = normalSpeed; // 初期値を通常速度に設定
     }
 
     private void Update()
@@ -31,7 +34,7 @@ public class MouseMove : MonoBehaviour
             // XZ平面上の速度の合計を計算
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
-            float totalSpeed = (speedR + speedL) * moveSpeedMultiplier;
+            float totalSpeed = (speedR + speedL) * moveSpeed;
 
             // 頭（カメラ）の向きを取得して移動方向を決定
             Transform headTransform = Camera.main.transform;
@@ -56,12 +59,20 @@ public class MouseMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
         }
-
     }
 
     public void SetMouseOVRCameraRig()
     {
         mouseOVRCameraRig = GameObject.Find("MouseCameraRig(Clone)");
+    }
+
+    public void SetMoveSpeedNormal()
+    {
+        moveSpeed = normalSpeed;
+    }
+    public void SetMoveSpeedSlow()
+    {
+        moveSpeed = slowSpeed;
     }
 
     private void OnCollisionEnter(Collision collision)
