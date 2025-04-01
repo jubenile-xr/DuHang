@@ -53,7 +53,9 @@ public class MouseMove : MonoBehaviour
             }
 
             // カメラの位置をねずみの位置に合わせる
-            mouseOVRCameraRig.transform.position = transform.position;
+            Vector3 cameraPosition = transform.position;
+            cameraPosition.y += 0.2f; // y軸を+0.2
+            mouseOVRCameraRig.transform.position = cameraPosition;
 
             // カメラの向きをねずみの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
