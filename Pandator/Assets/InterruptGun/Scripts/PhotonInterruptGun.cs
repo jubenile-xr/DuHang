@@ -23,8 +23,6 @@ public class PhotonInterruptGun : MonoBehaviour
 
     private void Update()
     {
-        //IsMineで自分のキャラクターかどうかを判定
-        if (!GetComponent<PhotonView>().IsMine) return;
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
         {
             if (shotable)

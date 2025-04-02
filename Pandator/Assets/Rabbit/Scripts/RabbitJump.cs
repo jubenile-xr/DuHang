@@ -75,7 +75,7 @@ public class RabbitJump : MonoBehaviourPun
 
         //bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
         // 条件を満たしたらジャンプ
-        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp))
+        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.J) && isGrounded))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // 空中にいると判定
