@@ -586,15 +586,35 @@ PrefabInstance:
     - target: {fileID: 777414074816125609, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 2fa0e3c15be6a4011a28d9fa47ad0c1d, type: 2}
+      objectReference: {fileID: 9100000, guid: 33b4521758be84a69930b6510dbeab9d, type: 2}
     - target: {fileID: 777414074816125609, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].Name
+      value: speed
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].Type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: Panda
       value: 
       objectReference: {fileID: 6797029909271862366}
+    - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: minSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: cameraRig
+      value: 
+      objectReference: {fileID: 191155838186363012}
     - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: pointView
       value: 
