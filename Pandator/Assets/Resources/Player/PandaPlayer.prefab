@@ -609,7 +609,7 @@ PrefabInstance:
       objectReference: {fileID: 6797029909271862366}
     - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: minSpeed
-      value: 0.5
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1854608780902484433, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: cameraRig

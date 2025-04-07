@@ -13,7 +13,7 @@ public class PandaController : MonoBehaviour
     private Vector3 previousPosition = Vector3.zero; // 前フレームの位置
     private Vector3 previousVelocity = Vector3.zero; // 前フレームの速度
     private Vector3 currentVelocity = Vector3.zero;  // 現在の速度
-    [SerializeField] private float minSpeed = 1.0f; // 移動速度
+    [SerializeField] private float minSpeed; // 移動速度
 
     void Start()
     {
@@ -41,22 +41,19 @@ public class PandaController : MonoBehaviour
             // パンダの向きをカメラの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, cameraRig.transform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
-
-            // 加速度を取得してアニメーションに反映
-            Vector3 acceleration = GetCameraRigAcceleration();
-            if (acceleration.magnitude > minSpeed)
-            {
-                animator.SetFloat("speed", acceleration.magnitude);
-            }
-            else
-            {
-                animator.SetFloat("speed", 0);
-            }
-
-            Debug.Log("加速度: " + acceleration.magnitude);
         }
+        // 加速度を取得してアニメーションに反映
+        Vector3 acceleration = GetCameraRigAcceleration();
+        if (acceleration.magnitude > minSpeed)
+        {
+            animator.SetFloat("speed", acceleration.magnitude);
+        }
+        else
+        {
+            animator.SetFloat("speed", 0);
+        }
+        Debug.Log("加速度: " + acceleration.magnitude);
     }
-
     void OnAnimatorIK()
     {
         if (pointView != null)
