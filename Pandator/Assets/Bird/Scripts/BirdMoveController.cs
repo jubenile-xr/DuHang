@@ -138,7 +138,7 @@ public class BirdMoveController : MonoBehaviour
         Vector3 move = (forward * input.y + right * input.x) * moveSpeed;
 
         // 一旦进入Walking状态，就会受到正常重力 // once enter the Walking state, the bird will be affected by the gravity // ウォーキング状態に入ると通常の重力が適用される
-        move.y = -gravityForce * Time.deltaTime;
+        move.y = -gravityForce * Time.deltaTime; //TODO: 落下速度調整
 
         CharacterController.Move(move * Time.deltaTime);
 
