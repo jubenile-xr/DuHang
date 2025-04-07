@@ -122,6 +122,7 @@ public class BirdMoveController : MonoBehaviour
         }
         else
         {
+            
             isWalking = false;
         }
 
@@ -137,8 +138,7 @@ public class BirdMoveController : MonoBehaviour
         Vector3 move = (forward * input.y + right * input.x) * moveSpeed;
 
         // 一旦进入Walking状态，就会受到正常重力 // once enter the Walking state, the bird will be affected by the gravity // ウォーキング状態に入ると通常の重力が適用される
-        verticalVelocity -= gravityForce * Time.deltaTime;
-        move.y = verticalVelocity;
+        move.y = -gravityForce * Time.deltaTime;
 
         CharacterController.Move(move * Time.deltaTime);
 
@@ -161,8 +161,8 @@ public class BirdMoveController : MonoBehaviour
         //*this part is for the future flight control or skill code, not needed for now
 
         //根据是否按住飞行按钮来施加重力 //apply gravity based on the flight button // 飛行ボタンの押下状態に応じて重力を適用する
-        if (isFlying)
-        {
+        if (!isFlying) return;
+
             // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
             verticalVelocity -= gravityForceInAir * Time.deltaTime;
 
@@ -174,13 +174,8 @@ public class BirdMoveController : MonoBehaviour
             Vector3 movement = direction * flightSpeed;
             movement.y += verticalVelocity;
 
-            CharacterController.Move(movement * 0.5f * Time.deltaTime);
-        }
-        else
-        {
-            // 不飞就恢复正常重力 // if not flying, apply normal gravity // 飛行していない場合は通常の重力を適用する
-            verticalVelocity -= gravityForce * Time.deltaTime;
-        }
+            CharacterController.Move(movement * 0.1f * Time.deltaTime);
+ 
 
     }
 
