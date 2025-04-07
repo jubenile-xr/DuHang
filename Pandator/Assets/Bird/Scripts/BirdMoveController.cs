@@ -164,7 +164,7 @@ public class BirdMoveController : MonoBehaviour
         if (!isFlying) return;
 
             // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
-            verticalVelocity -= gravityForceInAir * Time.deltaTime;
+            verticalVelocity -= 1.5f * gravityForceInAir * Time.deltaTime;
 
             // 让玩家朝头显方向移动，不限制 y，可以向上/向下 // プレイヤーをHMDの向いている方向に移動させ、Y軸方向には制限がなく上下に移動できます
             // Move the player towards the direction of the head display, no limit on y, can move up and down // プレイヤーをHMDの向きに移動させ、Y方向の移動制限がないため上下に移動できます
