@@ -93,6 +93,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80400871f5de344f493cd8bbd37f68fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  godCamera: {fileID: 7006499265764727088}
+  followTarget: 4
+  followOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &3357546730357739410
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,5 +237,10 @@ PrefabInstance:
 --- !u!4 &4288999737909985935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4312382746172224076, guid: d8d5650c235194a239bb005f2ab33e4f, type: 3}
+  m_PrefabInstance: {fileID: 26247317749248195}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7006499265764727088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7016936140937701875, guid: d8d5650c235194a239bb005f2ab33e4f, type: 3}
   m_PrefabInstance: {fileID: 26247317749248195}
   m_PrefabAsset: {fileID: 0}
