@@ -45,6 +45,7 @@ public class Net : MonoBehaviour
 
         if(Player.tag == "Player")
         {
+            Debug.Log("Player");
             isCollision = true;
             //Netの中に入れる
             Player.GetComponent<BoxCollider>().isTrigger = true;
