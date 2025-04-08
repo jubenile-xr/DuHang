@@ -36,7 +36,7 @@ public class PandaController : MonoBehaviour
         {
             // パンダの位置をカメラに合わせる
             Vector3 cameraPosition = cameraRig.position;
-            cameraPosition.y -= 1.8f; // パンダの高さを調整
+            cameraPosition.y -= heightDiffPandaCamera; // パンダの高さを調整
             transform.position = cameraPosition;
 
             // パンダの向きをカメラの向きに合わせる
