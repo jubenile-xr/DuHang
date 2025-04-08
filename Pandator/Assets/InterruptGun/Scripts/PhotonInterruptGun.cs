@@ -14,7 +14,6 @@ public class PhotonInterruptGun : MonoBehaviour
     [SerializeField] private float spanTime = 5f;
     private float recastTime = 0f;
     private bool shotable = true;
-    [SerializeField] private GameObject Tip;
     // private Animator animator;
 
     private void Start()
@@ -40,7 +39,7 @@ public class PhotonInterruptGun : MonoBehaviour
     }
     private void Shot()
     {
-        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, Tip.transform.position, transform.rotation);
-        bullet.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * Time.deltaTime * 100 * bulletSpeed);
+        GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, RightController.transform.position, transform.rotation);
+        bullet.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * Time.deltaTime * 100 * bulletSpeed);
     }
 }

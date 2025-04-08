@@ -73,9 +73,9 @@ public class RabbitJump : MonoBehaviourPun
         // 速度の条件を満たしているか（両手の速度が一定値以上 & 速度差が小さい）
         bool isHandSwinging = (speedR > handSpeedThreshold && speedL > handSpeedThreshold) && (Mathf.Abs(speedR - speedL) < speedSyncThreshold);
 
-        bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
+        //bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
         // 条件を満たしたらジャンプ
-        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || TestKeySpace)
+        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.J) && isGrounded))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // 空中にいると判定
