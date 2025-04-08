@@ -58,7 +58,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 Debug.Log("BirdJoin");
                 break;
             case GameCharacter.RABBIT:
-                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:

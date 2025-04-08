@@ -49,9 +49,7 @@ public class RabbitMove : MonoBehaviour
             }
 
             // カメラの位置をうさぎの位置に合わせる
-            Vector3 cameraPosition = transform.position;
-            cameraPosition.y += 0.2f; // y軸を+0.2
-            rabbitOVRCameraRig.transform.position = cameraPosition;
+            rabbitOVRCameraRig.transform.position = transform.position;
 
             // カメラの向きをうさぎの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, rabbitCamera.transform.eulerAngles.y, 0);
