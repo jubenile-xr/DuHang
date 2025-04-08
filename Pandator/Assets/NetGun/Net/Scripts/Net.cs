@@ -47,7 +47,7 @@ public class Net : MonoBehaviour
         {
             isCollision = true;
             //Netの中に入れる
-            Player.GetComponent<SphereCollider>().isTrigger = true;
+            Player.GetComponent<BoxCollider>().isTrigger = true;
             //速度を0に
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             transform.position = Player.transform.position;
