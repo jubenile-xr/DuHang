@@ -14,6 +14,7 @@ public class PandaController : MonoBehaviour
     private Vector3 previousVelocity = Vector3.zero; // 前フレームの速度
     private Vector3 currentVelocity = Vector3.zero;  // 現在の速度
     [SerializeField] private float minSpeed; // 移動速度
+    private const float heightDiffPandaCamera = 1.8f; // パンダとカメラの高さの差分
 
     void Start()
     {
