@@ -350,6 +350,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6089533315263693862}
     m_Modifications:
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Size.x
+      value: 0.9131443
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Size.y
+      value: 1.3284326
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Size.z
+      value: 0.64585173
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Center.x
+      value: 0.01054924
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Center.y
+      value: 0.014216304
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_Center.z
+      value: 0.1770744
+      objectReference: {fileID: 0}
+    - target: {fileID: 390879052530157148, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1441011316199503857, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
       propertyPath: m_Name
       value: MousePrefab
@@ -435,7 +463,7 @@ PrefabInstance:
       addedObject: {fileID: 6669165011117861530}
     - targetCorrespondingSourceObject: {fileID: 3197184005930701542, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5506494286444682611}
+      addedObject: {fileID: 4165671611454133798}
   m_SourcePrefab: {fileID: 100100000, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
 --- !u!4 &1892705324589368737 stripped
 Transform:
@@ -536,7 +564,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3197184005930701542, guid: 3372b1007806a407fabfcf36ba7971cb, type: 3}
   m_PrefabInstance: {fileID: 6265172345366385894}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &5506494286444682611
+--- !u!65 &4165671611454133798
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -553,7 +581,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.6, z: 1.25}
-  m_Center: {x: 0, y: 0.2, z: -0.6}
+  m_Size: {x: 0.7, y: 0.47725597, z: 1.4000003}
+  m_Center: {x: 0, y: 0.16137215, z: -0.58802646}
