@@ -46,6 +46,8 @@ public class BirdMoveController : MonoBehaviour
 
     {
         if (!isInitialized) return;
+        Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        leftStick = Vector2.zero; // 強引に0にする
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
@@ -181,7 +183,6 @@ public class BirdMoveController : MonoBehaviour
             // 不飞就恢复正常重力 // if not flying, apply normal gravity // 飛行していない場合は通常の重力を適用する
             verticalVelocity -= gravityForce * Time.deltaTime;
         }
-
     }
 
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
