@@ -53,7 +53,7 @@ public class PandaController : MonoBehaviour
         {
             animator.SetFloat("speed", 0);
         }
-        Debug.Log("加速度: " + acceleration.magnitude);
+        //Debug.Log("加速度: " + acceleration.magnitude);
     }
     void OnAnimatorIK()
     {
