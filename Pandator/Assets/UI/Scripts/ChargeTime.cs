@@ -37,7 +37,7 @@ public class ChargeTime : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canReset)
+        if ((Input.GetKeyDown(KeyCode.Space) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger)) && canReset)
         {
             ResetSlider();
             rawImage.color = new Color(0f, 246f / 255f, 1f, 1f); // R=0, G=246, B=255
