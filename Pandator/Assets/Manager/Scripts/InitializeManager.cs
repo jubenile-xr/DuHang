@@ -6,7 +6,7 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
-    private enum GameCharacter
+    public enum GameCharacter
     {
         BIRD,
         RABBIT,
@@ -17,7 +17,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameManager gameManager;
     private GameObject player;
     private GameObject camera;
-    
+
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -72,7 +72,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 break;
         }
 
-        
+
         if (camera == null)
         {
             Debug.LogError("CameraRig is missing in the inspector.");
@@ -88,7 +88,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         CanvasCameraSetter.Instance.SetCanvasCamera();
         CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
-    
+
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
     //GameManagerの取得とaliveCountのインクリメントを行う
     private IEnumerator WaitForGameManager()
@@ -134,5 +134,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             Debug.LogError("PhotonFailureObject is not set in the inspector.");
         }
+    }
+
+    public GameCharacter GetGameCharacter()
+    {
+        return character;
     }
 }
