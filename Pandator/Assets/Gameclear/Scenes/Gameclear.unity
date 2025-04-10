@@ -1289,11 +1289,13 @@ MonoBehaviour:
   target: {fileID: 1241330878}
   startOffset: {x: 0, y: 2, z: -3}
   startAngle: 45
+  lookAtAngle: 0
   rotateAngle: 90
   rotateDuration: 3
   finalOffset: {x: 0, y: 2, z: -3}
   pullBackDuration: 1.5
   smoothSpeed: 2
+  lookAtHeight: 2.1
 --- !u!1 &1163516861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,12 +1431,14 @@ MonoBehaviour:
   victoryTextEffect: {fileID: 1982834178}
   target: {fileID: 1241330878}
   startOffset: {x: 2, y: 2, z: -1.5}
-  startAngle: 45
+  startAngle: 0
+  lookAtAngle: 2.1
   rotateAngle: 90
-  rotateDuration: 3
+  rotateDuration: 4
   finalOffset: {x: 0, y: 2, z: -1.3}
   pullBackDuration: 2
   smoothSpeed: 3
+  lookAtHeight: 2.1
 --- !u!4 &1196873676
 Transform:
   m_ObjectHideFlags: 0
