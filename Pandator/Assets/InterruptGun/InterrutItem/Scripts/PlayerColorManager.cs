@@ -5,16 +5,6 @@ public class PlayerColorManager : MonoBehaviour
     private Renderer[] renderers;
     private Color[] originalColors;
     [SerializeField]private Material invisibleMaterial;
-
-    private void Start(){
-        renderers = this.GetComponentsInChildren<Renderer>();
-    }
-
-    private void Update(){
-        if(Input.GetKeyDown(KeyCode.A)){
-            ChangeColorInvisible();
-        }
-    }
     private void GetRendererColors(){
         // 子オブジェクト内のすべての Renderer を取得する
         renderers = GetComponentsInChildren<Renderer>();
