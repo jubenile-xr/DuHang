@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        Debug.Log("aliveCount: " + aliveCount);
+        
     }
 
     public GameState GetGameState()
