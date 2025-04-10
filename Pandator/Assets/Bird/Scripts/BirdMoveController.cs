@@ -30,6 +30,7 @@ public class BirdMoveController : MonoBehaviour
     //force // 力
     public float gravityForce = 9.8f;
     public float gravityForceInAir = 0f; // 飞行中重力 // gravity in air // 飛行中の重力
+    private float flyForce = 0.1f; // 飞行中上升力 // lift force in air // 飛行中の上昇力
     public float liftForce = 2f; // 上升力 // when the first time fly will give the bird a lift force // 初めて飛行モードに入った際に鳥に与える上昇力
     public float verticalVelocity = 0f;       // 当前竖直方向速度（向上为正） // current vertical velocity // 現在の垂直方向速度（上方向が正）
 
@@ -140,7 +141,7 @@ public class BirdMoveController : MonoBehaviour
         // 一旦进入Walking状态，就会受到正常重力 // once enter the Walking state, the bird will be affected by the gravity // ウォーキング状態に入ると通常の重力が適用される
         move.y = -gravityForce * Time.deltaTime; //TODO: 落下速度調整
 
-        CharacterController.Move(move * Time.deltaTime);
+        CharacterController.Move( move * Time.deltaTime);
 
         // 如果碰到地面，重置速度 // if the bird hit the ground, reset the velocity // 地面に触れたら速度をリセットする
         if (CharacterController.isGrounded && verticalVelocity < 0f)
@@ -163,20 +164,19 @@ public class BirdMoveController : MonoBehaviour
         //根据是否按住飞行按钮来施加重力 //apply gravity based on the flight button // 飛行ボタンの押下状態に応じて重力を適用する
         if (!isFlying) return;
 
-            // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
-            verticalVelocity -= 1.5f * gravityForceInAir * Time.deltaTime;
+        // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
+        verticalVelocity -= 1.5f * gravityForceInAir * Time.deltaTime;
 
-            // 让玩家朝头显方向移动，不限制 y，可以向上/向下 // プレイヤーをHMDの向いている方向に移動させ、Y軸方向には制限がなく上下に移動できます
-            // Move the player towards the direction of the head display, no limit on y, can move up and down // プレイヤーをHMDの向きに移動させ、Y方向の移動制限がないため上下に移動できます
-            Vector3 direction = CenterEyeAnchor.forward;
-            direction.Normalize();
+        // 让玩家朝头显方向移动，不限制 y，可以向上/向下 // プレイヤーをHMDの向いている方向に移動させ、Y軸方向には制限がなく上下に移動できます
+        // Move the player towards the direction of the head display, no limit on y, can move up and down // プレイヤーをHMDの向きに移動させ、Y方向の移動制限がないため上下に移動できます
+        Vector3 direction = CenterEyeAnchor.forward;
+        direction.Normalize();
 
-            Vector3 movement = direction * flightSpeed;
-            movement.y += verticalVelocity;
+        Vector3 movement = direction * flightSpeed;
+        movement.y += verticalVelocity;
 
-            CharacterController.Move(movement * 0.1f * Time.deltaTime);
- 
-
+        CharacterController.Move(flyForce *movement * Time.deltaTime);
+        
     }
 
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
