@@ -19,8 +19,8 @@ public class VRKilleImagedAttach : MonoBehaviour
 
     void Start()
     {
-        InitializeManager a = initialize.GetComponent<InitializeManager>();
-        character = a.GetGameCharacter(); // フィールドに値を代入
+        InitializeManager initmanager = initialize.GetComponent<InitializeManager>();
+        character = initmanager.GetGameCharacter(); // フィールドに値を代入
 
         // 初期設定
         switch (character)
