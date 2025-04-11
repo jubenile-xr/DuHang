@@ -12,6 +12,8 @@ TagManager:
   - RHandTargetAnchor
   - Wall
   - GameManager
+  - Ground
+  - PandaPlayer
   layers:
   - Default
   - TransparentFX
