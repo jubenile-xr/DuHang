@@ -12,6 +12,8 @@ public class tutorialInstantiate : MonoBehaviour
     [SerializeField] private GameCharacter character;
     private GameObject player;
     private GameObject camera;
+    public GameObject roomPrefab;
+    public GameObject passthrough;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,7 +35,7 @@ public class tutorialInstantiate : MonoBehaviour
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
-                player = Instantiate(Resources.Load<GameObject>("Player/PandaPlayer"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             // Add other cases for MOUSE and PANDA as needed
@@ -43,7 +45,7 @@ public class tutorialInstantiate : MonoBehaviour
         camera.transform.SetParent(player.transform);
 
         //CreatePhotonAvatarのOnCreate()を実行
-        CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
+        CreateTutorialAvatar avatarScript = player.GetComponent<CreateTutorialAvatar>();
         if (avatarScript == null)
         {
             Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
@@ -54,8 +56,10 @@ public class tutorialInstantiate : MonoBehaviour
         switch (character)
         {
             case GameCharacter.PANDA:
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                // CanvasCameraSetter.Instance.SetCanvasCamera();
+                // CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                roomPrefab.SetActive(false);
+                passthrough.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
                 MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
