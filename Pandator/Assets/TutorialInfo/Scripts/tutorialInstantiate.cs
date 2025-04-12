@@ -27,11 +27,11 @@ public class tutorialInstantiate : MonoBehaviour
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 break;
             case GameCharacter.RABBIT:
-                player = Instantiate(Resources.Load<GameObject>("Player/RabbitPlayer"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:
-                player = Instantiate(Resources.Load<GameObject>("Player/MousePlayer"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
@@ -62,7 +62,7 @@ public class tutorialInstantiate : MonoBehaviour
                 passthrough.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
-                MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+                TutorialMouseMove mouseMoveScript = player.GetComponentInChildren<TutorialMouseMove>();
                 if (mouseMoveScript == null)
                 {
                     Debug.LogError("MouseMove script is missing on the instantiated player object!");
@@ -71,7 +71,7 @@ public class tutorialInstantiate : MonoBehaviour
                 mouseMoveScript.SetMouseOVRCameraRig();
                 break;
             case GameCharacter.RABBIT:
-                RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
+                TutorialRabbitMove rabbitMoveScript = player.GetComponentInChildren<TutorialRabbitMove>();
                 if (rabbitMoveScript == null)
                 {
                     Debug.LogError("RabbitMove script is missing on the instantiated player object!");
