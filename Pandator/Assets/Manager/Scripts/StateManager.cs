@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour
@@ -96,7 +97,7 @@ public class StateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
-        if (!isAlive) return;
+        if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
         //地面に落とす
