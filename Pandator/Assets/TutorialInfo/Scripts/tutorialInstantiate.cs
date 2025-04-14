@@ -56,8 +56,7 @@ public class tutorialInstantiate : MonoBehaviour
         switch (character)
         {
             case GameCharacter.PANDA:
-                // CanvasCameraSetter.Instance.SetCanvasCamera();
-                // CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                
                 roomPrefab.SetActive(false);
                 passthrough.SetActive(true);
                 break;
@@ -86,6 +85,8 @@ public class tutorialInstantiate : MonoBehaviour
                 Debug.LogWarning("未処理のキャラクタータイプです: " + character);
                 break;
         }
+        CanvasCameraSetter.Instance.SetCanvasCamera();
+        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
 
     // Update is called once per frame
