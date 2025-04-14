@@ -11,7 +11,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         BIRD,
         RABBIT,
         MOUSE,
-        PANDA
+        PANDA,
+        GOD
     }
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
@@ -66,10 +67,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
-                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
                 PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+                break;
+            case GameCharacter.GOD:
                 break;
         }
 

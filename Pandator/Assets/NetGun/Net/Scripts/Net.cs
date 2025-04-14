@@ -54,7 +54,7 @@ public class Net : MonoBehaviour
             transform.position += new Vector3(0, 1, 0);
             Player.GetComponent<StateManager>()?.SetAlive(false);
             // ここは視覚的にわかりやすいように色を変える処理を追加しているだけ
-            Player.GetComponent<PlayerColorManager>()?.ChangeColorBlack();
+            Player.GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
             Debug.Log("hit");
         }
     }

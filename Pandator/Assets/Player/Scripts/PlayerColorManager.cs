@@ -4,6 +4,7 @@ public class PlayerColorManager : MonoBehaviour
 {
     private Renderer[] renderers;
     private Color[] originalColors;
+    [SerializeField]private Material invisibleMaterial;
     private void GetRendererColors(){
         // 子オブジェクト内のすべての Renderer を取得する
         renderers = GetComponentsInChildren<Renderer>();
@@ -56,6 +57,15 @@ public class PlayerColorManager : MonoBehaviour
             Color newColor = Color.black;
             newColor.a = 1f;
             renderers[i].material.color = newColor;
+        }
+    }
+
+    public void ChangeColorInvisible()
+    {
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            // 色を不透明に設定する
+            renderers[i].material = invisibleMaterial;
         }
     }
 }
