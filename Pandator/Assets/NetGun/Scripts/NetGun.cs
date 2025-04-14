@@ -4,44 +4,43 @@ using Photon.Pun;
 
 public class NetGun : MonoBehaviourPun
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private float BulletSpeed = 0.5f;
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     [SerializeField] private float spanTime = 0f;
-    private Boolean shotable = true;
+    private bool shotable = true;
     private Animator animator;
+
     void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //実験用
+        // 実験用
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
-
         {
             if (shotable && photonView.IsMine)
             {
                 Shot();
                 shotable = false;
+                spanTime = 0f; // 発射時にカウントをリセット
             }
-
         }
-        spanTime += Time.deltaTime;
 
-        //銃を初期状態に戻す
-        if (spanTime > 5.0f)
+        // 発射間隔を管理
+        if (!shotable)
         {
-            shotable = true;
-            spanTime = 0;
-
+            spanTime += Time.deltaTime;
+            if (spanTime > 5.0f)
+            {
+                shotable = true; // 5秒後に発射可能にする
+            }
         }
     }
 
-    public void Shot() //弾の発射
+    public void Shot() // 弾の発射
     {
         animator.SetTrigger("Fire");
 
