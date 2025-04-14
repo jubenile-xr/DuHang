@@ -96,6 +96,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 3339474512950913747}
   - {fileID: 1627445677244288914}
+  - {fileID: 5816927443545295796}
   - {fileID: 5338401572920123032}
   sceneViewId: 0
   InstantiationId: 0
@@ -656,6 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b7416fc37c44b30b73190a94051c6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invisibleMaterial: {fileID: 2100000, guid: 964cb45fa6e024504a4ff24b8cb6d8f1, type: 2}
 --- !u!65 &8773034350506361957
 BoxCollider:
   m_ObjectHideFlags: 0
