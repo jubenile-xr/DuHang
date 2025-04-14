@@ -1,16 +1,19 @@
 using Photon.Realtime;
 using System.Runtime.CompilerServices;
-//using Unity.Android.Gradle.Manifest;
+// using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 
 public class BirdMoveController : MonoBehaviour
 {
+    private bool isInitialized = false;
     public Transform OvrPlayer;
     public Transform CenterEyeAnchor;
     private CharacterController CharacterController;
 
-    public float flightSpeed = 10f; //Flight speed // 飛行速度
+    public float flightSpeed = 1.0f; //Flight speed // 飛行速度
+    private const float moveSpeedSlow = 0.5f; // Slow flight speed // スローフライト速度
+    private const float moveSpeedNormal = 1.0f; // Normal flight speed // 通常の飛行速度
     public float moveSpeed = 1.0f; //Walking speed // 歩行速度
 
     //threshold // 閾値
@@ -27,7 +30,8 @@ public class BirdMoveController : MonoBehaviour
     //force // 力
     public float gravityForce = 9.8f;
     public float gravityForceInAir = 0f; // 飞行中重力 // gravity in air // 飛行中の重力
-    public float liftForce = 4f; // 上升力 // when the first time fly will give the bird a lift force // 初めて飛行モードに入った際に鳥に与える上昇力
+    private float flyForce = 0.1f; // 飞行中上升力 // lift force in air // 飛行中の上昇力
+    public float liftForce = 2f; // 上升力 // when the first time fly will give the bird a lift force // 初めて飛行モードに入った際に鳥に与える上昇力
     public float verticalVelocity = 0f;       // 当前竖直方向速度（向上为正） // current vertical velocity // 現在の垂直方向速度（上方向が正）
 
     public bool isFlying = false; //判断是否进入飞行模式 // 飛行モードに入っているかどうかを示す
@@ -42,19 +46,27 @@ public class BirdMoveController : MonoBehaviour
     void Update()
 
     {
+        if (!isInitialized) return;
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
-        { 
-            HandleWalking(); 
+        {
+            HandleWalking();
         }
         else
         {
             HandleFlight();
         }
 
+        // //初始化 //initialize
+        // if (!isInitialized)
+        // {
+        //     CenterEyeAnchor = GameObject.FindWithTag("MainCamera").transform;
+        //     isInitialized = true;
+        // }
+
     }
-    void TellBirdMode() 
+    void TellBirdMode()
     {
         //获取手部速度（用于检测手臂摆动幅度）//get the hand velocity to detect the flapping // 手の速度を取得する（腕の振り幅を検出するため）
         Vector3 leftHandVel = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
@@ -111,6 +123,7 @@ public class BirdMoveController : MonoBehaviour
         }
         else
         {
+            
             isWalking = false;
         }
 
@@ -126,10 +139,9 @@ public class BirdMoveController : MonoBehaviour
         Vector3 move = (forward * input.y + right * input.x) * moveSpeed;
 
         // 一旦进入Walking状态，就会受到正常重力 // once enter the Walking state, the bird will be affected by the gravity // ウォーキング状態に入ると通常の重力が適用される
-        verticalVelocity -= gravityForce * Time.deltaTime;
-        move.y = verticalVelocity;
+        move.y = -gravityForce * Time.deltaTime; //TODO: 落下速度調整
 
-        CharacterController.Move(move * Time.deltaTime);
+        CharacterController.Move( move * Time.deltaTime);
 
         // 如果碰到地面，重置速度 // if the bird hit the ground, reset the velocity // 地面に触れたら速度をリセットする
         if (CharacterController.isGrounded && verticalVelocity < 0f)
@@ -141,35 +153,46 @@ public class BirdMoveController : MonoBehaviour
 
     void HandleFlight()
     {
-        //// 刚刚按下 A 
+        //// 刚刚按下 A
         //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
 
         ////是否持续按住 A
-        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One); 
+        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
         //这部分为后续添加的飞行控制或者技能代码提供接口，暂时不需要
         //*this part is for the future flight control or skill code, not needed for now
 
         //根据是否按住飞行按钮来施加重力 //apply gravity based on the flight button // 飛行ボタンの押下状態に応じて重力を適用する
-        if (isFlying)
-        {
-            // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
-            verticalVelocity -= gravityForceInAir * Time.deltaTime;
+        if (!isFlying) return;
 
-            // 让玩家朝头显方向移动，不限制 y，可以向上/向下 // プレイヤーをHMDの向いている方向に移動させ、Y軸方向には制限がなく上下に移動できます
-            // Move the player towards the direction of the head display, no limit on y, can move up and down // プレイヤーをHMDの向きに移動させ、Y方向の移動制限がないため上下に移動できます
-            Vector3 direction = CenterEyeAnchor.forward;
-            direction.Normalize();
+        // 飞行中不受重力 // no gravity in the air // 飛行中は重力の影響を受けない
+        verticalVelocity -= gravityForceInAir * Time.deltaTime;
 
-            Vector3 movement = direction * flightSpeed;
-            movement.y += verticalVelocity;
+        // 让玩家朝头显方向移动，不限制 y，可以向上/向下 // プレイヤーをHMDの向いている方向に移動させ、Y軸方向には制限がなく上下に移動できます
+        // Move the player towards the direction of the head display, no limit on y, can move up and down // プレイヤーをHMDの向きに移動させ、Y方向の移動制限がないため上下に移動できます
+        Vector3 direction = CenterEyeAnchor.forward;
+        direction.Normalize();
 
-            CharacterController.Move(movement * Time.deltaTime);
-        }
-        else
-        {
-            // 不飞就恢复正常重力 // if not flying, apply normal gravity // 飛行していない場合は通常の重力を適用する
-            verticalVelocity -= gravityForce * Time.deltaTime;
-        }
+        Vector3 movement = direction * flightSpeed;
+        movement.y += verticalVelocity;
 
+        CharacterController.Move(flyForce *movement * Time.deltaTime);
+        
+    }
+
+    public void SetCenterEyeAnchor(Transform centerEyeAnchor)
+    {
+        CenterEyeAnchor = centerEyeAnchor;
+        isInitialized = true;
+    }
+
+    public void SetMoveSpeedNormal()
+    {
+        flightSpeed = moveSpeedNormal;
+        moveSpeed = moveSpeedNormal;
+    }
+    public void SetMoveSpeedSlow()
+    {
+        flightSpeed = moveSpeedSlow;
+        moveSpeed = moveSpeedSlow;
     }
 }

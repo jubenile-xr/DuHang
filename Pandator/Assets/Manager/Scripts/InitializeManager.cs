@@ -11,7 +11,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         BIRD,
         RABBIT,
         MOUSE,
-        PANDA
+        PANDA,
+        GOD
     }
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
@@ -47,37 +48,43 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             StartCoroutine(WaitForGameManager());
         }
 
+        // プレイヤーキャラクターの生成およびカメラの生成
         switch (character)
         {
             case GameCharacter.BIRD:
-                player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                GameObject eyePos = player.transform.Find("eyePos").gameObject;
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), eyePos.transform.position, Quaternion.identity);
+                player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 Debug.Log("BirdJoin");
                 break;
             case GameCharacter.RABBIT:
-                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.MOUSE:
-                player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                gameManager.GetComponent<GameManager>().SetIncrementAliveCount();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.PANDA:
-                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0f, 0f), Quaternion.identity);
+                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                 // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
                 PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
+            case GameCharacter.GOD:
+                break;
         }
 
-
+        //カメラ生成の確認
         if (camera == null)
         {
             Debug.LogError("CameraRig is missing in the inspector.");
         }
+        //カメラの親子関係を設定
         camera.transform.SetParent(player.transform);
+
+        //CreatePhotonAvatarのOnCreate()を実行
         CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
         if (avatarScript == null)
         {
@@ -85,8 +92,38 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             return;
         }
         avatarScript.ExecuteCreatePhotonAvatar();
-        CanvasCameraSetter.Instance.SetCanvasCamera();
-        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+
+        switch (character)
+        {
+            case GameCharacter.PANDA:
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                break;
+            case GameCharacter.MOUSE:
+                MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+                if (mouseMoveScript == null)
+                {
+                    Debug.LogError("MouseMove script is missing on the instantiated player object!");
+                    return;
+                }
+                mouseMoveScript.SetMouseOVRCameraRig();
+                break;
+            case GameCharacter.RABBIT:
+                RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
+                if (rabbitMoveScript == null)
+                {
+                    Debug.LogError("RabbitMove script is missing on the instantiated player object!");
+                    return;
+                }
+                rabbitMoveScript.SetRabbitOVRCameraRig();
+                break;
+            case GameCharacter.BIRD:
+                // BIRD用の処理があれば追加
+                break;
+            default:
+                Debug.LogWarning("未処理のキャラクタータイプです: " + character);
+                break;
+        }
     }
 
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
@@ -112,7 +149,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.Log("GameManager object not found. Waiting...");
+                // Debug.Log("GameManager object not found. Waiting...");
             }
             yield return null; // 1フレーム待機
         }

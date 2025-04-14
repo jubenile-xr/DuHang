@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 4000615125199104777}
   m_Layer: 0
   m_Name: VRPlayer
-  m_TagString: MasterPlayer
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -502,6 +502,7 @@ MonoBehaviour:
   playerColorManager: {fileID: 4852022021903905061}
   photonKeyMove: {fileID: 4000615125199104777}
   scoreManager: {fileID: 1178441077383595741}
+  parentObject: {fileID: 0}
 --- !u!1001 &7996113090293123962
 PrefabInstance:
   m_ObjectHideFlags: 0
