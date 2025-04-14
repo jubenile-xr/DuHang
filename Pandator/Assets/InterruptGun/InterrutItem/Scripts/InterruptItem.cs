@@ -7,6 +7,7 @@ public class InterrupteItem : MonoBehaviour
     [SerializeField] private float collisionDeleteTime = 0.1f;
     private float collisionTime = 0.0f;
     private bool isCollision = false;
+    [SerializeField]private GameObject hitSE;
 
     private void Update()
     {
@@ -35,6 +36,7 @@ public class InterrupteItem : MonoBehaviour
             // プレイヤーの状態を Interrupted に設定する
             player.GetComponent<StateManager>()?.SetInterrupted(true);
             Debug.Log("hit!");
+            hitSE?.GetComponent<SoundPlayer>().Play();
         }
     }
 }
