@@ -1,7 +1,6 @@
 using UnityEngine;
-using Photon.Pun;
 
-public class PandaController : MonoBehaviour
+public class TutorialPandaController : MonoBehaviour
 {
     public Transform leftHandTarget;
     public Transform rightHandTarget;
@@ -15,7 +14,7 @@ public class PandaController : MonoBehaviour
     private Vector3 currentVelocity = Vector3.zero;  // 現在の速度
     [SerializeField] private float minSpeed; // 移動速度
     private const float heightDiffPandaCamera = 1.8f; // パンダとカメラの高さの差分
-
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -30,19 +29,16 @@ public class PandaController : MonoBehaviour
         }
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (GetComponent<PhotonView>().IsMine)
-        {
-            // パンダの位置をカメラに合わせる
-            Vector3 cameraPosition = cameraRig.position;
-            cameraPosition.y -= heightDiffPandaCamera; // パンダの高さを調整
-            transform.position = cameraPosition;
-
-            // パンダの向きをカメラの向きに合わせる
-            Quaternion targetRotation = Quaternion.Euler(0, cameraRig.transform.eulerAngles.y, 0);
-            transform.rotation = targetRotation;
-        }
+        // パンダの位置をカメラに合わせる
+        Vector3 cameraPosition = cameraRig.position;
+        cameraPosition.y -= heightDiffPandaCamera; // パンダの高さを調整
+        transform.position = cameraPosition;
+        // パンダの向きをカメラの向きに合わせる
+        Quaternion targetRotation = Quaternion.Euler(0, cameraRig.transform.eulerAngles.y, 0);
+        transform.rotation = targetRotation;
         // 加速度を取得してアニメーションに反映
         Vector3 acceleration = GetCameraRigAcceleration();
         if (acceleration.magnitude > minSpeed)
@@ -53,8 +49,9 @@ public class PandaController : MonoBehaviour
         {
             animator.SetFloat("speed", 0);
         }
-        Debug.Log("加速度: " + acceleration.magnitude);
+        //Debug.Log("加速度: " + acceleration.magnitude);
     }
+
     void OnAnimatorIK()
     {
         if (pointView != null)
