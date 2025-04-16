@@ -1,10 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement; // シーン遷移に必要
 
 public class tutorialSceneTransition : MonoBehaviour
 {
     // 遷移先のシーン名
-    [SerializeField] private string nextSceneName;
+    [SerializeField] private SceneType nextScene = SceneType.MR;
+    private string nextSceneName; // 遷移先のシーン名を格納する変数
     [SerializeField] private setChangeSceneLogo setChangeSceneLogoScript; // setChangeSceneLogoスクリプトの参照
 
     private void Start(){
@@ -38,13 +40,15 @@ public class tutorialSceneTransition : MonoBehaviour
             Debug.Log(Character.GetSelectedAnimal());
         }
     }
+
     private void changeScene()
     {
         // ローディング画面を表示
         setChangeSceneLogoScript.showLoadingLogo();
         // 1秒後にgotoNextSceneメソッドを呼び出す
-        Invoke("goToNextScene", 1f);
+        Invoke(nameof(goToNextScene), 1f);
     }
+
     private void goToNextScene()
     {
         // 遷移先のシーンに遷移

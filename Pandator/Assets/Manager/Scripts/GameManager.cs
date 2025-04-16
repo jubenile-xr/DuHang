@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -11,10 +12,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         PLAY,
         END
     }
+    public enum PlayerType
+    {
+        MR,
+        VR
+    }
 
     [Header("ゲームの状態はこっちで完全管理")]
     [SerializeField] private GameState state;
     private Dictionary<string, float> scoreList;
+
+    [SerializeField]
+    private PlayerType playerType = PlayerType.MR;
 
     private int aliveCount;
     private enum Winner
@@ -66,7 +75,19 @@ public class GameManager : MonoBehaviourPunCallbacks
             // TODO　スコアを集める
             if (aliveCount == 0)
             {
-                PhotonNetwork.Instantiate("GameOverCube",new Vector3(0f, 0f, 0f), Quaternion.identity, 0);　//TODO パンダが優勝した時の遷移にする
+                switch (playerType)
+                {
+                    case PlayerType.MR:
+                        SceneManager.LoadScene("ResultClearMRScene");
+                        break;
+                    case PlayerType.VR:
+                        SceneManager.LoadScene("ResultClearVRScene");
+                        break;
+                    default:
+                        Debug.LogError("Unknown PlayerType");
+                        break;
+                }
+
             }
         }
     }
