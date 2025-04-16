@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement; // シーン遷移に必要
 
 public class tutorialSceneTransition : MonoBehaviour
 {
-    // 遷移先のシーン名
-    [SerializeField] private SceneType nextScene = SceneType.MR;
     private string nextSceneName; // 遷移先のシーン名を格納する変数
     [SerializeField] private setChangeSceneLogo setChangeSceneLogoScript; // setChangeSceneLogoスクリプトの参照
 
