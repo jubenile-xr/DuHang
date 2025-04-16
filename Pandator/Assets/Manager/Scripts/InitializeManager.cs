@@ -19,8 +19,29 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject player;
     private GameObject camera;
 
-    void Start()
+    private void Start()
     {
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                character = GameCharacter.BIRD;
+                break;
+            case Character.GameCharacters.RABBIT:
+                character = GameCharacter.RABBIT;
+                break;
+            case Character.GameCharacters.MOUSE:
+                character = GameCharacter.MOUSE;
+                break;
+            case Character.GameCharacters.PANDA:
+                character = GameCharacter.PANDA;
+                break;
+            case Character.GameCharacters.GOD:
+                character = GameCharacter.GOD;
+                break;
+            default:
+                Debug.LogError("Invalid character selected.");
+                return; // 不正なキャラクターが選択された場合は処理を中断
+        }
         PhotonNetwork.ConnectUsingSettings();
     }
 

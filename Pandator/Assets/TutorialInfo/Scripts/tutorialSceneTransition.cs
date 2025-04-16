@@ -6,6 +6,19 @@ public class tutorialSceneTransition : MonoBehaviour
     // 遷移先のシーン名
     [SerializeField] private string nextSceneName;
     [SerializeField] private setChangeSceneLogo setChangeSceneLogoScript; // setChangeSceneLogoスクリプトの参照
+
+    private void Start(){
+        if(Character.GetSelectedAnimal() == Character.GameCharacters.GOD)
+        {
+            nextSceneName = "GodScene";
+        }
+        else if(Character.GetSelectedAnimal() == Character.GameCharacters.PANDA)
+        {
+            nextSceneName = "MRScene";
+        }else{
+            nextSceneName = "VRScene";
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -18,6 +31,12 @@ public class tutorialSceneTransition : MonoBehaviour
         {
             changeScene();
         }
+
+        // スペースキーが押された場合
+        if (Input.GetKeyDown(KeyCode.A)) // スペースキー
+        {
+            Debug.Log(Character.GetSelectedAnimal());
+        }
     }
     private void changeScene()
     {
@@ -28,7 +47,7 @@ public class tutorialSceneTransition : MonoBehaviour
     }
     private void goToNextScene()
     {
-        // シーン遷移
+        // 遷移先のシーンに遷移
         SceneManager.LoadScene(nextSceneName);
     }
 }
