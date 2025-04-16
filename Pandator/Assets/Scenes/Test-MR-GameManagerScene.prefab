@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 1057276839154336510}
   - component: {fileID: 1272762774541201903}
   m_Layer: 14
-  m_Name: RabbitKilledImage
+  m_Name: FirstKilledImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 146610532985699693}
   - component: {fileID: 3322863468825226222}
   m_Layer: 14
-  m_Name: MouseKilledImage
+  m_Name: SecondKilledImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 3979059452696831016}
   - component: {fileID: 876912785524498160}
   m_Layer: 14
-  m_Name: BirdKilledImage
+  m_Name: ThirdKilledImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -889,7 +889,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8752758377788379925, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1607120936648443819, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+    - {fileID: 8219454349399495366, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+    - {fileID: 8682295006896381244, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2984171437233212997, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
       insertIndex: -1
@@ -960,9 +963,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f858f15a6341e043b79a27182086b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RabbitImage: {fileID: 1665427518138516406}
-  BirdImage: {fileID: 8994556783179601247}
-  MouseImage: {fileID: 7782223975424209205}
+  FirstKilledImage: {fileID: 1665427518138516406}
+  SecondKilledImage: {fileID: 7782223975424209205}
+  ThirdKilledImage: {fileID: 8994556783179601247}
+  canvas: {fileID: 4206705845744586073}
+  RabbitImage: {fileID: 2800000, guid: d20fe06a843e3134692137081c3a890d, type: 3}
+  BirdImage: {fileID: 2800000, guid: 3483eee38b666694c94d8edc16fab087, type: 3}
+  MouseImage: {fileID: 2800000, guid: e1b824ccd43abb844af2dc05f73b8002, type: 3}
 --- !u!114 &7093040381707603996
 MonoBehaviour:
   m_ObjectHideFlags: 0
