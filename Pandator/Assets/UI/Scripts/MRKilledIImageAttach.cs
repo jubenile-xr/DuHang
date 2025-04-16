@@ -3,59 +3,177 @@ using UnityEngine.UI; // UIコンポーネントを使用するために必要
 
 public class MRKilleImagedAttach : MonoBehaviour
 {
-    [SerializeField] private GameObject RabbitImage; // インスペクターでUI画像を指定
-    [SerializeField] private GameObject BirdImage; // インスペクターでUI画像を指定
-    [SerializeField] private GameObject MouseImage; // インスペクターでUI画像を指定
+    [SerializeField] private GameObject FirstKilledImage; // インスペクターでUI画像を指定
+    [SerializeField] private GameObject SecondKilledImage; // インスペクターでUI画像を指定
+    [SerializeField] private GameObject ThirdKilledImage; // インスペクターでUI画像を指定
 
-    void Update()
+    private bool isFirstPlayerDead = false;
+    private bool isSecondPlayerDead = false;
+    private bool isThirdPlayerDead = false;
+    private InitializeManager.GameCharacter firstCharacter;
+    private InitializeManager.GameCharacter secondCharacter;
+    private InitializeManager.GameCharacter thirdCharacter;
+    [SerializeField] private GameObject canvas; // インスペクターでCanvasを指定
+    [SerializeField] private Texture2D RabbitImage;
+    [SerializeField] private Texture2D BirdImage;
+    [SerializeField] private Texture2D MouseImage;
+    GameObject FirstImageObject;
+    GameObject SecondImageObject;
+    GameObject ThirdImageObject;
+    RawImage FirstImage;
+    RawImage SecondImage;
+    RawImage ThirdImage;
+
+    private int characterNum = 0;
+
+
+    private void Start()
     {
-        if (RabbitKill())
+        FirstImageObject = new GameObject("FirstAnimalImage");
+        FirstImage = FirstImageObject.AddComponent<RawImage>();
+        SecondImageObject = new GameObject("SecondAnimalImage");
+        SecondImage = SecondImageObject.AddComponent<RawImage>();
+        ThirdImageObject = new GameObject("ThirdAnimalImage");
+        ThirdImage = ThirdImageObject.AddComponent<RawImage>();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            isFirstPlayerDead = true;
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            isSecondPlayerDead = true;
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isThirdPlayerDead = true;
+        }
+        FirstKilledImage.SetActive(isFirstPlayerDead);
+        ThirdKilledImage.SetActive(isSecondPlayerDead);
+        SecondKilledImage.SetActive(isThirdPlayerDead);
+
+        if (Input.GetKeyDown(KeyCode.L))
         {
             if (RabbitImage != null)
             {
-                RabbitImage.SetActive(true); // UI画像を表示
+                // テクスチャをスプライトに変換して設定
+                FirstImage.texture = RabbitImage;
+                setFirstPosition();
             }
         }
-        else if (MouseKill())
+
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (MouseImage != null)
-            {
-                MouseImage.SetActive(true); // UI画像を表示
-            }
-        }
-        else if (BirdKill())
-        {
-            if (BirdImage != null)
-            {
-                BirdImage.SetActive(true); // UI画像を表示
-            }
+            changeCharacterNameToImage(InitializeManager.GameCharacter.RABBIT);
         }
     }
 
-    //仮に置いているだけなので、ステートマネージャー次第で消しといて
-    bool RabbitKill()
+    public void setIsFirstPlayerDead(bool isDead)
     {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            return true;
-        }
-        return false;
+        isFirstPlayerDead = isDead;
+    }
+    public void setIsSecondPlayerDead(bool isDead)
+    {
+        isSecondPlayerDead = isDead;
+    }
+    public void setIsThirdPlayerDead(bool isDead)
+    {
+        isThirdPlayerDead = isDead;
     }
 
-    bool BirdKill()
+    public void setFirstCharacterName(InitializeManager.GameCharacter characterName)
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            return true;
-        }
-        return false;
+        firstCharacter = characterName;
     }
-    bool MouseKill()
+
+    public void setSecondCharacterName(InitializeManager.GameCharacter characterName)
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        secondCharacter = characterName;
+    }
+    public void setThirdCharacterName(InitializeManager.GameCharacter characterName)
+    {
+        thirdCharacter = characterName;
+    }
+
+    //下のコードなんやけど多分これであってると思う→長張へ
+    //これでテキスチャーを決定する感じ
+    private void changeCharacterNameToImage(InitializeManager.GameCharacter characterName)
+    {
+        RawImage img;
+        characterNum++;
+        switch (characterNum)
         {
-            return true;
+            case 1:
+                img = FirstImage;
+                break;
+            case 2:
+                img = SecondImage;
+                break;
+            case 3:
+                img = ThirdImage;
+                break;
+            default:
+                return;
         }
-        return false;
+        switch (characterName)
+        {
+            case InitializeManager.GameCharacter.RABBIT:
+                img.texture = RabbitImage;
+                break;
+            case InitializeManager.GameCharacter.BIRD:
+                img.texture = BirdImage;
+                break;
+            case InitializeManager.GameCharacter.MOUSE:
+                img.texture = MouseImage;
+                break;
+        }
+        switch (characterNum)
+        {
+            case 1:
+                setFirstPosition();
+                break;
+            case 2:
+                setSecondPosition();
+                break;
+            case 3:
+                setThirdPosition();
+                break;
+            default:
+                return;
+        }
+    }
+
+    //以下は画像をセットしてくれるものです。
+    private void setFirstPosition()
+    {
+        // Canvasに追加
+        FirstImageObject.transform.SetParent(canvas.transform, false);
+
+        // RectTransformの設定
+        RectTransform setimage = FirstImageObject.GetComponent<RectTransform>();
+        setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
+        setimage.anchoredPosition = new Vector2(350f, 200f); // 位置
+    }
+    private void setSecondPosition()
+    {
+        // Canvasに追加
+        SecondImageObject.transform.SetParent(canvas.transform, false);
+
+        // RectTransformの設定
+        RectTransform setimage = SecondImageObject.GetComponent<RectTransform>();
+        setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
+        setimage.anchoredPosition = new Vector2(210f, 200f); // 位置
+    }
+    private void setThirdPosition()
+    {
+        // Canvasに追加
+        ThirdImageObject.transform.SetParent(canvas.transform, false);
+
+        // RectTransformの設定
+        RectTransform setimage = ThirdImageObject.GetComponent<RectTransform>();
+        setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
+        setimage.anchoredPosition = new Vector2(70f, 200f); // 位置
     }
 }
