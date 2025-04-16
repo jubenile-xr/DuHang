@@ -154,3 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandTarget: {fileID: 0}
   rightHandTarget: {fileID: 0}
+  pointView: {fileID: 0}
+  cameraRig: {fileID: 0}
+  minSpeed: 0
