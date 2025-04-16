@@ -12,6 +12,11 @@ TagManager:
   - RHandTargetAnchor
   - Wall
   - GameManager
+  - Ground
+  - BirdScene
+  - RabbitScene
+  - MouseScene
+  - PandaScene
   layers:
   - Default
   - TransparentFX

@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 5535853823434844382}
   - component: {fileID: 1085382579734581275}
   m_Layer: 0
-  m_Name: PhotonGamemanager
+  m_Name: InitializeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,6 @@ Transform:
   - {fileID: 4042747435562204682}
   - {fileID: 5535853823434844382}
   - {fileID: 4124175714379813708}
-  - {fileID: 7264709180971487057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4519004383892714663
