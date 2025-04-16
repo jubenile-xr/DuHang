@@ -6,7 +6,7 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
-    private enum GameCharacter
+    public enum GameCharacter
     {
         BIRD,
         RABBIT,
@@ -171,5 +171,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             Debug.LogError("PhotonFailureObject is not set in the inspector.");
         }
+    }
+
+    public GameCharacter GetGameCharacter()
+    {
+        return character;
     }
 }
