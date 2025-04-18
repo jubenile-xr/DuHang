@@ -23,13 +23,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         GOD
     }
 
-    // もともとの static 配列は、カスタムプロパティ実装により不要となるため削除またはコメントアウト可能
-    // private static string[] playerNameArray = new string[3];
 
     private GameObject canvasObject;
 
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField]
     private static GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
     private bool hasPlayerNameCreated = false;
@@ -68,13 +65,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
-
-            // TODO: GameStateをPLAYになったらのフラグに変更 && GameStateをPhotonで共有できるようにする
-            hasPlayerNameCreated = true;
-
         }
-        // TODO: ここもフラグをPLAYに変更してから実行するようにする
-        if (GetPlayerType() != PlayerType.GOD && hasPlayerNameCreated)
+
+        if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY)
         {
             SetupUI();
         }
@@ -82,6 +75,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameState GetGameState()
     {
+        if (PhotonNetwork.InRoom &&
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameState", out object gameStateValue))
+        {
+            return (GameState)(int)gameStateValue;
+        }
         return state;
     }
 
@@ -93,7 +91,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetGameState(GameState newState)
     {
         state = newState;
+        UpdateGameStateProperty();
     }
+
+    private void UpdateGameStateProperty()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            ExitGames.Client.Photon.Hashtable gameStateProps = new ExitGames.Client.Photon.Hashtable();
+            gameStateProps["gameState"] = (int)state;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(gameStateProps);
+        }
+    }
+
 
     public void SetDecrementAliveCount()
     {
