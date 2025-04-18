@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                                          ))
         {
             SetGameState(GameState.PLAY);
+            Debug.Log("Game State PLAY");
+            Debug.Log(playerNameArray);
             if (canvasObject != null)
             {
                 MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
