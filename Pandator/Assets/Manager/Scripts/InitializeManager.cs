@@ -19,9 +19,52 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject player;
     private GameObject camera;
 
+    private static string playerName;
+
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
+        if (gameManagerObject == null)
+        {
+            Debug.LogError("GameManager object not found!");
+            return;
+        }
+
+        int i = 1;
+        playerName = character.ToString() + i.ToString();
+
+        while (GameManager.IsPlayerNameInArray(playerName))
+        {
+            i++;
+            playerName = character.ToString() + i.ToString();
+        }
+
+        GameManager.AddToPlayerNameArray(playerName);
+        
+        GameObject masterPlayerObject = GameObject.FindWithTag("MasterPlayer");
+        if (masterPlayerObject == null)
+        {
+            Debug.LogError("MasterPlayer object not found!");
+            return;
+        }
+        
+        Transform playerTransform = masterPlayerObject.transform.Find("Player");
+        if (playerTransform == null || !playerTransform.CompareTag("Player"))
+        {
+            Debug.LogError("Player child object not found under MasterPlayer!");
+            return;
+        }
+        
+        StateManager stateManager = playerTransform.GetComponent<StateManager>();
+        if (stateManager != null)
+        {
+            StateManager.SetPlayerName(playerName);
+        }
+        else
+        {
+            Debug.LogError("StateManager component not found on Player object!");
+        }
     }
 
     // ルームに参加する処理

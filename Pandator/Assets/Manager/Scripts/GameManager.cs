@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
@@ -18,8 +19,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         VR
     }
 
+    private static string[] playerNameArray;
+
+    private GameObject canvasObject;
+
+
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField] private GameState state;
+    [SerializeField] private GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
 
     [SerializeField]
@@ -41,10 +47,56 @@ public class GameManager : MonoBehaviourPunCallbacks
         scoreList = new Dictionary<string, float>();
         aliveCount = 0;
         winner = Winner.NONE;
+
+        canvasObject = GameObject.FindWithTag("Canvas");
+        if (canvasObject == null)
+        {
+            Debug.LogError("GameManager object not found!");
+        }
+
     }
 
     private void Update()
     {
+        if ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
+             OVRInput.Get(OVRInput.Button.Two) && // Bボタン
+             OVRInput.Get(OVRInput.Button.Three) && // Xボタン
+             OVRInput.Get(OVRInput.Button.Four) && // Yボタン
+             GetGameState() == GameState.START) ||
+            (Input.GetKey(KeyCode.Space) && // 実験用
+             GetGameState() == GameState.START))
+        {
+            SetGameState(GameState.PLAY);
+            if (canvasObject != null)
+            {
+                MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
+                if (mrKilleImagedAttach != null)
+                {
+                    for (int i = 0; i < playerNameArray.Length; i++)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                MRKilleImagedAttach.SetFirstCharacter(playerNameArray[i]);
+                                break;
+                            case 1:
+                                MRKilleImagedAttach.SetSecondCharacter(playerNameArray[i]);
+                                break;
+                            case 2:
+                                MRKilleImagedAttach.SetThirdCharacter(playerNameArray[i]);
+                                break;
+                            default:
+                                Debug.LogError("Invalid player index");
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Canvas component is missing on the GameManager object!");
+                }
+            }
+        }
         
     }
 
@@ -127,5 +179,45 @@ public class GameManager : MonoBehaviourPunCallbacks
             aliveCount = (int)propertiesThatChanged["aliveCount"];
             Debug.Log("aliveCount: " + aliveCount);
         }
+    }
+    public static string[] GetPlayerNameArray()
+    {
+        return playerNameArray;
+    }
+
+    // プレイヤー名が配列の中に存在するか
+    public static bool IsPlayerNameInArray(string playerName)
+    {
+        foreach (string name in playerNameArray)
+        {
+            if (name == playerName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void AddToPlayerNameArray(string playerName)
+    {
+        string[] newArray = new string[playerNameArray.Length + 1];
+        for (int i = 0; i < playerNameArray.Length; i++)
+        {
+            newArray[i] = playerNameArray[i];
+        }
+        newArray[newArray.Length - 1] = playerName;
+        playerNameArray = newArray;
+    }
+
+    public static int GetPlayerNameArrayIndex(string playerName)
+    {
+        for (int i = 0; i < playerNameArray.Length; i++)
+        {
+            if (playerNameArray[i] == playerName)
+            {
+                return i;
+            }
+        }
+        return -1; // 見つからなかった場合
     }
 }
