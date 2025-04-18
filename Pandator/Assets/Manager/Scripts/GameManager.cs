@@ -61,16 +61,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && Input.GetKey(KeyCode.Space))
+        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && Input.GetKey(KeyCode.Space) && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
+
+            // デバッグ用
+            string[] playerNames_forDebug = GetAllPlayerNames();
+            Debug.Log(playerNames_forDebug);
         }
 
-        if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY)
+        if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
             SetupUI();
+            hasPlayerNameCreated = true;
         }
     }
 
@@ -162,7 +167,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 for (int i = 0; i < playerNames.Length; i++)
                 {
-                    if (playerNames[i] != null || playerNames[i] != "")
+                    if (playerNames[i].Contains("BIRD") ||
+                        playerNames[i].Contains("RABBIT") ||
+                        playerNames[i].Contains("MOUSE"))
                     {
                         switch (i)
                         {

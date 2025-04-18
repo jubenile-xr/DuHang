@@ -14,9 +14,9 @@ public class MRKilledImagedAttach : MonoBehaviour
     private bool isFirstPlayerDead = false;
     private bool isSecondPlayerDead = false;
     private bool isThirdPlayerDead = false;
-    private static string firstCharacter;
-    private static string secondCharacter;
-    private static string thirdCharacter;
+    private static string firstCharacter = null;
+    private static string secondCharacter = null;
+    private static string thirdCharacter = null;
     [SerializeField] private GameObject canvas; // インスペクターでCanvasを指定
     [SerializeField] private Texture2D RabbitImage;
     [SerializeField] private Texture2D BirdImage;
