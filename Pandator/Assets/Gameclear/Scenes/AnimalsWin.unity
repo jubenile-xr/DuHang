@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &5849631766605017699
+--- !u!1001 &6758587753653804921
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -127,114 +127,90 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 208215518082540163, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 1047
-      objectReference: {fileID: 0}
-    - target: {fileID: 1629075679936623504, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_Name
-      value: PandaWinAnimation
-      objectReference: {fileID: 0}
-    - target: {fileID: 2760770634180098911, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 1047
-      objectReference: {fileID: 0}
-    - target: {fileID: 3579728297160876723, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CustomShadowLayers
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4065414500099659452, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CustomShadowLayers
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.40627182
+      value: 2.8390667
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.2458448
+      value: 2.3810432
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.34497672
+      value: 2.037954
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4602344066433823801, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - target: {fileID: 751393109948401390, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4620098395733207320, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.72
+    - target: {fileID: 4180669617967103811, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.51
       objectReference: {fileID: 0}
-    - target: {fileID: 4796683850331328687, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CustomShadowLayers
+    - target: {fileID: 4180669617967103811, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 4180669617967103811, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432078982950583514, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491877900661337026, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4796683850331328687, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_AdditionalLightsShadowResolutionTier
-      value: -1
+    - target: {fileID: 6369438901076982585, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: m_Name
+      value: AnimalsWinAnimation
       objectReference: {fileID: 0}
-    - target: {fileID: 6226488880587502655, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 1047
+    - target: {fileID: 6611196645530977069, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: birdWin
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 6361494362131985001, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_RenderMode
+    - target: {fileID: 6611196645530977069, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: mouseWin
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7677440451455737299, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 1047
-      objectReference: {fileID: 0}
-    - target: {fileID: 7677440451455737299, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_Shadows.m_Resolution
-      value: 128
-      objectReference: {fileID: 0}
-    - target: {fileID: 9074214039162545435, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 1047
-      objectReference: {fileID: 0}
-    - target: {fileID: 9122990870745585108, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9216581193946361837, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
-      propertyPath: m_CustomShadowLayers
-      value: 1
+    - target: {fileID: 6611196645530977069, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: rabbitWin
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 8507031259097676065, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+    - {fileID: 1576880918686161625, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 5849631766605017699}
+  - {fileID: 6758587753653804921}
