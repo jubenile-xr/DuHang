@@ -53,8 +53,12 @@ public class StateManager : MonoBehaviour
                 ResetState();
             }
         }
-        playerDeadStatus = gameManager.GetPlayerDeadStatus();
-        setupDeadUI();
+
+        if (gameManager.GetGameState() == GameManager.GameState.PLAY)
+        {
+            playerDeadStatus = gameManager.GetPlayerDeadStatus();
+            setupDeadUI();
+        }
     }
 
     private void ResetState()
