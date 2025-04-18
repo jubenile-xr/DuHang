@@ -9,12 +9,15 @@ public class StateManager : MonoBehaviour
     private float time;
     [SerializeField] private PlayerColorManager playerColorManager;
     [Header("ゲームマネージャー")] private GameManager gameManager;
+    private GameObject canvasObject;
     [SerializeField] private ScoreManager scoreManager;
     [Header("親オブジェクト操作用"), SerializeField] private GameObject parentObject;
     [SerializeField] private RabbitMove rabbitMove;
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
+    private static string PlayerName;
+    private static int PlayerNameIndex;
     private enum GameCharacter
     {
         BIRD,
@@ -29,6 +32,12 @@ public class StateManager : MonoBehaviour
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
+
+        canvasObject = GameObject.FindWithTag("Canvas");
+        if (canvasObject == null)
+        {
+            Debug.LogError("GameManager object not found!");
+        }
     }
 
     void Update()
@@ -100,10 +109,38 @@ public class StateManager : MonoBehaviour
         if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
-        //地面に落とす
-        //TODO: 実際の地面との調整が必要
-        // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
-        Debug.Log("Dead");
+
+        if (canvasObject != null)
+        {
+            MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
+            if (mrKilleImagedAttach != null)
+            {
+                PlayerNameIndex = GameManager.GetPlayerNameArrayIndex(PlayerName);
+                switch (PlayerNameIndex)
+                {
+                    case 0:
+                        mrKilleImagedAttach.SetFirstPlayerDead(true);
+                        break;
+                    case 1:
+                        mrKilleImagedAttach.SetSecondPlayerDead(true);
+                        break;
+                    case 2:
+                        mrKilleImagedAttach.SetThirdPlayerDead(true);
+                        break;
+                    case -1:
+                        Debug.LogError("index not found");
+                        break;
+                    default:
+                        Debug.LogError("Invalid player index");
+                        break;
+                }
+            }
+
+            //地面に落とす
+            //TODO: 実際の地面との調整が必要
+            // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
+            Debug.Log("Dead");
+        }
     }
 
     private void InterruptLogic()
@@ -125,5 +162,10 @@ public class StateManager : MonoBehaviour
                 Debug.Log("Unknown character type: " + character);
                 break;
         }
+    }
+
+    public static void SetPlayerName(string name)
+    {
+        PlayerName = name;
     }
 }
