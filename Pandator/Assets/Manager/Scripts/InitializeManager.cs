@@ -197,7 +197,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void CreatePlayerName()
+ private void CreatePlayerName()
     {
         if (gameManagerObject == null)
         {
@@ -206,16 +206,22 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
 
         int i = 1;
-        playerName = character.ToString() + i.ToString();
+        string candidateName = character.ToString() + i.ToString();
 
-        while (GameManager.IsPlayerNameInArray(playerName))
+        // PhotonNetwork.PlayerList を参照して、すでに使われている名前がないかチェック
+        while (IsPlayerNameTaken(candidateName))
         {
             i++;
-            playerName = character.ToString() + i.ToString();
+            candidateName = character.ToString() + i.ToString();
         }
 
-        GameManager.AddToPlayerNameArray(playerName);
+        // ユニークなプレイヤー名が決定
+        playerName = candidateName;
 
+        // ローカルプレイヤーの名前を Photon のカスタムプロパティと NickName に設定
+        SetLocalPlayerName(playerName);
+
+        // マスタープレイヤーの子オブジェクト「Player」を取得し、StateManager で管理する場合の処理
         GameObject masterPlayerObject = GameObject.FindWithTag("MasterPlayer");
         if (masterPlayerObject == null)
         {
@@ -233,12 +239,37 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         StateManager stateManager = playerTransform.GetComponent<StateManager>();
         if (stateManager != null)
         {
+            // StateManager にプレイヤー名を設定（static でもインスタンスメソッドでも、ここはプロジェクトに合わせて修正）
             StateManager.SetPlayerName(playerName);
         }
         else
         {
             Debug.LogError("StateManager component not found on Player object!");
         }
+    }
+
+    private bool IsPlayerNameTaken(string candidateName)
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.TryGetValue("playerName", out object existingName))
+            {
+                if (candidateName.Equals(existingName.ToString()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void SetLocalPlayerName(string name)
+    {
+        PhotonNetwork.NickName = name;
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+        props.Add("playerName", name);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
     public GameCharacter GetGameCharacter()

@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using Oculus.Platform.Models;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -21,13 +23,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         GOD
     }
 
-    private static string[] playerNameArray = new string[3];
+    // もともとの static 配列は、カスタムプロパティ実装により不要となるため削除またはコメントアウト可能
+    // private static string[] playerNameArray = new string[3];
 
     private GameObject canvasObject;
 
-
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField] private static GameState state = GameState.START;
+    [SerializeField]
+    private static GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
 
     [SerializeField]
@@ -40,15 +43,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         SMALLANIMAL,
         PANDA,
     }
-    [SerializeField] private Winner winner;
+    [SerializeField]
+    private Winner winner;
     private List<string> winnerAnimalNameList;
-    
+
     private void Start()
     {
         state = GameState.START;
         scoreList = new Dictionary<string, float>();
         aliveCount = 0;
         winner = Winner.NONE;
+        winnerAnimalNameList = new List<string>();
 
         canvasObject = GameObject.FindWithTag("Canvas");
         if (canvasObject == null)
@@ -56,37 +61,45 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogError("GameManager object not found!");
         }
 
+        // ※ ここでローカルプレイヤーの名前をカスタムプロパティに設定します
+        // PhotonNetwork.NickName に名前が既にセットされている場合はそれを利用、
+        // もしくは別の方法で名前を取得してセットしてください。
+        SetLocalPlayerName(PhotonNetwork.NickName);
     }
 
     private void Update()
     {
-        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
-                                                  OVRInput.Get(OVRInput.Button.Two) && // Bボタン
-                                                  OVRInput.Get(OVRInput.Button.Three) && // Xボタン
-                                                  OVRInput.Get(OVRInput.Button.Four))  || // Yボタン
-            Input.GetKey(KeyCode.Space) // 実験用
-                                         ))
+        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD &&
+           ((OVRInput.Get(OVRInput.Button.One) &&
+             OVRInput.Get(OVRInput.Button.Two) &&
+             OVRInput.Get(OVRInput.Button.Three) &&
+             OVRInput.Get(OVRInput.Button.Four)) ||
+             Input.GetKey(KeyCode.Space)))
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
-            Debug.Log(playerNameArray);
+
+            // カスタムプロパティから各プレイヤーの名前情報を取得
+            string[] playerNames = GetAllPlayerNames();
+            Debug.Log("Player Names: " + string.Join(", ", playerNames));
+
             if (canvasObject != null)
             {
                 MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
                 if (mrKilleImagedAttach != null)
                 {
-                    for (int i = 0; i < playerNameArray.Length; i++)
+                    for (int i = 0; i < playerNames.Length; i++)
                     {
                         switch (i)
                         {
                             case 0:
-                                MRKilleImagedAttach.SetFirstCharacter(playerNameArray[i]);
+                                MRKilleImagedAttach.SetFirstCharacter(playerNames[i]);
                                 break;
                             case 1:
-                                MRKilleImagedAttach.SetSecondCharacter(playerNameArray[i]);
+                                MRKilleImagedAttach.SetSecondCharacter(playerNames[i]);
                                 break;
                             case 2:
-                                MRKilleImagedAttach.SetThirdCharacter(playerNameArray[i]);
+                                MRKilleImagedAttach.SetThirdCharacter(playerNames[i]);
                                 break;
                             default:
                                 Debug.LogError("Invalid player index");
@@ -96,11 +109,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    Debug.LogError("Canvas component is missing on the GameManager object!");
+                    Debug.LogError("Canvas に MRKilleImagedAttach コンポーネントが見つかりません！");
                 }
             }
         }
-        
     }
 
     public GameState GetGameState()
@@ -120,19 +132,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void SetDecrementAliveCount()
     {
-        // Debug.Log("SetDecrementAliveCount called");
         aliveCount--;
         Debug.Log("aliveCountDecrement: " + aliveCount);
 
         UpdateAliveCountProperty();
 
-        //0以下じゃないと動かない
-        if (aliveCount <= 0) 
+        if (aliveCount <= 0)
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
             Debug.Log("Panda Win");
-            // TODO　スコアを集める
             if (aliveCount == 0)
             {
                 switch (playerType)
@@ -147,10 +156,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                         Debug.LogError("Unknown PlayerType");
                         break;
                 }
-
             }
         }
     }
+
     public void SetIncrementAliveCount()
     {
         aliveCount++;
@@ -163,7 +172,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         scoreList[animalName] = score;
     }
-    // 勝利した動物の名前をリストに追加する関数
+
+    // 勝利した動物の名前をリストに追加する
     public void appendWinnerAnimalNameList(string animalName)
     {
         winnerAnimalNameList.Add(animalName);
@@ -174,7 +184,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-            
             properties.Add("aliveCount", aliveCount);
             PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
         }
@@ -188,50 +197,40 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("aliveCount: " + aliveCount);
         }
     }
-    public static string[] GetPlayerNameArray()
+
+    public void SetLocalPlayerName(string playerName)
     {
-        return playerNameArray;
+        // PhotonNetwork.NickName にも設定しておくと便利です
+        PhotonNetwork.NickName = playerName;
+
+        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+        props["playerName"] = playerName;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
-    // プレイヤー名が配列の中に存在するか
-    public static bool IsPlayerNameInArray(string playerName)
+    public string[] GetAllPlayerNames()
     {
-        foreach (string name in playerNameArray)
+        List<string> names = new List<string>();
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            if (name == playerName)
+            if (player.CustomProperties.TryGetValue("playerName", out object name))
             {
-                return true;
+                names.Add(name.ToString());
+            }
+            else
+            {
+                names.Add("Unknown");
             }
         }
-        return false;
+        return names.ToArray();
     }
 
-    public static void AddToPlayerNameArray(string playerName)
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (playerNameArray == null)
+        if (changedProps.ContainsKey("playerName"))
         {
-            Debug.LogError("playerNameArray is null");
-            return;
+            object newName = changedProps["playerName"];
+            Debug.Log("Player " + targetPlayer.ActorNumber + " has updated their name to: " + newName);
         }
-        for (int i = 0; i < playerNameArray.Length; i++)
-        {
-            if (playerNameArray[i] == null)
-            {
-                playerNameArray[i] = playerName;
-                break;
-            }
-        }
-    }
-
-    public static int GetPlayerNameArrayIndex(string playerName)
-    {
-        for (int i = 0; i < playerNameArray.Length; i++)
-        {
-            if (playerNameArray[i] == playerName)
-            {
-                return i;
-            }
-        }
-        return -1; // 見つからなかった場合
     }
 }
