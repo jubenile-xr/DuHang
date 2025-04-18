@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MRScene
       objectReference: {fileID: 0}
+    - target: {fileID: 7220880955355323675, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7297887214145469082, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

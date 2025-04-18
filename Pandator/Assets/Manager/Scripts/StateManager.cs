@@ -118,35 +118,32 @@ public class StateManager : MonoBehaviour
             if (mrKilleImagedAttach != null)
             {
                 // Photon のカスタムプロパティから名前に基づくインデックスを取得
-                int playerIndex = GetPlayerIndexByName(PlayerName);
-                switch (playerIndex)
-                {
-                    case 0:
-                        mrKilleImagedAttach.SetFirstPlayerDead(true);
-                        break;
-                    case 1:
-                        mrKilleImagedAttach.SetSecondPlayerDead(true);
-                        break;
-                    case 2:
-                        mrKilleImagedAttach.SetThirdPlayerDead(true);
-                        break;
-                    case -1:
-                        Debug.LogError("Player index not found for name: " + PlayerName);
-                        break;
-                    default:
-                        Debug.LogError("Invalid player index: " + playerIndex);
-                        break;
-                }
-            }
-            else
-            {
-                Debug.LogError("MRKilleImagedAttach component is missing on canvasObject!");
-            }
 
-            //地面に落とす
-            //TODO: 実際の地面との調整が必要
-            // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
-            Debug.Log("Dead");
+                string[] playerNames = gameManager.GetAllPlayerNames();
+                for (int i = 0; i < playerNames.Length; i++)
+                {
+                    if (playerNames[i].Contains(PlayerName))
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                mrKilleImagedAttach.SetFirstPlayerDead();
+                                break;
+                            case 1:
+                                mrKilleImagedAttach.SetSecondPlayerDead();
+                                break;
+                            case 2:
+                                mrKilleImagedAttach.SetThirdPlayerDead();
+                                break;
+                        }
+                    }
+                }
+
+                //地面に落とす
+                //TODO: 実際の地面との調整が必要
+                // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
+                Debug.Log("Dead");
+            }
         }
     }
 

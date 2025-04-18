@@ -42,10 +42,6 @@ public class MRKilledImagedAttach : MonoBehaviour
     }
     private void Update()
     {
-        FirstKilledImage.SetActive(isFirstPlayerDead);
-        ThirdKilledImage.SetActive(isSecondPlayerDead);
-        SecondKilledImage.SetActive(isThirdPlayerDead);
-
         if (Input.GetKeyDown(KeyCode.L))
         {
             if (RabbitImage != null)
@@ -170,17 +166,17 @@ public class MRKilledImagedAttach : MonoBehaviour
         thirdCharacter = character;
     }
 
-    public void SetFirstPlayerDead(bool isDead)
+    public void SetFirstPlayerDead()
     {
-        isFirstPlayerDead = isDead;
+        FirstKilledImage.SetActive(true);
     }
-    public void SetSecondPlayerDead(bool isDead)
+    public void SetSecondPlayerDead()
     {
-        isSecondPlayerDead = isDead;
+        SecondKilledImage.SetActive(true);
     }
-    public void SetThirdPlayerDead(bool isDead)
+    public void SetThirdPlayerDead()
     {
-        isThirdPlayerDead = isDead;
+        ThirdKilledImage.SetActive(true);
     }
 
 }
