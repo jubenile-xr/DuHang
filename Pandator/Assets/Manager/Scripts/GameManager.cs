@@ -59,13 +59,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (GetPlayerType() == PlayerType.GOD && ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
+        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
                                                   OVRInput.Get(OVRInput.Button.Two) && // Bボタン
                                                   OVRInput.Get(OVRInput.Button.Three) && // Xボタン
-                                                  OVRInput.Get(OVRInput.Button.Four) && // Yボタン
-                                                  GetGameState() == GameState.START) ||
-            (Input.GetKey(KeyCode.Space) && // 実験用
-             GetGameState() == GameState.START)))
+                                                  OVRInput.Get(OVRInput.Button.Four))  || // Yボタン
+            Input.GetKey(KeyCode.Space) // 実験用
+                                         ))
         {
             SetGameState(GameState.PLAY);
             if (canvasObject != null)
