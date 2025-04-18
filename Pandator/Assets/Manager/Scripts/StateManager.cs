@@ -114,7 +114,7 @@ public class StateManager : MonoBehaviour
 
         if (canvasObject != null)
         {
-            MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
+            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
             if (mrKilleImagedAttach != null)
             {
                 // Photon のカスタムプロパティから名前に基づくインデックスを取得
