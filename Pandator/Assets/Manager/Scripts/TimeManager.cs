@@ -19,7 +19,6 @@ public class TimeManager : MonoBehaviour
         {
             Debug.Log("GameManagerがアタッチされていません");
         }
-        gameManager.SetGameState(GameManager.GameState.START);
 
         // CanvasDispTimeのインスタンスを取得
         // PandaCanvasの中にある子オブジェクトのTimeからCanvasDispTimeを取得

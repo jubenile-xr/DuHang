@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  playerType: 0
+  playerType: 2
   winner: 0
 --- !u!114 &5395083701465966290
 MonoBehaviour:

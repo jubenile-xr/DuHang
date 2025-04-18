@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     [Header("ゲームの状態はこっちで完全管理")]
-    [SerializeField] private GameState state = GameState.START;
+    [SerializeField] private static GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
 
     [SerializeField]
