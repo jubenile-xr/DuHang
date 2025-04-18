@@ -34,6 +34,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             gameManagerObject = GameObject.FindWithTag("GameManager");
         }
+
+        if (GetGameCharacter() == GameCharacter.GOD)
+        {
+            hasPlayerNameCreated = true;
+        }
+
         if (!hasPlayerNameCreated && gameManagerObject != null)
         {
             CreatePlayerName();

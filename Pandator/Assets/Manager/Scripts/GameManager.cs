@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using Oculus.Platform.Models;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +21,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         GOD
     }
 
-    private static string[] playerNameArray;
+    private static string[] playerNameArray = new string[3];
 
     private GameObject canvasObject;
 
