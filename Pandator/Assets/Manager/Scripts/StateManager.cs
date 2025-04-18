@@ -20,6 +20,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private MouseMove mouseMove;
     private static string PlayerName;
     private static int PlayerNameIndex;
+    private bool[] playerDeadStatus;
     private enum GameCharacter
     {
         BIRD,
@@ -52,6 +53,9 @@ public class StateManager : MonoBehaviour
                 ResetState();
             }
         }
+        playerDeadStatus = gameManager.GetPlayerDeadStatus();
+        Debug.Log("PlayerDeadStatus: " + playerDeadStatus);
+        setupDeadUI();
     }
 
     private void ResetState()
@@ -124,6 +128,31 @@ public class StateManager : MonoBehaviour
                 {
                     if (playerNames[i].Contains(PlayerName))
                     {
+                        gameManager.SetPlayerDeadStatusTrue(i);
+                    }
+                }
+
+                //地面に落とす
+                //TODO: 実際の地面との調整が必要
+                // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
+                Debug.Log("Dead");
+            }
+        }
+    }
+
+    private void setupDeadUI()
+    {
+        if (canvasObject != null)
+        {
+            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+            if (mrKilleImagedAttach != null)
+            {
+                // Photon のカスタムプロパティから名前に基づくインデックスを取得
+
+                for (int i = 0; i < playerDeadStatus.Length; i++)
+                {
+                    if (playerDeadStatus[i])
+                    {
                         switch (i)
                         {
                             case 0:
@@ -138,11 +167,6 @@ public class StateManager : MonoBehaviour
                         }
                     }
                 }
-
-                //地面に落とす
-                //TODO: 実際の地面との調整が必要
-                // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
-                Debug.Log("Dead");
             }
         }
     }

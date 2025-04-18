@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Winner winner;
     private List<string> winnerAnimalNameList;
 
+    private bool[] playerDeadStatus;
+
     private void Start()
     {
         state = GameState.START;
@@ -258,6 +260,35 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             object newName = changedProps["playerName"];
             Debug.Log("Player " + targetPlayer.ActorNumber + " has updated their name to: " + newName);
+        }
+    }
+    private void InitializePlayerDeadStatusArray()
+    {
+        string[] names = GetAllPlayerNames();
+        playerDeadStatus = new bool[names.Length];
+        // ※ C# の bool の初期値は false のため、明示的な初期化は不要ですが、念のためにループで設定しています。
+        for (int i = 0; i < playerDeadStatus.Length; i++)
+        {
+            playerDeadStatus[i] = false;
+        }
+        Debug.Log("playerDeadStatus 初期化完了: サイズ = " + playerDeadStatus.Length);
+    }
+
+    public bool[] GetPlayerDeadStatus()
+    {
+        return playerDeadStatus;
+    }
+
+    public void SetPlayerDeadStatusTrue(int index)
+    {
+        if (playerDeadStatus != null && index >= 0 && index < playerDeadStatus.Length)
+        {
+            playerDeadStatus[index] = true;
+            Debug.Log("SetPlayerDeadStatusTrue: index = " + index + " が true に更新されました。");
+        }
+        else
+        {
+            Debug.LogError("SetPlayerDeadStatusTrue: インデックスが範囲外か、playerDeadStatus が初期化されていません。index = " + index);
         }
     }
 }
