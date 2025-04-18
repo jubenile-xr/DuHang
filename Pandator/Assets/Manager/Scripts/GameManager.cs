@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private GameObject canvasObject;
 
     [Header("ゲームの状態はこっちで完全管理")]
-    private static GameState state = GameState.START;
+    private GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
     private bool hasPlayerNameCreated = false;
 
