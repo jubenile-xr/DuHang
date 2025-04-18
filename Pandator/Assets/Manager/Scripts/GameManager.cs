@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private static GameState state = GameState.START;
     private Dictionary<string, float> scoreList;
+    private bool hasPlayerNameCreated = false;
 
     [SerializeField]
     private PlayerType playerType = PlayerType.MR;
@@ -55,63 +56,27 @@ public class GameManager : MonoBehaviourPunCallbacks
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
-        canvasObject = GameObject.FindWithTag("Canvas");
-        if (canvasObject == null)
+        if (GetPlayerType() == PlayerType.VR)
         {
-            Debug.LogError("GameManager object not found!");
+            SetLocalPlayerName(PhotonNetwork.NickName);
         }
-
-        // ※ ここでローカルプレイヤーの名前をカスタムプロパティに設定します
-        // PhotonNetwork.NickName に名前が既にセットされている場合はそれを利用、
-        // もしくは別の方法で名前を取得してセットしてください。
-        SetLocalPlayerName(PhotonNetwork.NickName);
     }
 
     private void Update()
     {
-        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD &&
-           ((OVRInput.Get(OVRInput.Button.One) &&
-             OVRInput.Get(OVRInput.Button.Two) &&
-             OVRInput.Get(OVRInput.Button.Three) &&
-             OVRInput.Get(OVRInput.Button.Four)) ||
-             Input.GetKey(KeyCode.Space)))
+        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && Input.GetKey(KeyCode.Space))
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
 
-            // カスタムプロパティから各プレイヤーの名前情報を取得
-            string[] playerNames = GetAllPlayerNames();
-            Debug.Log("Player Names: " + string.Join(", ", playerNames));
+            // TODO: GameStateをPLAYになったらのフラグに変更 && GameStateをPhotonで共有できるようにする
+            hasPlayerNameCreated = true;
 
-            if (canvasObject != null)
-            {
-                MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
-                if (mrKilleImagedAttach != null)
-                {
-                    for (int i = 0; i < playerNames.Length; i++)
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                MRKilleImagedAttach.SetFirstCharacter(playerNames[i]);
-                                break;
-                            case 1:
-                                MRKilleImagedAttach.SetSecondCharacter(playerNames[i]);
-                                break;
-                            case 2:
-                                MRKilleImagedAttach.SetThirdCharacter(playerNames[i]);
-                                break;
-                            default:
-                                Debug.LogError("Invalid player index");
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Canvas に MRKilleImagedAttach コンポーネントが見つかりません！");
-                }
-            }
+        }
+        // TODO: ここもフラグをPLAYに変更してから実行するようにする
+        if (GetPlayerType() != PlayerType.GOD && hasPlayerNameCreated)
+        {
+            SetupUI();
         }
     }
 
@@ -167,6 +132,47 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         UpdateAliveCountProperty();
     }
+    private void SetupUI()
+    {
+        canvasObject = GameObject.FindWithTag("Canvas");
+        if (canvasObject == null)
+        {
+            Debug.LogError("canvas object not found!");
+        }
+
+        // カスタムプロパティから各プレイヤーの名前情報を取得
+        string[] playerNames = GetAllPlayerNames();
+
+        if (canvasObject != null)
+        {
+            MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
+            if (mrKilleImagedAttach != null)
+            {
+                for (int i = 0; i < playerNames.Length; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            MRKilleImagedAttach.SetFirstCharacter(playerNames[i]);
+                            break;
+                        case 1:
+                            MRKilleImagedAttach.SetSecondCharacter(playerNames[i]);
+                            break;
+                        case 2:
+                            MRKilleImagedAttach.SetThirdCharacter(playerNames[i]);
+                            break;
+                        default:
+                            Debug.LogError("Invalid player index");
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("Canvas に MRKilleImagedAttach コンポーネントが見つかりません！");
+            }
+        }
+    }
 
     public void SetScoreList(string animalName, float score)
     {
@@ -200,7 +206,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void SetLocalPlayerName(string playerName)
     {
-        // PhotonNetwork.NickName にも設定しておくと便利です
         PhotonNetwork.NickName = playerName;
 
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
