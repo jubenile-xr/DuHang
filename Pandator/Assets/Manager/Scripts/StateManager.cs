@@ -15,6 +15,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
+    private string charaName;
     private enum GameCharacter
     {
         BIRD,
@@ -120,6 +121,25 @@ public class StateManager : MonoBehaviour
                 break;
             case GameCharacter.MOUSE:
                 mouseMove?.SetMoveSpeedSlow();
+                break;
+            default:
+                Debug.Log("Unknown character type: " + character);
+                break;
+        }
+    }
+
+    private void SetCharaName(GameCharacter character)
+    {
+        switch (character)
+        {
+            case GameCharacter.BIRD:
+                charaName = "Bird";
+                break;
+            case GameCharacter.RABBIT:
+                charaName = "Rabbit";
+                break;
+            case GameCharacter.MOUSE:
+                charaName = "Mouse";
                 break;
             default:
                 Debug.Log("Unknown character type: " + character);

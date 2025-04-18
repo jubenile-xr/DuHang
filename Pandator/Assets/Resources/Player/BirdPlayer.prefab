@@ -623,7 +623,7 @@ MonoBehaviour:
   rabbitJump: {fileID: 0}
   birdMoveController: {fileID: 6172448218825311844}
   mouseMove: {fileID: 0}
-  character: 1
+  character: 0
 --- !u!114 &5164755693211121568
 MonoBehaviour:
   m_ObjectHideFlags: 0
