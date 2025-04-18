@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour
@@ -115,8 +117,9 @@ public class StateManager : MonoBehaviour
             MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
             if (mrKilleImagedAttach != null)
             {
-                PlayerNameIndex = GameManager.GetPlayerNameArrayIndex(PlayerName);
-                switch (PlayerNameIndex)
+                // Photon のカスタムプロパティから名前に基づくインデックスを取得
+                int playerIndex = GetPlayerIndexByName(PlayerName);
+                switch (playerIndex)
                 {
                     case 0:
                         mrKilleImagedAttach.SetFirstPlayerDead(true);
@@ -128,12 +131,16 @@ public class StateManager : MonoBehaviour
                         mrKilleImagedAttach.SetThirdPlayerDead(true);
                         break;
                     case -1:
-                        Debug.LogError("index not found");
+                        Debug.LogError("Player index not found for name: " + PlayerName);
                         break;
                     default:
-                        Debug.LogError("Invalid player index");
+                        Debug.LogError("Invalid player index: " + playerIndex);
                         break;
                 }
+            }
+            else
+            {
+                Debug.LogError("MRKilleImagedAttach component is missing on canvasObject!");
             }
 
             //地面に落とす
@@ -162,6 +169,25 @@ public class StateManager : MonoBehaviour
                 Debug.Log("Unknown character type: " + character);
                 break;
         }
+    }
+
+    private int GetPlayerIndexByName(string playerName)
+    {
+        // PhotonNetwork.PlayerList からプレイヤー情報をリストに格納し、ActorNumber の昇順にソートする
+        List<Player> players = new List<Player>(PhotonNetwork.PlayerList);
+        players.Sort((a, b) => a.ActorNumber.CompareTo(b.ActorNumber));
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].CustomProperties.TryGetValue("playerName", out object existingName))
+            {
+                if (existingName.ToString() == playerName)
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     public static void SetPlayerName(string name)
