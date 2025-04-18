@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY)
         {
+            SetGameState(GameState.PLAY);
             SetupUI();
         }
     }
@@ -152,6 +153,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // カスタムプロパティから各プレイヤーの名前情報を取得
         string[] playerNames = GetAllPlayerNames();
+        Debug.Log(playerNames);
 
         if (canvasObject != null)
         {
@@ -160,20 +162,23 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 for (int i = 0; i < playerNames.Length; i++)
                 {
-                    switch (i)
+                    if (playerNames[i] != null || playerNames[i] != "")
                     {
-                        case 0:
-                            MRKilledImagedAttach.SetFirstCharacter(playerNames[i]);
-                            break;
-                        case 1:
-                            MRKilledImagedAttach.SetSecondCharacter(playerNames[i]);
-                            break;
-                        case 2:
-                            MRKilledImagedAttach.SetThirdCharacter(playerNames[i]);
-                            break;
-                        default:
-                            Debug.LogError("Invalid player index");
-                            break;
+                        switch (i)
+                        {
+                            case 0:
+                                MRKilledImagedAttach.SetFirstCharacter(playerNames[i]);
+                                break;
+                            case 1:
+                                MRKilledImagedAttach.SetSecondCharacter(playerNames[i]);
+                                break;
+                            case 2:
+                                MRKilledImagedAttach.SetThirdCharacter(playerNames[i]);
+                                break;
+                            default:
+                                Debug.LogError("Invalid player index");
+                                break;
+                        }
                     }
                 }
             }
