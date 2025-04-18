@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public enum PlayerType
     {
         MR,
-        VR
+        VR,
+        GOD
     }
 
     private static string[] playerNameArray;
@@ -58,13 +59,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
-             OVRInput.Get(OVRInput.Button.Two) && // Bボタン
-             OVRInput.Get(OVRInput.Button.Three) && // Xボタン
-             OVRInput.Get(OVRInput.Button.Four) && // Yボタン
-             GetGameState() == GameState.START) ||
+        if (GetPlayerType() == PlayerType.GOD && ((OVRInput.Get(OVRInput.Button.One) && // Aボタン
+                                                  OVRInput.Get(OVRInput.Button.Two) && // Bボタン
+                                                  OVRInput.Get(OVRInput.Button.Three) && // Xボタン
+                                                  OVRInput.Get(OVRInput.Button.Four) && // Yボタン
+                                                  GetGameState() == GameState.START) ||
             (Input.GetKey(KeyCode.Space) && // 実験用
-             GetGameState() == GameState.START))
+             GetGameState() == GameState.START)))
         {
             SetGameState(GameState.PLAY);
             if (canvasObject != null)
@@ -103,6 +104,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameState GetGameState()
     {
         return state;
+    }
+
+    public PlayerType GetPlayerType()
+    {
+        return playerType;
     }
 
     public void SetGameState(GameState newState)
