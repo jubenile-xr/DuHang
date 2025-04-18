@@ -55,10 +55,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
+        // VRの場合はローカルプレイヤーの名前を設定
         if (GetPlayerType() == PlayerType.VR)
         {
             SetLocalPlayerName(PhotonNetwork.NickName);
         }
+
     }
 
     private void Update()
@@ -68,18 +70,18 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
 
-            // デバッグ用
+            // デバッグ用：プレイヤー名リストの出力
             string[] playerNames_forDebug = GetAllPlayerNames();
-            Debug.Log(playerNames_forDebug);
+            Debug.Log("Player Names: " + string.Join(", ", playerNames_forDebug));
         }
 
         if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
             SetupUI();
+            InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
         }
-        Debug.Log("PlayerDeadStatus: " + playerDeadStatus);
     }
 
     public GameState GetGameState()
@@ -112,7 +114,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(gameStateProps);
         }
     }
-
 
     public void SetDecrementAliveCount()
     {
@@ -151,6 +152,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         UpdateAliveCountProperty();
     }
+
     private void SetupUI()
     {
         canvasObject = GameObject.FindWithTag("Canvas");
@@ -161,13 +163,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // カスタムプロパティから各プレイヤーの名前情報を取得
         string[] playerNames = GetAllPlayerNames();
-        Debug.Log(playerNames);
+        Debug.Log("SetupUI: Player Names: " + string.Join(", ", playerNames));
 
         if (canvasObject != null)
         {
             MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
             if (mrKilleImagedAttach != null)
             {
+                // ここでは、各プレイヤー名が "BIRD", "RABBIT", "MOUSE" を含む場合に処理する例
                 for (int i = 0; i < playerNames.Length; i++)
                 {
                     if (playerNames[i].Contains("BIRD") ||
@@ -194,7 +197,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.LogError("Canvas に MRKilleImagedAttach コンポーネントが見つかりません！");
+                Debug.LogError("Canvas に MRKilledImagedAttach コンポーネントが見つかりません！");
             }
         }
     }
@@ -220,12 +223,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // ★ ここでカスタムプロパティから更新があった場合に、死亡状態の配列も更新する
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
-        if(propertiesThatChanged.ContainsKey("aliveCount"))
+        if (propertiesThatChanged.ContainsKey("aliveCount"))
         {
             aliveCount = (int)propertiesThatChanged["aliveCount"];
             Debug.Log("aliveCount: " + aliveCount);
+        }
+        if (propertiesThatChanged.ContainsKey("gameState"))
+        {
+            int newStateInt = (int)propertiesThatChanged["gameState"];
+            state = (GameState)newStateInt;
+            Debug.Log("GameState updated to: " + state);
+        }
+        if (propertiesThatChanged.ContainsKey("playerDeadStatus"))
+        {
+            playerDeadStatus = (bool[])propertiesThatChanged["playerDeadStatus"];
+            Debug.Log("playerDeadStatus updated from custom properties. Array size = " + playerDeadStatus.Length);
         }
     }
 
@@ -263,16 +278,29 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("Player " + targetPlayer.ActorNumber + " has updated their name to: " + newName);
         }
     }
+
     private void InitializePlayerDeadStatusArray()
     {
         string[] names = GetAllPlayerNames();
         playerDeadStatus = new bool[names.Length];
-        // ※ C# の bool の初期値は false のため、明示的な初期化は不要ですが、念のためにループで設定しています。
+        // ※ C# の bool の初期値は false のため、明示的な初期化は不要ですが、念のためループで設定
         for (int i = 0; i < playerDeadStatus.Length; i++)
         {
             playerDeadStatus[i] = false;
         }
         Debug.Log("playerDeadStatus 初期化完了: サイズ = " + playerDeadStatus.Length);
+        // 初期化時にルームプロパティに反映
+        UpdatePlayerDeadStatusProperty();
+    }
+
+    private void UpdatePlayerDeadStatusProperty()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            ExitGames.Client.Photon.Hashtable statusProps = new ExitGames.Client.Photon.Hashtable();
+            statusProps["playerDeadStatus"] = playerDeadStatus;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(statusProps);
+        }
     }
 
     public bool[] GetPlayerDeadStatus()
@@ -286,6 +314,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             playerDeadStatus[index] = true;
             Debug.Log("SetPlayerDeadStatusTrue: index = " + index + " が true に更新されました。");
+            // 更新後、ルームプロパティに反映
+            UpdatePlayerDeadStatusProperty();
         }
         else
         {
