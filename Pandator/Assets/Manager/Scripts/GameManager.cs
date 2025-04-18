@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (canvasObject != null)
         {
-            MRKilleImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilleImagedAttach>();
+            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
             if (mrKilleImagedAttach != null)
             {
                 for (int i = 0; i < playerNames.Length; i++)
@@ -153,13 +153,13 @@ public class GameManager : MonoBehaviourPunCallbacks
                     switch (i)
                     {
                         case 0:
-                            MRKilleImagedAttach.SetFirstCharacter(playerNames[i]);
+                            MRKilledImagedAttach.SetFirstCharacter(playerNames[i]);
                             break;
                         case 1:
-                            MRKilleImagedAttach.SetSecondCharacter(playerNames[i]);
+                            MRKilledImagedAttach.SetSecondCharacter(playerNames[i]);
                             break;
                         case 2:
-                            MRKilleImagedAttach.SetThirdCharacter(playerNames[i]);
+                            MRKilledImagedAttach.SetThirdCharacter(playerNames[i]);
                             break;
                         default:
                             Debug.LogError("Invalid player index");
