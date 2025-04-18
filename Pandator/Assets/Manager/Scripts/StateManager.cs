@@ -54,7 +54,6 @@ public class StateManager : MonoBehaviour
             }
         }
         playerDeadStatus = gameManager.GetPlayerDeadStatus();
-        Debug.Log("PlayerDeadStatus: " + playerDeadStatus);
         setupDeadUI();
     }
 

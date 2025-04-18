@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetupUI();
             hasPlayerNameCreated = true;
         }
+        Debug.Log("PlayerDeadStatus: " + playerDeadStatus);
     }
 
     public GameState GetGameState()
