@@ -60,12 +60,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
         }
 
-        if (GetGameCharacter() == GameCharacter.GOD && GetGameCharacter() == GameCharacter.PANDA )
+        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
         {
             hasPlayerNameCreated = true;
         }
 
-        if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+        if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
         {
             CreatePlayerName();
             hasPlayerNameCreated = true;
