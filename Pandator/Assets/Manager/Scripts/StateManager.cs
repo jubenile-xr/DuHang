@@ -119,32 +119,26 @@ public class StateManager : MonoBehaviour
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
 
-        if (canvasObject != null)
+        // Photon のカスタムプロパティから名前に基づくインデックスを取得
+
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        Debug.Log("DeadLogic: Player Names: " + string.Join(", ", playerNames));
+        Debug.Log("PlayerName" + PlayerName);
+
+        for (int i = 0; i < playerNames.Length; i++)
         {
-            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
-            if (mrKilleImagedAttach != null)
+            Debug.Log("PlayerNames TF" + playerNames[i].Contains(PlayerName));
+            if (playerNames[i].Contains(PlayerName))
             {
-                // Photon のカスタムプロパティから名前に基づくインデックスを取得
-
-                string[] playerNames = gameManager.GetAllPlayerNames();
-                Debug.Log("DeadLogic: Player Names: " + string.Join(", ", playerNames));
-                Debug.Log("PlayerName" + PlayerName);
-
-                for (int i = 0; i < playerNames.Length; i++)
-                {
-                    Debug.Log("PlayerNames TF" + playerNames[i].Contains(PlayerName));
-                    if (playerNames[i].Contains(PlayerName))
-                    {
-                        gameManager.SetPlayerDeadStatusTrue(i);
-                    }
-                }
-
-                //地面に落とす
-                //TODO: 実際の地面との調整が必要
-                // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
-                Debug.Log("Dead");
+                gameManager.SetPlayerDeadStatusTrue(i);
             }
         }
+
+        //地面に落とす
+        //TODO: 実際の地面との調整が必要
+        // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
+        Debug.Log("Dead");
+
     }
 
     private void setupDeadUI()

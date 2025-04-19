@@ -35,12 +35,33 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             gameManagerObject = GameObject.FindWithTag("GameManager");
         }
 
+        if (gameManagerObject != null)
+        {
+            if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
+            {
+                gameManager.SetPlayerType(GameManager.PlayerType.VR);
+            }
+            else if (GetGameCharacter() == GameCharacter.PANDA)
+            {
+                gameManager.SetPlayerType(GameManager.PlayerType.MR);
+            }
+            else if (GetGameCharacter() == GameCharacter.GOD)
+            {
+                gameManager.SetPlayerType(GameManager.PlayerType.GOD);
+            }
+            else
+            {
+                Debug.LogError("Unknown player type");
+            }
+
+        }
+
         if (GetGameCharacter() == GameCharacter.GOD && GetGameCharacter() == GameCharacter.PANDA )
         {
             hasPlayerNameCreated = true;
         }
 
-        if (!hasPlayerNameCreated && gameManagerObject != null)
+        if (!hasPlayerNameCreated && gameManagerObject != null && GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
         {
             CreatePlayerName();
             hasPlayerNameCreated = true;

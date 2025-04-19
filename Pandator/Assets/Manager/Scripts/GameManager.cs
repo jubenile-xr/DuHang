@@ -99,6 +99,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         return playerType;
     }
 
+    public void SetPlayerType(PlayerType type)
+    {
+        playerType = type;
+        Debug.Log("SetPlayerType: " + playerType);
+    }
+
     public void SetGameState(GameState newState)
     {
         state = newState;
