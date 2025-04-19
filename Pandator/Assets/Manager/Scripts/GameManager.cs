@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     // プレイヤー死亡状態を管理するローカル配列
     private bool[] playerDeadStatus;
 
-    // ローカルで管理するプレイヤー名の配列（ローカルのPlayerTypeがVRの場合のみ利用）
+    // ローカルで管理するプレイヤー名の配列
     private string[] localPlayerNames = new string[0];
 
     private void Start()
@@ -57,347 +57,270 @@ public class GameManager : MonoBehaviourPunCallbacks
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
-        // VRの場合のみ、ローカルプレイヤーの名前を設定（それ以外では更新しない）
-        if (GetPlayerType() == PlayerType.VR)
-        {
-            SetLocalPlayerName(PhotonNetwork.NickName);
-        }
+        // Room に入室済みなら既存の playerNameList を取ってくる
+        FetchPlayerNameListFromRoom();
 
-        // ルームに入室中のプレイヤー名をローカル変数に設定（初期化）
-        UpdateLocalPlayerNames();
-
-        // 定期的にローカルの配列の内容をカスタムプロパティへ同期するコルーチンを開始
+        // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
     }
 
     private void Update()
     {
         if (canvasObject == null)
-        {
             canvasObject = GameObject.FindWithTag("Canvas");
-        }
-        if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && Input.GetKey(KeyCode.Space) && !hasPlayerNameCreated)
+
+        if (GetGameState() == GameState.START
+            && GetPlayerType() == PlayerType.GOD
+            && Input.GetKey(KeyCode.Space)
+            && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
 
-            // デバッグ用：プレイヤー名リストの出力（ローカルがVRの場合のみ）
-            string[] playerNames_forDebug = GetAllPlayerNames();
-            Debug.Log("Player Names: " + string.Join(", ", playerNames_forDebug));
+            Debug.Log("Player Names: " + string.Join(", ", GetAllPlayerNames()));
         }
 
-        if (GetPlayerType() != PlayerType.GOD && GetGameState() == GameState.PLAY && !hasPlayerNameCreated)
+        if (GetPlayerType() != PlayerType.GOD
+            && GetGameState() == GameState.PLAY
+            && !hasPlayerNameCreated)
         {
-            SetGameState(GameState.PLAY);
             SetupUI();
             InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
         }
     }
 
+
     public GameState GetGameState()
     {
-        if (PhotonNetwork.InRoom &&
-            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameState", out object gameStateValue))
+        if (PhotonNetwork.InRoom
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("gameState", out object gs))
         {
-            return (GameState)(int)gameStateValue;
+            return (GameState)(int)gs;
         }
         return state;
-    }
-
-    public PlayerType GetPlayerType()
-    {
-        return playerType;
-    }
-
-    public void SetPlayerType(PlayerType type)
-    {
-        playerType = type;
-        Debug.Log("SetPlayerType: " + playerType);
     }
 
     public void SetGameState(GameState newState)
     {
         state = newState;
-        UpdateGameStateProperty();
-    }
-
-    private void UpdateGameStateProperty()
-    {
         if (PhotonNetwork.InRoom)
         {
-            ExitGames.Client.Photon.Hashtable gameStateProps = new ExitGames.Client.Photon.Hashtable();
-            gameStateProps["gameState"] = (int)state;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(gameStateProps);
+            var props = new ExitGames.Client.Photon.Hashtable { ["gameState"] = (int)state };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
     }
+
+    public PlayerType GetPlayerType() => playerType;
+    public void SetPlayerType(PlayerType type) => playerType = type;
+
 
     public void SetDecrementAliveCount()
     {
         aliveCount--;
-        Debug.Log("aliveCountDecrement: " + aliveCount);
         UpdateAliveCountProperty();
-
         if (aliveCount <= 0)
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
-            Debug.Log("Panda Win");
             if (aliveCount == 0)
-            {
-                switch (playerType)
-                {
-                    case PlayerType.MR:
-                        SceneManager.LoadScene("ResultClearMRScene");
-                        break;
-                    case PlayerType.VR:
-                        SceneManager.LoadScene("ResultClearVRScene");
-                        break;
-                    default:
-                        Debug.LogError("Unknown PlayerType");
-                        break;
-                }
-            }
+                LoadResultScene();
         }
     }
 
     public void SetIncrementAliveCount()
     {
         aliveCount++;
-        Debug.Log("aliveCountIncrement: " + aliveCount);
         UpdateAliveCountProperty();
-    }
-
-    private void SetupUI()
-    {
-        // ローカルがVRの場合のみ、カスタムプロパティから各プレイヤーの名前情報を取得
-        string[] playerNames = GetAllPlayerNames();
-        Debug.Log("SetupUI: Player Names: " + string.Join(", ", playerNames));
-
-        if (canvasObject != null)
-        {
-            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
-            if (mrKilleImagedAttach != null)
-            {
-                // 例として、各プレイヤー名が "BIRD", "RABBIT", "MOUSE" を含む場合に処理を行う
-                for (int i = 0; i < playerNames.Length; i++)
-                {
-                    if (playerNames[i].Contains("BIRD") ||
-                        playerNames[i].Contains("RABBIT") ||
-                        playerNames[i].Contains("MOUSE"))
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                MRKilledImagedAttach.SetFirstCharacter(playerNames[i]);
-                                break;
-                            case 1:
-                                MRKilledImagedAttach.SetSecondCharacter(playerNames[i]);
-                                break;
-                            case 2:
-                                MRKilledImagedAttach.SetThirdCharacter(playerNames[i]);
-                                break;
-                            default:
-                                Debug.LogError("Invalid player index");
-                                break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogError("Canvas に MRKilledImagedAttach コンポーネントが見つかりません！");
-            }
-        }
-    }
-
-    public void SetScoreList(string animalName, float score)
-    {
-        scoreList[animalName] = score;
-    }
-
-    // 勝利した動物の名前をリストに追加する
-    public void appendWinnerAnimalNameList(string animalName)
-    {
-        winnerAnimalNameList.Add(animalName);
     }
 
     private void UpdateAliveCountProperty()
     {
         if (PhotonNetwork.InRoom)
         {
-            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-            properties.Add("aliveCount", aliveCount);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { ["aliveCount"] = aliveCount }
+            );
         }
     }
 
-    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    private void LoadResultScene()
     {
-        if (propertiesThatChanged.ContainsKey("aliveCount"))
+        switch (playerType)
         {
-            aliveCount = (int)propertiesThatChanged["aliveCount"];
-            Debug.Log("aliveCount: " + aliveCount);
+            case PlayerType.MR:
+                SceneManager.LoadScene("ResultClearMRScene");
+                break;
+            case PlayerType.VR:
+                SceneManager.LoadScene("ResultClearVRScene");
+                break;
+            default:
+                Debug.LogError("Unknown PlayerType");
+                break;
         }
-        if (propertiesThatChanged.ContainsKey("gameState"))
+    }
+
+    private void SetupUI()
+    {
+        var names = GetAllPlayerNames();
+        Debug.Log("SetupUI: Player Names: " + string.Join(", ", names));
+
+        if (canvasObject == null) return;
+        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        if (mrAttach == null)
         {
-            int newStateInt = (int)propertiesThatChanged["gameState"];
-            state = (GameState)newStateInt;
-            Debug.Log("GameState updated to: " + state);
+            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            return;
         }
-        // カスタムプロパティから同期された死亡状態の更新
-        if (propertiesThatChanged.ContainsKey("playerDeadStatus"))
+
+        for (int i = 0; i < names.Length; i++)
         {
-            playerDeadStatus = (bool[])propertiesThatChanged["playerDeadStatus"];
-            Debug.Log("playerDeadStatus updated from custom properties. Array size = " + playerDeadStatus.Length);
-        }
-        // カスタムプロパティから同期されたプレイヤー名配列の更新（必要に応じて）
-        if (propertiesThatChanged.ContainsKey("playerNameList"))
-        {
-            string[] names = propertiesThatChanged["playerNameList"] as string[];
-            if (names != null)
+            var nm = names[i];
+            if (nm.Contains("BIRD") || nm.Contains("RABBIT") || nm.Contains("MOUSE"))
             {
-                localPlayerNames = names;
-                Debug.Log("playerNameList updated from custom properties: " + string.Join(", ", localPlayerNames));
+                switch (i)
+                {
+                    case 0: MRKilledImagedAttach.SetFirstCharacter(nm); break;
+                    case 1: MRKilledImagedAttach.SetSecondCharacter(nm); break;
+                    case 2: MRKilledImagedAttach.SetThirdCharacter(nm); break;
+                    default: Debug.LogError("Invalid player index"); break;
+                }
             }
         }
     }
 
-    public void SetLocalPlayerName(string playerName)
+
+    public void SetScoreList(string animalName, float score)
     {
-        PhotonNetwork.NickName = playerName;
-
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-        props["playerName"] = playerName;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-
-        // ローカルがVRの場合のみ、プレイヤー名の更新を行う
-        UpdateLocalPlayerNames();
+        scoreList[animalName] = score;
     }
 
-    public string[] GetAllPlayerNames()
+    public void appendWinnerAnimalNameList(string animalName)
     {
-        List<string> names = new List<string>();
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (player.CustomProperties.TryGetValue("playerName", out object name))
-            {
-                names.Add(name.ToString());
-            }
-            else
-            {
-                names.Add("Unknown");
-            }
-        }
-        return names.ToArray();
+        winnerAnimalNameList.Add(animalName);
     }
 
-    private void UpdateLocalPlayerNames()
-    {
-        List<string> namesList = new List<string>();
-        foreach (Player p in PhotonNetwork.PlayerList)
-        {
-            if (p.CustomProperties.TryGetValue("playerName", out object name))
-            {
-                namesList.Add(name.ToString());
-            }
-            else
-            {
-                namesList.Add("Unknown");
-            }
-        }
-        localPlayerNames = namesList.ToArray();
-        Debug.Log("LocalPlayerNames updated: " + string.Join(", ", localPlayerNames));
-    }
-
-    public override void OnPlayerEnteredRoom(Player newPlayer)
-    {
-        base.OnPlayerEnteredRoom(newPlayer);
-        UpdateLocalPlayerNames();
-    }
-
-    // プレイヤーのカスタムプロパティが更新されたときにもローカル配列を更新
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
-    {
-        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
-        if (changedProps.ContainsKey("playerName"))
-        {
-            object newName = changedProps["playerName"];
-            Debug.Log("Player " + targetPlayer.ActorNumber + " has updated their name to: " + newName);
-            UpdateLocalPlayerNames();
-        }
-    }
 
     private void InitializePlayerDeadStatusArray()
     {
-        string[] names = GetAllPlayerNames();
+        var names = GetAllPlayerNames();
         playerDeadStatus = new bool[names.Length];
-        // C# の bool の初期値は false なのでループで明示的にfalseを設定
         for (int i = 0; i < playerDeadStatus.Length; i++)
-        {
             playerDeadStatus[i] = false;
-        }
-        Debug.Log("playerDeadStatus 初期化完了: サイズ = " + playerDeadStatus.Length);
         UpdatePlayerDeadStatusProperty();
+    }
+
+    public bool[] GetPlayerDeadStatus() => playerDeadStatus;
+
+    public void SetPlayerDeadStatusTrue(int index)
+    {
+        if (playerDeadStatus != null
+            && index >= 0
+            && index < playerDeadStatus.Length)
+        {
+            playerDeadStatus[index] = true;
+            UpdatePlayerDeadStatusProperty();
+        }
+        else
+        {
+            Debug.LogError($"Invalid index or not initialized: {index}");
+        }
     }
 
     private void UpdatePlayerDeadStatusProperty()
     {
         if (PhotonNetwork.InRoom)
         {
-            ExitGames.Client.Photon.Hashtable statusProps = new ExitGames.Client.Photon.Hashtable();
-            statusProps["playerDeadStatus"] = playerDeadStatus;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(statusProps);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { ["playerDeadStatus"] = playerDeadStatus }
+            );
         }
     }
 
-    public bool[] GetPlayerDeadStatus()
+
+    public void SetLocalPlayerNames(string[] names)
     {
-        return playerDeadStatus;
+        localPlayerNames = names;
+        UpdatePlayerNameListProperty();
     }
 
-    public void SetPlayerDeadStatusTrue(int index)
+    public void AddLocalPlayerName(string name)
     {
-        if (playerDeadStatus != null && index >= 0 && index < playerDeadStatus.Length)
+        var list = new List<string>(localPlayerNames);
+        if (!list.Contains(name))
         {
-            playerDeadStatus[index] = true;
-            Debug.Log("SetPlayerDeadStatusTrue: index = " + index + " が true に更新されました。");
-            UpdatePlayerDeadStatusProperty();
+            list.Add(name);
+            localPlayerNames = list.ToArray();
+            UpdatePlayerNameListProperty();
         }
-        else
+    }
+
+    private void UpdatePlayerNameListProperty()
+    {
+        if (PhotonNetwork.InRoom)
         {
-            Debug.LogError("SetPlayerDeadStatusTrue: インデックスが範囲外か、playerDeadStatus が初期化されていません。index = " + index);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { ["playerNameList"] = localPlayerNames }
+            );
+        }
+    }
+
+    private void FetchPlayerNameListFromRoom()
+    {
+        if (PhotonNetwork.InRoom
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
+            && obj is string[] names)
+        {
+            localPlayerNames = names;
+            Debug.Log("Fetched playerNameList from room: " + string.Join(", ", localPlayerNames));
+        }
+    }
+
+
+    public string[] GetAllPlayerNames()
+    {
+        if (PhotonNetwork.InRoom
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
+            && obj is string[] namesFromRoom)
+        {
+            return namesFromRoom;
+        }
+        return localPlayerNames;
+    }
+    
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable props)
+    {
+        if (props.ContainsKey("aliveCount"))
+        {
+            aliveCount = (int)props["aliveCount"];
+            Debug.Log("aliveCount updated: " + aliveCount);
+        }
+        if (props.ContainsKey("gameState"))
+        {
+            state = (GameState)(int)props["gameState"];
+            Debug.Log("GameState updated: " + state);
+        }
+        if (props.ContainsKey("playerDeadStatus"))
+        {
+            playerDeadStatus = props["playerDeadStatus"] as bool[];
+            Debug.Log("playerDeadStatus updated, len=" + (playerDeadStatus?.Length ?? 0));
+        }
+        if (props.ContainsKey("playerNameList"))
+        {
+            localPlayerNames = props["playerNameList"] as string[];
+            Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
     }
 
     private IEnumerator SyncCustomPropertiesCoroutine()
     {
-        // 1秒ごとに同期（必要に応じてウェイトを変更）
         while (true)
         {
-            SyncPlayerNameList();
-            SyncPlayerDeadStatus();
+            // Fallback in case an immediate SetCustomProperties was missed
+            UpdatePlayerNameListProperty();
+            UpdatePlayerDeadStatusProperty();
             yield return new WaitForSeconds(1f);
-        }
-    }
-    
-    private void SyncPlayerNameList()
-    {
-        if (PhotonNetwork.InRoom)
-        {
-            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-            props["playerNameList"] = localPlayerNames;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-        }
-    }
-    
-    private void SyncPlayerDeadStatus()
-    {
-        if (PhotonNetwork.InRoom)
-        {
-            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-            props["playerDeadStatus"] = playerDeadStatus;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
     }
 }

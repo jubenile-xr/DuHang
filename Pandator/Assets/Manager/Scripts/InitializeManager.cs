@@ -243,7 +243,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         playerName = candidateName;
 
         // ローカルプレイヤーの名前を Photon のカスタムプロパティと NickName に設定
-        SetLocalPlayerName(playerName);
+        gameManager.AddLocalPlayerName(playerName);
 
         // マスタープレイヤーの子オブジェクト「Player」を取得し、StateManager で管理する場合の処理
         GameObject masterPlayerObject = GameObject.FindWithTag("MasterPlayer");
@@ -276,15 +276,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
         return false;
-    }
-
-    private void SetLocalPlayerName(string name)
-    {
-        PhotonNetwork.NickName = name;
-
-        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-        props.Add("playerName", name);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props);
     }
 
     public GameCharacter GetGameCharacter()
