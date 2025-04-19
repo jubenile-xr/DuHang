@@ -33,10 +33,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (gameManager == null)
-        {
-            gameManagerObject = GameObject.FindWithTag("GameManager");
-        }
         if (stateManager == null)
         {
             playerPrefab = GameObject.FindWithTag("MasterPlayer");
@@ -50,38 +46,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 stateManager = playerPrefab.GetComponentInChildren<StateManager>();
             }
         }
-        if (gameManager != null)
-        {
-            if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
-            {
-                gameManager.SetPlayerType(GameManager.PlayerType.VR);
-            }
-            else if (GetGameCharacter() == GameCharacter.PANDA)
-            {
-                gameManager.SetPlayerType(GameManager.PlayerType.MR);
-            }
-            else if (GetGameCharacter() == GameCharacter.GOD)
-            {
-                gameManager.SetPlayerType(GameManager.PlayerType.GOD);
-            }
-            else
-            {
-                Debug.LogError("Unknown player type");
-            }
-
-        }
-
-        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-        {
-            hasPlayerNameCreated = true;
-        }
-
-        if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-        {
-            CreatePlayerName();
-            hasPlayerNameCreated = true;
-        }
-
     }
 
     // ルームに参加する処理
@@ -199,6 +163,33 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 {
                     Debug.Log("GameManager found.");
                     gameManager.SetIncrementAliveCount();
+                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.VR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.PANDA)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.MR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.GOD)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.GOD);
+                    }
+                    else
+                    {
+                        Debug.LogError("Unknown player type");
+                    }
+
+                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                    {
+                        hasPlayerNameCreated = true;
+                    }
+
+                    if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    {
+                        CreatePlayerName();
+                        hasPlayerNameCreated = true;
+                    }
                     yield break;
                 }
                 else

@@ -115,6 +115,7 @@ public class StateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
+        Debug.Log("Dead!!!!!!");
         if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
