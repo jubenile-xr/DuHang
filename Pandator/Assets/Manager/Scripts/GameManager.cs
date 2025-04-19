@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetupDeadUI();
         }
 
-        if (aliveCount == 0 && GetGameState() == GameState.END)
+        if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS)
         {
             PostToGAS();
             LoadResultScene();
