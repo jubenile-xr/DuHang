@@ -127,8 +127,12 @@ public class StateManager : MonoBehaviour
                 // Photon のカスタムプロパティから名前に基づくインデックスを取得
 
                 string[] playerNames = gameManager.GetAllPlayerNames();
+                Debug.Log("DeadLogic: Player Names: " + string.Join(", ", playerNames));
+                Debug.Log("PlayerName" + PlayerName);
+
                 for (int i = 0; i < playerNames.Length; i++)
                 {
+                    Debug.Log("PlayerNames TF" + playerNames[i].Contains(PlayerName));
                     if (playerNames[i].Contains(PlayerName))
                     {
                         gameManager.SetPlayerDeadStatusTrue(i);
