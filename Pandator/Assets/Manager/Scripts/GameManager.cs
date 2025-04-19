@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
-using Oculus.Platform.Models;
+using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
@@ -22,7 +21,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         VR,
         GOD
     }
-
 
     private GameObject canvasObject;
 
@@ -47,6 +45,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool[] playerDeadStatus;
 
+    // ローカルで管理するプレイヤー名の配列（ローカルのPlayerTypeがVRの場合のみ）
+    private string[] localPlayerNames = new string[0];
+
     private void Start()
     {
         state = GameState.START;
@@ -55,22 +56,28 @@ public class GameManager : MonoBehaviourPunCallbacks
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
-        // VRの場合はローカルプレイヤーの名前を設定
+        // VRの場合のみ、ローカルプレイヤーの名前を設定
         if (GetPlayerType() == PlayerType.VR)
         {
             SetLocalPlayerName(PhotonNetwork.NickName);
         }
 
+        // ルームに入室中のプレイヤー名をローカル変数に設定（初期化）
+        UpdateLocalPlayerNames();
     }
 
     private void Update()
     {
+        if (canvasObject == null)
+        {
+            canvasObject = GameObject.FindWithTag("Canvas");
+        }
         if (GetGameState() == GameState.START && GetPlayerType() == PlayerType.GOD && Input.GetKey(KeyCode.Space) && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
             Debug.Log("Game State PLAY");
 
-            // デバッグ用：プレイヤー名リストの出力
+            // デバッグ用：プレイヤー名リストの出力（ローカルがVRの場合のみ）
             string[] playerNames_forDebug = GetAllPlayerNames();
             Debug.Log("Player Names: " + string.Join(", ", playerNames_forDebug));
         }
@@ -161,13 +168,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void SetupUI()
     {
-        canvasObject = GameObject.FindWithTag("Canvas");
-        if (canvasObject == null)
-        {
-            Debug.LogError("canvas object not found!");
-        }
-
-        // カスタムプロパティから各プレイヤーの名前情報を取得
+        // ローカルがVRの場合のみ、カスタムプロパティから各プレイヤーの名前情報を取得
         string[] playerNames = GetAllPlayerNames();
         Debug.Log("SetupUI: Player Names: " + string.Join(", ", playerNames));
 
@@ -176,7 +177,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
             if (mrKilleImagedAttach != null)
             {
-                // ここでは、各プレイヤー名が "BIRD", "RABBIT", "MOUSE" を含む場合に処理する例
+                // 例として、各プレイヤー名が "BIRD", "RABBIT", "MOUSE" を含む場合に処理する
                 for (int i = 0; i < playerNames.Length; i++)
                 {
                     if (playerNames[i].Contains("BIRD") ||
@@ -229,7 +230,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // ★ ここでカスタムプロパティから更新があった場合に、死亡状態の配列も更新する
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
         if (propertiesThatChanged.ContainsKey("aliveCount"))
@@ -257,6 +257,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
         props["playerName"] = playerName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+        // ローカルがVRの場合のみ、プレイヤー名の更新を行う
+        UpdateLocalPlayerNames();
     }
 
     public string[] GetAllPlayerNames()
@@ -276,12 +279,46 @@ public class GameManager : MonoBehaviourPunCallbacks
         return names.ToArray();
     }
 
+    private void UpdateLocalPlayerNames()
+    {
+        if (GetPlayerType() != PlayerType.VR)
+        {
+            localPlayerNames = new string[0];
+            Debug.Log("ローカルプレイヤーがVRではないため、localPlayerNamesは空です。");
+            return;
+        }
+
+        List<string> namesList = new List<string>();
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            if (p.CustomProperties.TryGetValue("playerName", out object name))
+            {
+                namesList.Add(name.ToString());
+            }
+            else
+            {
+                namesList.Add("Unknown");
+            }
+        }
+        localPlayerNames = namesList.ToArray();
+        Debug.Log("LocalPlayerNames updated: " + string.Join(", ", localPlayerNames));
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        UpdateLocalPlayerNames();
+    }
+
+    // プレイヤーのカスタムプロパティが更新されたときにもローカル配列を更新
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
+        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
         if (changedProps.ContainsKey("playerName"))
         {
             object newName = changedProps["playerName"];
             Debug.Log("Player " + targetPlayer.ActorNumber + " has updated their name to: " + newName);
+            UpdateLocalPlayerNames();
         }
     }
 
@@ -289,7 +326,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         string[] names = GetAllPlayerNames();
         playerDeadStatus = new bool[names.Length];
-        // ※ C# の bool の初期値は false のため、明示的な初期化は不要ですが、念のためループで設定
+
         for (int i = 0; i < playerDeadStatus.Length; i++)
         {
             playerDeadStatus[i] = false;

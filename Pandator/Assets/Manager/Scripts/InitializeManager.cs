@@ -22,6 +22,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private static string playerName;
     private GameObject gameManagerObject;
     private bool hasPlayerNameCreated = false;
+    private StateManager stateManager;
 
     void Start()
     {
@@ -34,7 +35,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             gameManagerObject = GameObject.FindWithTag("GameManager");
         }
-
+        if (stateManager == null)
+        {
+            stateManager = GameObject.FindWithTag("MasterPlayer").GetComponentInChildren<StateManager>();
+        }
         if (gameManagerObject != null)
         {
             if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
@@ -61,7 +65,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             hasPlayerNameCreated = true;
         }
 
-        if (!hasPlayerNameCreated && gameManagerObject != null && GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+        if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
         {
             CreatePlayerName();
             hasPlayerNameCreated = true;
@@ -256,16 +260,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        StateManager stateManager = playerTransform.GetComponent<StateManager>();
-        if (stateManager != null)
-        {
-            // StateManager にプレイヤー名を設定（static でもインスタンスメソッドでも、ここはプロジェクトに合わせて修正）
-            StateManager.SetPlayerName(playerName);
-        }
-        else
-        {
-            Debug.LogError("StateManager component not found on Player object!");
-        }
+        StateManager.SetPlayerName(playerName);
     }
 
     private bool IsPlayerNameTaken(string candidateName)
