@@ -14,6 +14,11 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         gameTime = 0;
+        if (canvasDispTime != null)
+        {
+            canvasDispTime.SetTimeText(FormatTime(gameTime));
+        }
+
         GameObject gmObj = GameObject.FindWithTag("GameManager");
         if (gmObj)
         {
