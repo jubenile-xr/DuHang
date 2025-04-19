@@ -20,7 +20,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject camera;
 
     private static string playerName;
-    private GameObject gameManagerObject;
     private bool hasPlayerNameCreated = false;
     private StateManager stateManager;
     private GameObject playerPrefab;
@@ -185,7 +184,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         hasPlayerNameCreated = true;
                     }
 
-                    if (!hasPlayerNameCreated && stateManager != null && gameManagerObject != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    if (!hasPlayerNameCreated && stateManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                     {
                         CreatePlayerName();
                         hasPlayerNameCreated = true;
@@ -225,12 +224,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
  private void CreatePlayerName()
     {
-        if (gameManagerObject == null)
-        {
-            Debug.LogError("GameManager object not found!");
-            return;
-        }
-
         int i = 1;
         string candidateName = character.ToString() + i.ToString();
 

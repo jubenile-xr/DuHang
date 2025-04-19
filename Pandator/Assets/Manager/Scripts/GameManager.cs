@@ -75,9 +75,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
-            Debug.Log("Game State PLAY");
-
-            Debug.Log("Player Names: " + string.Join(", ", GetAllPlayerNames()));
         }
 
         if (GetPlayerType() != PlayerType.GOD
@@ -237,13 +234,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
-    public void SetLocalPlayerNames(string[] names)
-    {
-        localPlayerNames = names;
-        UpdatePlayerNameListProperty();
-    }
-
     public void AddLocalPlayerName(string name)
     {
         var list = new List<string>(localPlayerNames);
@@ -317,7 +307,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         while (true)
         {
-            // Fallback in case an immediate SetCustomProperties was missed
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
             yield return new WaitForSeconds(1f);
