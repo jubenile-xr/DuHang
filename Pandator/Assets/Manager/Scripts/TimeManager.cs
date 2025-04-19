@@ -60,7 +60,7 @@ public class TimeManager : MonoBehaviour
     {
         if (gameTime >= gameEndTime)
         {
-            gameManager.SetGameState(GameManager.GameState.END);
+            // gameManager.SetGameState(GameManager.GameState.END);
         }
     }
 
