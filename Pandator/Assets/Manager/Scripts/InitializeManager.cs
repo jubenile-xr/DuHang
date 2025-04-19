@@ -23,6 +23,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject gameManagerObject;
     private bool hasPlayerNameCreated = false;
     private StateManager stateManager;
+    private GameObject playerPrefab;
+    private string gameCharString;
 
     void Start()
     {
@@ -37,9 +39,18 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
         if (stateManager == null)
         {
-            stateManager = GameObject.FindWithTag("MasterPlayer").GetComponentInChildren<StateManager>();
+            playerPrefab = GameObject.FindWithTag("MasterPlayer");
+            gameCharString = GetGameCharacter().ToString();
+            if (!string.IsNullOrEmpty(gameCharString))
+            {
+                gameCharString = gameCharString.Substring(0, 1).ToUpper() + gameCharString.Substring(1).ToLower();
+            }
+            if (playerPrefab.name.Contains(gameCharString))
+            {
+                stateManager = playerPrefab.GetComponentInChildren<StateManager>();
+            }
         }
-        if (gameManagerObject != null)
+        if (gameManager != null && gameManagerObject != null)
         {
             if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
             {
@@ -245,22 +256,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         // ローカルプレイヤーの名前を Photon のカスタムプロパティと NickName に設定
         gameManager.AddLocalPlayerName(playerName);
 
-        // マスタープレイヤーの子オブジェクト「Player」を取得し、StateManager で管理する場合の処理
-        GameObject masterPlayerObject = GameObject.FindWithTag("MasterPlayer");
-        if (masterPlayerObject == null)
-        {
-            Debug.LogError("MasterPlayer object not found!");
-            return;
-        }
-
-        Transform playerTransform = masterPlayerObject.transform.Find("Player");
-        if (playerTransform == null || !playerTransform.CompareTag("Player"))
-        {
-            Debug.LogError("Player child object not found under MasterPlayer!");
-            return;
-        }
-
-        StateManager.SetPlayerName(playerName);
+        stateManager.SetPlayerName(playerName);
     }
 
     private bool IsPlayerNameTaken(string candidateName)

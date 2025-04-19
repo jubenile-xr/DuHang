@@ -18,7 +18,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
-    private static string PlayerName;
+    private string PlayerName;
     private static int PlayerNameIndex;
     private bool[] playerDeadStatus;
     private enum GameCharacter
@@ -212,7 +212,7 @@ public class StateManager : MonoBehaviour
         return -1;
     }
 
-    public static void SetPlayerName(string name)
+    public void SetPlayerName(string name)
     {
         PlayerName = name;
     }
