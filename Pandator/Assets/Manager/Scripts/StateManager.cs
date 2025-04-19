@@ -18,9 +18,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
-    private string PlayerName;
-    private static int PlayerNameIndex;
-    private bool[] playerDeadStatus;
+    private string playerName;
     private enum GameCharacter
     {
         BIRD,
@@ -54,11 +52,7 @@ public class StateManager : MonoBehaviour
             }
         }
 
-        if (gameManager.GetGameState() == GameManager.GameState.PLAY)
-        {
-            playerDeadStatus = gameManager.GetPlayerDeadStatus();
-            setupDeadUI();
-        }
+
     }
 
     private void ResetState()
@@ -115,21 +109,19 @@ public class StateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
-        Debug.Log("Dead!!!!!!");
         if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
 
-        // Photon のカスタムプロパティから名前に基づくインデックスを取得
 
         string[] playerNames = gameManager.GetAllPlayerNames();
-        Debug.Log("DeadLogic: Player Names: " + string.Join(", ", playerNames));
-        Debug.Log("PlayerName" + PlayerName);
+        Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
+        Debug.Log("State:PlayerName" + playerName);
 
         for (int i = 0; i < playerNames.Length; i++)
         {
-            Debug.Log("PlayerNames TF" + playerNames[i].Contains(PlayerName));
-            if (playerNames[i].Contains(PlayerName))
+            Debug.Log("State:PlayerNames TF" + playerNames[i].Contains(playerName));
+            if (playerNames[i].Contains(playerName))
             {
                 gameManager.SetPlayerDeadStatusTrue(i);
             }
@@ -140,37 +132,6 @@ public class StateManager : MonoBehaviour
         // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
 
-    }
-
-    private void setupDeadUI()
-    {
-        if (canvasObject != null)
-        {
-            MRKilledImagedAttach mrKilleImagedAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
-            if (mrKilleImagedAttach != null)
-            {
-                // Photon のカスタムプロパティから名前に基づくインデックスを取得
-
-                for (int i = 0; i < playerDeadStatus.Length; i++)
-                {
-                    if (playerDeadStatus[i])
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                mrKilleImagedAttach.SetFirstPlayerDead();
-                                break;
-                            case 1:
-                                mrKilleImagedAttach.SetSecondPlayerDead();
-                                break;
-                            case 2:
-                                mrKilleImagedAttach.SetThirdPlayerDead();
-                                break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void InterruptLogic()
@@ -215,6 +176,6 @@ public class StateManager : MonoBehaviour
 
     public void SetPlayerName(string name)
     {
-        PlayerName = name;
+        playerName = name;
     }
 }

@@ -26,13 +26,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     [Header("ゲームの状態はこっちで完全管理")]
     private GameState state = GameState.START;
-    private Dictionary<string, float> scoreList;
     private bool hasPlayerNameCreated = false;
 
     [SerializeField]
     private PlayerType playerType = PlayerType.MR;
 
     private int aliveCount;
+    private bool hasSendToGAS = false;
     private enum Winner
     {
         NONE,
@@ -49,16 +49,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するプレイヤー名の配列
     private string[] localPlayerNames = new string[0];
 
+    // ローカルで管理するスコア配列
+    private float[] localPlayerScores = new float[0];
+
     private void Start()
     {
         state = GameState.START;
-        scoreList = new Dictionary<string, float>();
         aliveCount = 0;
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
         // Room に入室済みなら既存の playerNameList を取ってくる
         FetchPlayerNameListFromRoom();
+
+        // Room に入室済みなら既存の playerScoreList を取ってくる
+        FetchPlayerScoreListFromRoom();
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
@@ -67,7 +72,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         if (canvasObject == null)
+        {
             canvasObject = GameObject.FindWithTag("Canvas");
+        }
 
         if (GetGameState() == GameState.START
             && GetPlayerType() == PlayerType.GOD
@@ -85,6 +92,19 @@ public class GameManager : MonoBehaviourPunCallbacks
             InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
         }
+
+        if (GetGameState() == GameState.PLAY || GetGameState() == GameState.END)
+        {
+            SetupDeadUI();
+        }
+
+        if (aliveCount == 0 && GetGameState() == GameState.END)
+        {
+            PostToGAS();
+            LoadResultScene();
+        }
+
+
     }
 
 
@@ -120,8 +140,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetGameState(GameState.END);
             winner = Winner.PANDA;
-            if (aliveCount == 0)
-                LoadResultScene();
         }
     }
 
@@ -186,10 +204,45 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
-    public void SetScoreList(string animalName, float score)
+    private void SetupDeadUI()
     {
-        scoreList[animalName] = score;
+        if (canvasObject == null)
+        {
+            canvasObject = GameObject.FindWithTag("Canvas");
+            if (canvasObject == null) return;
+        }
+
+        Debug.LogWarning("SetUpDeadUI");
+
+        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        if (mrAttach == null)
+        {
+            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            return;
+        }
+        Debug.LogWarning("MRKilledImagedAttach found");
+        // Photon のカスタムプロパティから名前に基づくインデックスを取得
+        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ",GetPlayerDeadStatus()));
+
+        for (int i = 0; i < GetPlayerDeadStatus().Length; i++)
+        {
+            if (GetPlayerDeadStatus()[i])
+            {
+                switch (i)
+                {
+                    case 0:
+                        Debug.LogWarning("SetFirstPlayerDead");
+                        mrAttach.SetFirstPlayerDead();
+                        break;
+                    case 1:
+                        mrAttach.SetSecondPlayerDead();
+                        break;
+                    case 2:
+                        mrAttach.SetThirdPlayerDead();
+                        break;
+                }
+            }
+        }
     }
 
     public void appendWinnerAnimalNameList(string animalName)
@@ -277,7 +330,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         return localPlayerNames;
     }
-    
+
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable props)
     {
@@ -301,6 +354,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             localPlayerNames = props["playerNameList"] as string[];
             Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
+        if (props.ContainsKey("playerScoreList"))
+        {
+            localPlayerScores = props["playerScoreList"] as float[];
+            Debug.Log("playerScoreList updated from room: " + string.Join(", ", localPlayerScores));
+        }
     }
 
     private IEnumerator SyncCustomPropertiesCoroutine()
@@ -309,7 +367,52 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
+            UpdatePlayerScoreListProperty();
             yield return new WaitForSeconds(1f);
         }
     }
+
+    // Room から既存の playerScoreList を取得してローカルにセット
+    private void FetchPlayerScoreListFromRoom()
+    {
+        if (PhotonNetwork.InRoom
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerScoreList", out object obj)
+            && obj is float[] scores)
+        {
+            localPlayerScores = scores;
+            Debug.Log("Fetched playerScoreList from room: " + string.Join(", ", localPlayerScores));
+        }
+    }
+
+    // インデックス指定でセットして同期
+    public void SetLocalPlayerScore(int index, float score)
+    {
+        // 必要ならサイズ拡張
+        if (index >= localPlayerScores.Length)
+        {
+            Array.Resize(ref localPlayerScores, index + 1);
+        }
+        localPlayerScores[index] = score;
+        UpdatePlayerScoreListProperty();
+    }
+
+    // カスタムプロパティに最新値を流し込む
+    private void UpdatePlayerScoreListProperty()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { ["playerScoreList"] = localPlayerScores }
+            );
+        }
+    }
+
+    // TODO: このメソッドをGASに送信するAPIを叩く処理に変更して(dear MAOZ)
+    public void PostToGAS()
+    {
+        // localPlayerScoresの内容をGASにPOSTする処理を実装
+        Debug.Log("GASにPOSTしたよ！！！！");
+        hasSendToGAS = true;
+    }
+
 }

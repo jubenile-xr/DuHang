@@ -6,6 +6,7 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
+
     public enum GameCharacter
     {
         BIRD,
@@ -14,6 +15,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         PANDA,
         GOD
     }
+
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
     private GameObject player;
@@ -22,6 +24,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private static string playerName;
     private bool hasPlayerNameCreated = false;
     private StateManager stateManager;
+    private ScoreManager scoreManager;
     private GameObject playerPrefab;
     private string gameCharString;
 
@@ -32,20 +35,34 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        GameObject masterPlayer = GameObject.FindWithTag("MasterPlayer");
+        if (masterPlayer == null) return;
+
+        string formattedGameChar = GetFormattedGameCharacter();
+        if (!masterPlayer.name.Contains(formattedGameChar)) return;
+
         if (stateManager == null)
         {
-            playerPrefab = GameObject.FindWithTag("MasterPlayer");
-            gameCharString = GetGameCharacter().ToString();
-            if (!string.IsNullOrEmpty(gameCharString))
-            {
-                gameCharString = gameCharString.Substring(0, 1).ToUpper() + gameCharString.Substring(1).ToLower();
-            }
-            if (playerPrefab.name.Contains(gameCharString))
-            {
-                stateManager = playerPrefab.GetComponentInChildren<StateManager>();
-            }
+            stateManager = masterPlayer.GetComponentInChildren<StateManager>();
+        }
+
+        if (scoreManager == null)
+        {
+            scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
         }
     }
+
+    private string GetFormattedGameCharacter()
+    {
+        string gameCharString = GetGameCharacter().ToString();
+        if (!string.IsNullOrEmpty(gameCharString))
+        {
+            // 1文字目を大文字、2文字目以降を小文字に変換
+            return gameCharString.Substring(0, 1).ToUpper() + gameCharString.Substring(1).ToLower();
+        }
+        return gameCharString;
+    }
+
 
     // ルームに参加する処理
     public override void OnConnectedToMaster()
@@ -184,7 +201,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         hasPlayerNameCreated = true;
                     }
 
-                    if (!hasPlayerNameCreated && stateManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                     {
                         CreatePlayerName();
                         hasPlayerNameCreated = true;
@@ -237,10 +254,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         // ユニークなプレイヤー名が決定
         playerName = candidateName;
 
-        // ローカルプレイヤーの名前を Photon のカスタムプロパティと NickName に設定
+        // ローカルプレイヤーの名前を Photon のカスタムプロパティに設定
         gameManager.AddLocalPlayerName(playerName);
 
         stateManager.SetPlayerName(playerName);
+        scoreManager.SetPlayerName(playerName);
     }
 
     private bool IsPlayerNameTaken(string candidateName)
