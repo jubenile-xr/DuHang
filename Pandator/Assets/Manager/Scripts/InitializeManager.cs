@@ -50,7 +50,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 stateManager = playerPrefab.GetComponentInChildren<StateManager>();
             }
         }
-        if (gameManager != null && gameManagerObject != null)
+        if (gameManager != null)
         {
             if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
             {
