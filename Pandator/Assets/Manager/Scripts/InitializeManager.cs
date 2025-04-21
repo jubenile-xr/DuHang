@@ -146,6 +146,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 mouseMoveScript.SetMouseOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.RABBIT:
                 RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
@@ -155,9 +157,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 rabbitMoveScript.SetRabbitOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.BIRD:
                 // BIRD用の処理があれば追加
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             default:
                 Debug.LogWarning("未処理のキャラクタータイプです: " + character);
