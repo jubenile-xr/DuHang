@@ -402,7 +402,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-
     // TODO: このメソッドをGASに送信するAPIを叩く処理に変更して(dear MAOZ)
     public void PostToGAS()
     {
@@ -410,5 +409,4 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("GASにPOSTしたよ！！！！");
         hasSendToGAS = true;
     }
-
 }
