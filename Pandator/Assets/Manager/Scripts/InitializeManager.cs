@@ -247,38 +247,24 @@ public class InitializeManager : MonoBehaviourPunCallbacks
  private void CreatePlayerName()
     {
         int i = 1;
-        string candidateName = character.ToString() + i.ToString();
-
         // PhotonNetwork.PlayerList を参照して、すでに使われている名前がないかチェック
-        while (IsPlayerNameTaken(candidateName))
+        foreach (string playerListElement in gameManager.GetAllPlayerNames())
         {
+            string candidateName = character.ToString() + i.ToString();
+            if (!playerListElement.Equals(candidateName))
+            {
+                playerName = candidateName;
+                break;
+            }
             i++;
-            candidateName = character.ToString() + i.ToString();
         }
 
-        // ユニークなプレイヤー名が決定
-        playerName = candidateName;
 
         // ローカルプレイヤーの名前を Photon のカスタムプロパティに設定
         gameManager.AddLocalPlayerName(playerName);
 
         stateManager.SetPlayerName(playerName);
         scoreManager.SetPlayerName(playerName);
-    }
-
-    private bool IsPlayerNameTaken(string candidateName)
-    {
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (player.CustomProperties.TryGetValue("playerName", out object existingName))
-            {
-                if (candidateName.Equals(existingName.ToString()))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public GameCharacter GetGameCharacter()
