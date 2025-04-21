@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         state = GameState.START;
-        aliveCount = 0;
+        aliveCount = -1;
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
 
@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             && GetGameState() == GameState.PLAY
             && !hasPlayerNameCreated)
         {
+            SetAliveCount(GetAllPlayerNames().Length);
             SetupUI();
             InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
@@ -132,6 +133,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetPlayerType(PlayerType type) => playerType = type;
 
 
+    public void SetAliveCount(int count) => aliveCount = count;
     public void SetDecrementAliveCount()
     {
         aliveCount--;
@@ -141,12 +143,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetGameState(GameState.END);
             winner = Winner.PANDA;
         }
-    }
-
-    public void SetIncrementAliveCount()
-    {
-        aliveCount++;
-        UpdateAliveCountProperty();
     }
 
     private void UpdateAliveCountProperty()

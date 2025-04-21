@@ -178,7 +178,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 if (gameManager)
                 {
                     Debug.Log("GameManager found.");
-                    gameManager.SetIncrementAliveCount();
                     if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
                     {
                         gameManager.SetPlayerType(GameManager.PlayerType.VR);
