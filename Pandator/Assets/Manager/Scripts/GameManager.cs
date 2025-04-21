@@ -425,11 +425,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     // インデックス指定でセットして同期
     public void SetLocalPlayerScore(int index, float score)
     {
+        // index が -1 なら、配列の末尾に追加するため、index を現在の長さに設定
+        if (index == -1)
+        {
+            index = localPlayerScores.Length;
+        }
+
         // 必要ならサイズ拡張
         if (index >= localPlayerScores.Length)
         {
             Array.Resize(ref localPlayerScores, index + 1);
         }
+
         localPlayerScores[index] = score;
         UpdatePlayerScoreListProperty();
     }
@@ -452,6 +459,8 @@ public class GameManager : MonoBehaviourPunCallbacks
        {
             StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i]));
        }
+
+       PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1]);
        
        hasSendToGAS = true;
        
