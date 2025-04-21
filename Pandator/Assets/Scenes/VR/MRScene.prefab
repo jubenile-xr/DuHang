@@ -1374,10 +1374,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7891902172578936286, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
       propertyPath: m_Name
-      value: PandaCanvas
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7891902172578936286, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+      propertyPath: m_TagString
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266330710734263740, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+      propertyPath: m_text
+      value: 0:00
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8682295006896381244, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+    - {fileID: 8219454349399495366, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
+    - {fileID: 1607120936648443819, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2984171437233212997, guid: 95cfe3df9732b4466b882c66a634ba13, type: 3}
       insertIndex: -1

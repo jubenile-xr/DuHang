@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e175eb33cf749eda9952113117397c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerType: 0
+  playerType: 1
   winner: 0
 --- !u!114 &5395083701465966290
 MonoBehaviour:

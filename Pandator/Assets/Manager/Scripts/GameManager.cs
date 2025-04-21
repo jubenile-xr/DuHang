@@ -183,10 +183,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("SetupUI: Player Names: " + string.Join(", ", names));
 
         if (canvasObject == null) return;
-        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        var mrAttach = canvasObject.GetComponent<KilledImagedAttach>();
         if (mrAttach == null)
         {
-            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            Debug.LogError("Canvas に KilledImagedAttach がない！");
             return;
         }
 
@@ -197,9 +197,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 switch (i)
                 {
-                    case 0: MRKilledImagedAttach.SetFirstCharacter(nm); break;
-                    case 1: MRKilledImagedAttach.SetSecondCharacter(nm); break;
-                    case 2: MRKilledImagedAttach.SetThirdCharacter(nm); break;
+                    case 0: KilledImagedAttach.SetFirstCharacter(nm); break;
+                    case 1: KilledImagedAttach.SetSecondCharacter(nm); break;
+                    case 2: KilledImagedAttach.SetThirdCharacter(nm); break;
                     default: Debug.LogError("Invalid player index"); break;
                 }
             }
@@ -216,13 +216,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.LogWarning("SetUpDeadUI");
 
-        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        var mrAttach = canvasObject.GetComponent<KilledImagedAttach>();
         if (mrAttach == null)
         {
-            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            Debug.LogError("Canvas に KilledImagedAttach がない！");
             return;
         }
-        Debug.LogWarning("MRKilledImagedAttach found");
+        Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
         Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ",GetPlayerDeadStatus()));
 
@@ -292,12 +292,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void AddLocalPlayerName(string name)
     {
         var list = new List<string>(localPlayerNames);
-        if (!list.Contains(name))
-        {
-            list.Add(name);
-            localPlayerNames = list.ToArray();
-            UpdatePlayerNameListProperty();
-        }
+        list.Add(name);
+        localPlayerNames = list.ToArray();
+        UpdatePlayerNameListProperty();
+
     }
 
     private void UpdatePlayerNameListProperty()
@@ -313,10 +311,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void FetchPlayerNameListFromRoom()
     {
         if (PhotonNetwork.InRoom
-            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
-            && obj is string[] names)
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj))
         {
-            localPlayerNames = names;
+            if (obj is string[] names)
+            {
+                localPlayerNames = names;
+            }
+            else if (obj is object[] objArray)
+            {
+                localPlayerNames = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    localPlayerNames[i] = objArray[i].ToString();
+                }
+            }
             Debug.Log("Fetched playerNameList from room: " + string.Join(", ", localPlayerNames));
         }
     }
@@ -325,10 +333,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     public string[] GetAllPlayerNames()
     {
         if (PhotonNetwork.InRoom
-            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
-            && obj is string[] namesFromRoom)
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj))
         {
-            return namesFromRoom;
+            if (obj is string[] names)
+            {
+                return names;
+            }
+            else if (obj is object[] objArray)
+            {
+                string[] namesFromRoom = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    namesFromRoom[i] = objArray[i].ToString();
+                }
+                return namesFromRoom;
+            }
         }
         return localPlayerNames;
     }
@@ -353,7 +372,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         if (props.ContainsKey("playerNameList"))
         {
-            localPlayerNames = props["playerNameList"] as string[];
+            object propValue = props["playerNameList"];
+            if (propValue is string[] names)
+            {
+                localPlayerNames = names;
+            }
+            else if (propValue is object[] objArray)
+            {
+                // object[] から string[] へ変換
+                localPlayerNames = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    localPlayerNames[i] = objArray[i].ToString();
+                }
+            }
             Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
         if (props.ContainsKey("playerScoreList"))

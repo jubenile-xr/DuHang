@@ -146,6 +146,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 mouseMoveScript.SetMouseOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.RABBIT:
                 RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
@@ -155,9 +157,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 rabbitMoveScript.SetRabbitOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.BIRD:
                 // BIRD用の処理があれば追加
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             default:
                 Debug.LogWarning("未処理のキャラクタータイプです: " + character);
@@ -238,41 +244,37 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
     }
 
- private void CreatePlayerName()
+    private void CreatePlayerName()
     {
+        Debug.LogWarning("CreatePlayerName");
         int i = 1;
-        string candidateName = character.ToString() + i.ToString();
+        string candidateName = "";
 
-        // PhotonNetwork.PlayerList を参照して、すでに使われている名前がないかチェック
-        while (IsPlayerNameTaken(candidateName))
+        while (true)
         {
-            i++;
             candidateName = character.ToString() + i.ToString();
-        }
 
-        // ユニークなプレイヤー名が決定
-        playerName = candidateName;
-
-        // ローカルプレイヤーの名前を Photon のカスタムプロパティに設定
-        gameManager.AddLocalPlayerName(playerName);
-
-        stateManager.SetPlayerName(playerName);
-        scoreManager.SetPlayerName(playerName);
-    }
-
-    private bool IsPlayerNameTaken(string candidateName)
-    {
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (player.CustomProperties.TryGetValue("playerName", out object existingName))
+            bool exists = false;
+            foreach (string existingName in gameManager.GetAllPlayerNames())
             {
-                if (candidateName.Equals(existingName.ToString()))
+                if (existingName.Equals(candidateName))
                 {
-                    return true;
+                    exists = true;
+                    break;
                 }
             }
+
+            // candidateName が存在しなければ設定処理を実行
+            if (!exists)
+            {
+                Debug.LogWarning("PlayerName Created! " + candidateName);
+                gameManager.AddLocalPlayerName(candidateName);
+                stateManager.SetPlayerName(candidateName);
+                scoreManager.SetPlayerName(candidateName);
+                break;
+            }
+            i++;
         }
-        return false;
     }
 
     public GameCharacter GetGameCharacter()
