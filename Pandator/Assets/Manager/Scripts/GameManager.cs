@@ -128,4 +128,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("aliveCount: " + aliveCount);
         }
     }
+    public PlayerType GetPlayerType()
+    {
+        return playerType;
+    }
 }
