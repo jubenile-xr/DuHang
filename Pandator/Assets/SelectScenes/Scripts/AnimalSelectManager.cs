@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement; // シーン遷移に必要
 public class AnimalSelectManager : MonoBehaviour
 {
     private bool isAnimalSelected = false; // 動物が選択されたかどうかのフラグ
+    [SerializeField] private bool isDebugFlag = false; // 動物選択UI
 
     // Update is called once per frame
     private void Update()
@@ -24,15 +25,9 @@ public class AnimalSelectManager : MonoBehaviour
             SelectAnimal(Character.GameCharacters.MOUSE);
         }
         // Yボタンが押された場合
-        // TODO: PANDAは1人しか選べないようにしないといけない
-        else if (OVRInput.Get(OVRInput.Button.Four) || Input.GetKeyDown(KeyCode.P)) // Yボタン
+        else if (isDebugFlag && (OVRInput.Get(OVRInput.Button.Four) || Input.GetKeyDown(KeyCode.P))) // Yボタン
         {
             SelectAnimal(Character.GameCharacters.PANDA);
-        }
-        // スペースキーが押された場合
-        else if (Input.GetKeyDown(KeyCode.G)) // スペースキー
-        {
-            SelectAnimal(Character.GameCharacters.GOD);
         }
         if (isAnimalSelected && (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.O)))
         {
@@ -58,11 +53,5 @@ public class AnimalSelectManager : MonoBehaviour
         // チュートリアルシーンに遷移する処理
         SceneManager.LoadScene("TutorialScene");
         Debug.Log("Go to Tutorial Scene");
-    }
-    private void GoToGodScene()
-    {
-        // ゲームシーンに遷移する処理
-        SceneManager.LoadScene("GodScene");
-        Debug.Log("Go to God Scene");
     }
 }
