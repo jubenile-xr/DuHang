@@ -292,12 +292,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void AddLocalPlayerName(string name)
     {
         var list = new List<string>(localPlayerNames);
-        if (!list.Contains(name))
-        {
-            list.Add(name);
-            localPlayerNames = list.ToArray();
-            UpdatePlayerNameListProperty();
-        }
+        list.Add(name);
+        localPlayerNames = list.ToArray();
+        UpdatePlayerNameListProperty();
+
     }
 
     private void UpdatePlayerNameListProperty()
