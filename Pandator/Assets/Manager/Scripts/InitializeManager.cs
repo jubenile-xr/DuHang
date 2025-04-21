@@ -49,6 +49,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
         }
+        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+        {
+            hasPlayerNameCreated = true;
+        }
+
+        if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+        {
+            CreatePlayerName();
+            hasPlayerNameCreated = true;
+        }
     }
 
     private string GetFormattedGameCharacter()
@@ -200,16 +210,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         Debug.LogError("Unknown player type");
                     }
 
-                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-                    {
-                        hasPlayerNameCreated = true;
-                    }
-
-                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-                    {
-                        CreatePlayerName();
-                        hasPlayerNameCreated = true;
-                    }
                     yield break;
                 }
                 else
