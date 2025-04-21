@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -58,7 +60,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         aliveCount = -1;
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
-
+        
         // Room に入室済みなら既存の playerNameList を取ってくる
         FetchPlayerNameListFromRoom();
 
@@ -67,6 +69,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
+
+
     }
 
     private void Update()
@@ -103,7 +107,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS)
         {
-            PostToGAS();
+            SaveRankingData();
             LoadResultScene();
         }
 
@@ -440,11 +444,98 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-    // TODO: このメソッドをGASに送信するAPIを叩く処理に変更して(dear MAOZ)
-    public void PostToGAS()
+    
+    
+    public void SaveRankingData()
     {
-        // localPlayerScoresの内容をGASにPOSTする処理を実装
-        Debug.Log("GASにPOSTしたよ！！！！");
-        hasSendToGAS = true;
+       for(var i = 0; i < localPlayerNames.Length; i++)
+       {
+            StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i]));
+       }
+       
+       hasSendToGAS = true;
+       
+    }
+
+    private string JudgeAnimal(string playerName)
+    {
+        if (playerName.Contains("BIRD"))
+        {
+            return "bird";
+        }
+        else if (playerName.Contains("RABBIT"))
+        {
+            return "rabbit";
+        }
+        else if (playerName.Contains("MOUSE"))
+        {
+            return "mouse";
+        }
+        else if(playerName.Contains("PANDA"))
+        {
+            return "panda";
+        }
+        else
+        {
+            return null;
+        }
+        
+
+
+    }
+
+    private IEnumerator PostToGAS(string name, int score)
+    {
+        string url = "https://script.google.com/macros/s/AKfycbzn6Gf0A_H40-PfM1wf7LRjDFOEHNNLutAMGTV5o4bYqTUE_Ppb7Nb1V5F6M7qWdY7N/exec";
+    
+        JsonData data = new JsonData
+        {
+            name = name,
+            score = score,
+            animal = JudgeAnimal(name)
+        };
+        
+        if (data.animal == null)
+        {
+            Debug.LogError("Invalid animal type");
+            yield break;
+        }
+        
+        string jsonString = JsonUtility.ToJson(data);
+        
+        Debug.Log("jsonString: " + jsonString);
+    
+        UnityWebRequest webRequest = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonString);
+        webRequest.uploadHandler = new UploadHandlerRaw(jsonToSend);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+    
+        yield return webRequest.SendWebRequest();
+    
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(webRequest.error);
+        }
+        else
+        {
+            if (webRequest.downloadHandler != null)
+            {
+                string text = webRequest.downloadHandler.text;
+                Debug.Log(text);
+            }
+        }
+        
+        Debug.Log("SendToGAS: " + name + " " + score);
+    }
+    
+    
+    [System.Serializable]
+    private class JsonData
+    {
+        public string name;
+        public int score;
+        public string animal;
     }
 }
+
