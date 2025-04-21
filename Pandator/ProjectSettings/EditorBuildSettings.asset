@@ -6,23 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/tutorial/tutorialScene.unity
+    guid: 3ff660f951e944c3ba078b7c4d8ea709
+  - enabled: 1
+    path: Assets/Scenes/MRScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/CharactorSelectScene.unity
-    guid: 28a271026bbeea949b604b1d71e912ac
-  - enabled: 1
-    path: Assets/Scenes/BirdScene.unity
-    guid: 0d02199b702a9ff4f9700e66c78556ec
-  - enabled: 1
-    path: Assets/Scenes/MouseScene.unity
-    guid: d0d2d6718c220d24f9abe4f78c7f495b
-  - enabled: 1
-    path: Assets/Scenes/PandaScene.unity
-    guid: b175aab692c22c5439e418b6acb4723e
-  - enabled: 1
-    path: Assets/Scenes/RabbitScene.unity
-    guid: bbea5e6509339e64094972f47b192c1d
+    path: Assets/Scenes/VRScene.unity
+    guid: 631f23be972d84dfa9a94fe26408aae5
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: e95e4443513354b4992177bb2a4317e1, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7592a1c1a8c554fc4811de8d921dea7a, type: 2}

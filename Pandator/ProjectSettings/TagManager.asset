@@ -13,43 +13,40 @@ TagManager:
   - Wall
   - GameManager
   - Ground
-  - BirdScene
-  - RabbitScene
-  - MouseScene
-  - PandaScene
+  - PandaPlayer
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  -
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
   - Bird
-  - 
-  - 
-  - 
+  -
+  -
+  -
   - FrontUI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
   m_SortingLayers:
   - name: Default
     uniqueID: 0
