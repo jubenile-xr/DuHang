@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215c240fa776c441e86c92f69223d2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerType: 0
+  playerType: 2
   spawnPosition: {x: 203.0545, y: -154, z: 342.9874}
   spawnEulerAngles: {x: 0, y: 183.299, z: 0}
   spawnScale: {x: 100, y: 100, z: 100}
