@@ -458,9 +458,14 @@ public class GameManager : MonoBehaviourPunCallbacks
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
             StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i]));
+
+            if (i == localPlayerNames.Length - 1)
+            {
+                StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1]));
+            }
        }
 
-       PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1]);
+
        
        hasSendToGAS = true;
        
