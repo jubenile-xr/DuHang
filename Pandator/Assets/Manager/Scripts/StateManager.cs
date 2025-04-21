@@ -15,7 +15,6 @@ public class StateManager : MonoBehaviour
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
-    private string charaName;
     private enum GameCharacter
     {
         BIRD,
