@@ -252,7 +252,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         foreach (string playerListElement in gameManager.GetAllPlayerNames())
         {
             string candidateName = character.ToString() + i.ToString();
-            if (!playerListElement.Equals(candidateName))
+            if (!playerListElement.Equals(candidateName) || playerListElement.Length == 0)
             {
                 Debug.LogWarning("PlayerName Created!" + candidateName);
                 gameManager.AddLocalPlayerName(candidateName);
