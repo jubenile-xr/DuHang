@@ -8,6 +8,7 @@ public class ScoreManager : MonoBehaviour
     private float aliveTime;
     private int interruptedCount;
     public GameManager gameManager;
+    public TimeManager timeManager;
     [Header("スコア計算用の定数")]
     [SerializeField] private float scoreMultiplier = 100f; // スコア計算のための定数
     [SerializeField] private float hitPoint = 50f; // 妨害のポイント
@@ -45,7 +46,7 @@ public class ScoreManager : MonoBehaviour
         if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
         {
             // パンダのスコア計算
-            score = PandaMaxPoint - aliveTime * 5;
+            score = PandaMaxPoint - (int)timeManager.GetGameTime() * 5;
         }
         else if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
         {
