@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI; // UIコンポーネントを使用するために必要
 
-public class MRKilledImagedAttach : MonoBehaviour
+public class KilledImagedAttach : MonoBehaviour
 {
     [SerializeField] private GameObject FirstKilledImage; // インスペクターでUI画像を指定
     [SerializeField] private GameObject SecondKilledImage; // インスペクターでUI画像を指定
@@ -178,6 +178,5 @@ public class MRKilledImagedAttach : MonoBehaviour
     {
         ThirdKilledImage.SetActive(true);
     }
-
 }
 

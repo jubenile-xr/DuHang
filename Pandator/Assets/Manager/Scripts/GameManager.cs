@@ -177,10 +177,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("SetupUI: Player Names: " + string.Join(", ", names));
 
         if (canvasObject == null) return;
-        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        var mrAttach = canvasObject.GetComponent<KilledImagedAttach>();
         if (mrAttach == null)
         {
-            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            Debug.LogError("Canvas に KilledImagedAttach がない！");
             return;
         }
 
@@ -191,9 +191,9 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 switch (i)
                 {
-                    case 0: MRKilledImagedAttach.SetFirstCharacter(nm); break;
-                    case 1: MRKilledImagedAttach.SetSecondCharacter(nm); break;
-                    case 2: MRKilledImagedAttach.SetThirdCharacter(nm); break;
+                    case 0: KilledImagedAttach.SetFirstCharacter(nm); break;
+                    case 1: KilledImagedAttach.SetSecondCharacter(nm); break;
+                    case 2: KilledImagedAttach.SetThirdCharacter(nm); break;
                     default: Debug.LogError("Invalid player index"); break;
                 }
             }
@@ -210,13 +210,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.LogWarning("SetUpDeadUI");
 
-        var mrAttach = canvasObject.GetComponent<MRKilledImagedAttach>();
+        var mrAttach = canvasObject.GetComponent<KilledImagedAttach>();
         if (mrAttach == null)
         {
-            Debug.LogError("Canvas に MRKilledImagedAttach がない！");
+            Debug.LogError("Canvas に KilledImagedAttach がない！");
             return;
         }
-        Debug.LogWarning("MRKilledImagedAttach found");
+        Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
         Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ",GetPlayerDeadStatus()));
 
