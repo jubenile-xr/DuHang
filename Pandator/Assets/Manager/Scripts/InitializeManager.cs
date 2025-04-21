@@ -54,7 +54,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             hasPlayerNameCreated = true;
         }
 
-        if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+        if (!hasPlayerNameCreated && gameManager != null && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
         {
             CreatePlayerName();
             hasPlayerNameCreated = true;
