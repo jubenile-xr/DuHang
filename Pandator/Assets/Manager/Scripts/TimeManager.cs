@@ -40,11 +40,11 @@ public class TimeManager : MonoBehaviour
     }
     private void Update()
     {
+        canvasDispTime.SetTimeText(FormatTime(gameTime));
         // SmallAnimalはまだ作成していない
         if(canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY){
             gameTime += Time.deltaTime;
             SwitchGameState();
-            canvasDispTime.SetTimeText(FormatTime(gameTime));
         }
     }
 
