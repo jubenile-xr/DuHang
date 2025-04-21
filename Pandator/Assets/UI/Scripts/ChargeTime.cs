@@ -10,7 +10,7 @@ public class ChargeTime : MonoBehaviour
     private float currentTime = 0f;
     private bool isRunning = true;
     private bool canReset = true; // スペースでリセット可能かどうか
-
+    private GameManager gameManager;
     void Start()
     {
         if (slider == null)
@@ -18,11 +18,21 @@ public class ChargeTime : MonoBehaviour
             slider = GetComponent<Slider>();
         }
         slider.value = 1; // 初期状態をマックスに設定
+
+        // gameManagerの取得
+        if (gameManager == null)
+        {
+            gameManager = GameObject.Find("GameManager(Clone)").GetComponent<GameManager>();
+            if (gameManager == null)
+            {
+                Debug.LogError("GameManager not found");
+            }
+        }
     }
 
     void Update()
     {
-        if (isRunning)
+        if (isRunning && gameManager.GetGameState() == GameManager.GameState.PLAY)
         {
             currentTime += Time.deltaTime;
             float t = Mathf.Clamp01(currentTime / duration);
