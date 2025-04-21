@@ -7,8 +7,9 @@ public class ScoreManager : MonoBehaviour
     private float score;
     private float aliveTime;
     private int interruptedCount;
-    public GameManager gameManager;
-    public TimeManager timeManager;
+    private string playerName;
+    [Header("ゲームマネージャー")] private GameManager gameManager;
+    private TimeManager timeManager;
     [Header("スコア計算用の定数")]
     [SerializeField] private float scoreMultiplier = 100f; // スコア計算のための定数
     [SerializeField] private float hitPoint = 50f; // 妨害のポイント
@@ -18,9 +19,14 @@ public class ScoreManager : MonoBehaviour
         score = 0;
         aliveTime = 0;
         interruptedCount = 0;
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
     private void Update()
     {
+        if (gameManager.GetGameState() == GameManager.GameState.END)
+        {
+            SendScoreToGameManager();
+        }
 
     }
 
@@ -56,5 +62,26 @@ public class ScoreManager : MonoBehaviour
         {
             score = -1; // 不明な動物の場合はスコアを-1に設定
         }
+    }
+
+    private void SendScoreToGameManager()
+    {
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        Debug.Log("Score:DeadLogic: Player Names: " + string.Join(", ", playerNames));
+        Debug.Log("Score:PlayerName" + playerName);
+
+        for (int i = 0; i < playerNames.Length; i++)
+        {
+            Debug.Log("Score:PlayerNames TF" + playerNames[i].Contains(playerName));
+            if (playerNames[i].Contains(playerName))
+            {
+                gameManager.SetLocalPlayerScore(i, GetScore());
+            }
+        }
+    }
+
+    public void SetPlayerName(string name)
+    {
+        playerName = name;
     }
 }

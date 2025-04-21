@@ -167,12 +167,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1815615267537046740, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_TagString
+      value: Canvas
+      objectReference: {fileID: 0}
     - target: {fileID: 6884378872439537101, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_Name
       value: MRScene
       objectReference: {fileID: 0}
+    - target: {fileID: 7220880955355323675, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297887214145469082, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297887214145469082, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 921621710134174774, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+    - {fileID: 479256706843290572, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+    - {fileID: 7132106123052007073, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
