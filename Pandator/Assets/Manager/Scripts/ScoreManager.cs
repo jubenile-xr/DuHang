@@ -10,7 +10,7 @@ public class ScoreManager : MonoBehaviour
     [Header("スコア計算用の定数")]
     [SerializeField] private float scoreMultiplier = 100f; // スコア計算のための定数
     [SerializeField] private float hitPoint = 50f; // 妨害のポイント
-
+    [SerializeField] private float PandaMaxPoint = 1500; // パンダの最大ポイント
     private void Start()
     {
         score = 0;
@@ -43,7 +43,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (animal == "PANDA")
         {
-            score = aliveTime * 5 + interruptedCount * 10;
+            score = PandaMaxPoint - aliveTime * 5;
         }
         else if (animal == "BIRD" || animal == "RABBIT" || animal == "MOUSE")
         {
