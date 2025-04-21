@@ -24,6 +24,7 @@ public class AnimalSelectManager : MonoBehaviour
             SelectAnimal(Character.GameCharacters.MOUSE);
         }
         // Yボタンが押された場合
+        // TODO: PANDAは1人しか選べないようにしないといけない
         else if (OVRInput.Get(OVRInput.Button.Four) || Input.GetKeyDown(KeyCode.P)) // Yボタン
         {
             SelectAnimal(Character.GameCharacters.PANDA);
@@ -33,8 +34,7 @@ public class AnimalSelectManager : MonoBehaviour
         {
             SelectAnimal(Character.GameCharacters.GOD);
         }
-
-        if (isAnimalSelected && Input.GetKeyDown(KeyCode.O))
+        if (isAnimalSelected && (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.O)))
         {
             if (Character.GetSelectedAnimal() == Character.GameCharacters.GOD)
             {
