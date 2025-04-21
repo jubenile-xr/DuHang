@@ -21,6 +21,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject player;
     private GameObject camera;
 
+    private static string playerName;
     private bool hasPlayerNameCreated = false;
     private StateManager stateManager;
     private ScoreManager scoreManager;
@@ -48,16 +49,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         if (scoreManager == null)
         {
             scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
-        }
-        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-        {
-            hasPlayerNameCreated = true;
-        }
-
-        if (!hasPlayerNameCreated && gameManager != null && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-        {
-            CreatePlayerName();
-            hasPlayerNameCreated = true;
         }
     }
 
@@ -210,6 +201,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         Debug.LogError("Unknown player type");
                     }
 
+                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                    {
+                        hasPlayerNameCreated = true;
+                    }
+
+                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    {
+                        CreatePlayerName();
+                        hasPlayerNameCreated = true;
+                    }
                     yield break;
                 }
                 else
