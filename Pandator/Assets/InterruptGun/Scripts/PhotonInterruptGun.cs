@@ -26,7 +26,7 @@ public class PhotonInterruptGun : MonoBehaviour
         // gameManagerの取得
         if (gameManager == null)
         {
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            gameManager = GameObject.Find("GameManager(Clone)").GetComponent<GameManager>();
             if (gameManager == null)
             {
                 Debug.LogError("GameManager not found");
