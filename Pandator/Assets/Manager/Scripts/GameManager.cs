@@ -313,10 +313,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void FetchPlayerNameListFromRoom()
     {
         if (PhotonNetwork.InRoom
-            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
-            && obj is string[] names)
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj))
         {
-            localPlayerNames = names;
+            if (obj is string[] names)
+            {
+                localPlayerNames = names;
+            }
+            else if (obj is object[] objArray)
+            {
+                localPlayerNames = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    localPlayerNames[i] = objArray[i].ToString();
+                }
+            }
             Debug.Log("Fetched playerNameList from room: " + string.Join(", ", localPlayerNames));
         }
     }
@@ -325,10 +335,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     public string[] GetAllPlayerNames()
     {
         if (PhotonNetwork.InRoom
-            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj)
-            && obj is string[] namesFromRoom)
+            && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("playerNameList", out object obj))
         {
-            return namesFromRoom;
+            if (obj is string[] names)
+            {
+                return names;
+            }
+            else if (obj is object[] objArray)
+            {
+                string[] namesFromRoom = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    namesFromRoom[i] = objArray[i].ToString();
+                }
+                return namesFromRoom;
+            }
         }
         return localPlayerNames;
     }
@@ -353,7 +374,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         if (props.ContainsKey("playerNameList"))
         {
-            localPlayerNames = props["playerNameList"] as string[];
+            object propValue = props["playerNameList"];
+            if (propValue is string[] names)
+            {
+                localPlayerNames = names;
+            }
+            else if (propValue is object[] objArray)
+            {
+                // object[] から string[] へ変換
+                localPlayerNames = new string[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    localPlayerNames[i] = objArray[i].ToString();
+                }
+            }
             Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
         if (props.ContainsKey("playerScoreList"))
