@@ -173,11 +173,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3492265762032965102, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: nextScene
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4406341001301152750, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: character
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6844380791494689961, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: m_LocalPosition.y

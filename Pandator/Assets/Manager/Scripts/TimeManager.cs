@@ -7,7 +7,7 @@ public class TimeManager : MonoBehaviour
     private float gameTime;
 
     [Header("ゲームの終了時間")]
-    [SerializeField]private float gameEndTime = 5000;
+    [SerializeField]private float gameEndTime = 500;
     private GameManager gameManager;
     private CanvasDispTime canvasDispTime;
 
@@ -65,9 +65,7 @@ public class TimeManager : MonoBehaviour
     {
         if (gameTime >= gameEndTime)
         {
-            // gameManager.SetGameState(GameManager.GameState.END);
+            gameManager.SetGameState(GameManager.GameState.END);
         }
     }
-
-
 }
