@@ -21,7 +21,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject player;
     private GameObject camera;
 
-    private static string playerName;
     private bool hasPlayerNameCreated = false;
     private StateManager stateManager;
     private ScoreManager scoreManager;
@@ -244,7 +243,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
     }
 
- private void CreatePlayerName()
+    private void CreatePlayerName()
     {
         int i = 1;
         // PhotonNetwork.PlayerList を参照して、すでに使われている名前がないかチェック
@@ -253,18 +252,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             string candidateName = character.ToString() + i.ToString();
             if (!playerListElement.Equals(candidateName))
             {
-                playerName = candidateName;
+                Debug.LogWarning("PlayerName Created!" + candidateName);
+                gameManager.AddLocalPlayerName(candidateName);
+                stateManager.SetPlayerName(candidateName);
+                scoreManager.SetPlayerName(candidateName);
                 break;
             }
             i++;
         }
-
-
-        // ローカルプレイヤーの名前を Photon のカスタムプロパティに設定
-        gameManager.AddLocalPlayerName(playerName);
-
-        stateManager.SetPlayerName(playerName);
-        scoreManager.SetPlayerName(playerName);
     }
 
     public GameCharacter GetGameCharacter()
