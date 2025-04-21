@@ -127,23 +127,4 @@ public class StateManager : MonoBehaviour
                 break;
         }
     }
-
-    private void SetCharaName(GameCharacter character)
-    {
-        switch (character)
-        {
-            case GameCharacter.BIRD:
-                charaName = "Bird";
-                break;
-            case GameCharacter.RABBIT:
-                charaName = "Rabbit";
-                break;
-            case GameCharacter.MOUSE:
-                charaName = "Mouse";
-                break;
-            default:
-                Debug.Log("Unknown character type: " + character);
-                break;
-        }
-    }
 }
