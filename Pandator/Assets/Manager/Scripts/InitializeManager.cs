@@ -246,6 +246,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     private void CreatePlayerName()
     {
+        Debug.LogWarning("CreatePlayerName");
         int i = 1;
         // PhotonNetwork.PlayerList を参照して、すでに使われている名前がないかチェック
         foreach (string playerListElement in gameManager.GetAllPlayerNames())
