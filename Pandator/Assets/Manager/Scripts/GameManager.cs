@@ -89,6 +89,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             && !hasPlayerNameCreated)
         {
             SetAliveCount(GetAllPlayerNames().Length);
+            // localPlayerNamesに格納されている名前を出力する
+            Debug.Log("Local Player Names: " + GetAllPlayerNames().Length);
             SetupUI();
             InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
@@ -133,7 +135,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void SetPlayerType(PlayerType type) => playerType = type;
 
 
-    public void SetAliveCount(int count) => aliveCount = count;
+    public void SetAliveCount(int count)
+    {
+        aliveCount = count;
+        UpdateAliveCountProperty();
+    }
     public void SetDecrementAliveCount()
     {
         aliveCount--;

@@ -137,6 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626a1c262a6b64400862dee5fbfc93ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreMultiplier: 100
+  hitPoint: 50
+  PandaMaxPoint: 1500
 --- !u!114 &9198865818353753367
 MonoBehaviour:
   m_ObjectHideFlags: 0

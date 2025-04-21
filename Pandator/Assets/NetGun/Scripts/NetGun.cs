@@ -10,10 +10,20 @@ public class NetGun : MonoBehaviourPun
     [SerializeField] private float spanTime = 0f;
     private bool shotable = true;
     private Animator animator;
-
+    public GameManager gameManager;
     void Start()
     {
         animator = GetComponent<Animator>();
+
+        // gameManagerの取得
+        if (gameManager == null)
+        {
+            gameManager = GameObject.Find("GameManager(Clone)").GetComponent<GameManager>();
+            if (gameManager == null)
+            {
+                Debug.LogError("GameManager not found");
+            }
+        }
     }
 
     void Update()
@@ -21,7 +31,8 @@ public class NetGun : MonoBehaviourPun
         // 実験用
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
         {
-            if (shotable && photonView.IsMine)
+            // リロードされてる && 自分のPhotonView && ゲーム状態がPLAY
+            if (shotable && photonView.IsMine && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
                 Shot();
                 shotable = false;
