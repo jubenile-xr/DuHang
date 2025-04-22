@@ -27,7 +27,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private ScoreManager scoreManager;
     private GameObject playerPrefab;
     private string gameCharString;
-
+    [SerializeField] private GameObject loadingScene;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -83,6 +83,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        // ローディングカメラを非表示にする
+        loadingScene.SetActive(false);
         if (character != GameCharacter.PANDA)
         {
             StartCoroutine(WaitForGameManager());

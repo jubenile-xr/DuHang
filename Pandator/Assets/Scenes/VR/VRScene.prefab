@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 1
+  loadingScene: {fileID: 0}
 --- !u!1 &3963541788694439409
 GameObject:
   m_ObjectHideFlags: 0
