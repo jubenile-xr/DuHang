@@ -451,7 +451,7 @@ MonoBehaviour:
   roomPrefab: {fileID: 5991780742326204619}
   passthrough: {fileID: 6045353009627044728}
   planePrefab: {fileID: 8964321946455890345}
-  OVRSceneManager: {fileID: 0}
+  OVRSceneManager: {fileID: 841676588387879430}
 --- !u!1 &8964321946455890345
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,7 +481,7 @@ Transform:
   m_GameObject: {fileID: 8964321946455890345}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.23194444, y: -0.18916816, z: -0.03821493}
+  m_LocalPosition: {x: -0.23194444, y: -0.049, z: -0.03821493}
   m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -747,6 +747,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c813208e672e3074bbe118e1a9ee94fd, type: 3}
+--- !u!1 &841676588387879430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 747806495401477014, guid: c813208e672e3074bbe118e1a9ee94fd, type: 3}
+  m_PrefabInstance: {fileID: 130184850173708688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &841676588387879483 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 747806495401477035, guid: c813208e672e3074bbe118e1a9ee94fd, type: 3}
