@@ -16,6 +16,9 @@ public class MouseMove : MonoBehaviour
     [Header("カメラオブジェクト")]
     private GameObject mouseOVRCameraRig;
 
+    [Header("速度の閾値")]
+    [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,7 +27,7 @@ public class MouseMove : MonoBehaviour
 
     private void Update()
     {
-        //IsMineで自分のキャラクターかどうかを判定
+        // IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
             // 右手と左手の速度を取得
@@ -34,6 +37,13 @@ public class MouseMove : MonoBehaviour
             // XZ平面上の速度の合計を計算
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
+
+            // 速度が閾値以下の場合は移動しない
+            if (speedR < speedThreshold && speedL < speedThreshold)
+            {
+                return;
+            }
+
             float totalSpeed = (speedR + speedL) * moveSpeed;
 
             // 頭（カメラ）の向きを取得して移動方向を決定
@@ -60,6 +70,10 @@ public class MouseMove : MonoBehaviour
             // カメラの向きをねずみの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
+
+            // 左スティックの入力を0にする
+            Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+            leftStick = Vector2.zero; // 強引に0にする
         }
     }
 
@@ -72,6 +86,7 @@ public class MouseMove : MonoBehaviour
     {
         moveSpeed = normalSpeed;
     }
+
     public void SetMoveSpeedSlow()
     {
         moveSpeed = slowSpeed;
@@ -82,7 +97,6 @@ public class MouseMove : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             isCollisionWall = true;
-            // x,z, rotait固定
             rb.useGravity = false;
         }
     }

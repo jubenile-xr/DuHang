@@ -13,7 +13,8 @@ public class RabbitMove : MonoBehaviour
     [SerializeField] private GameObject rabbitCamera;
     [Header("カメラオブジェクト")]
     private GameObject rabbitOVRCameraRig;
-
+    [Header("速度の閾値")]
+    [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,6 +36,13 @@ public class RabbitMove : MonoBehaviour
             // XZ平面上の速度の合計を計算
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
+
+            // 速度が閾値以下の場合は移動しない
+            if (speedR < speedThreshold && speedL < speedThreshold)
+            {
+                return;
+            }
+            
             float totalSpeed = (speedR + speedL) * moveSpeed;
 
             // 頭（カメラ）の向きを取得して移動方向を決定
