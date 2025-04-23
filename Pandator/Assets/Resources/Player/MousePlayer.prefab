@@ -518,6 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseCamera: {fileID: 6163444777555909702}
+  speedThreshold: 0.7
 --- !u!114 &6669165011117861530
 MonoBehaviour:
   m_ObjectHideFlags: 0

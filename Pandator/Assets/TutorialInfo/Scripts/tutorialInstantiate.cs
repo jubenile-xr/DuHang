@@ -15,7 +15,7 @@ public class tutorialInstantiate : MonoBehaviour
         {
             //各キャラの生成
             case Character.GameCharacters.BIRD:
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), eyePos.transform.position, Quaternion.identity);
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
@@ -25,7 +25,7 @@ public class tutorialInstantiate : MonoBehaviour
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case Character.GameCharacters.MOUSE:
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
             case Character.GameCharacters.PANDA:
