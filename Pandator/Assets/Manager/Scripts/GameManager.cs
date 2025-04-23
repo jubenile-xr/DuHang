@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
 
-
     }
 
     private void Update()
@@ -535,14 +534,15 @@ void UpdatePlayerNameListProperty()
     
     
     public void SaveRankingData()
-    {
+    { 
+        string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
-            StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i]));
+            StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i],now));
 
             if (i == localPlayerNames.Length - 1)
             {
-                StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1]));
+                StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1],now));
             }
        }
 
@@ -579,15 +579,16 @@ void UpdatePlayerNameListProperty()
 
     }
 
-    private IEnumerator PostToGAS(string name, int score)
+    private IEnumerator PostToGAS(string name, int score,string dateTime)
     {
-        string url = "https://script.google.com/macros/s/AKfycbzn6Gf0A_H40-PfM1wf7LRjDFOEHNNLutAMGTV5o4bYqTUE_Ppb7Nb1V5F6M7qWdY7N/exec";
+        string url = "https://script.google.com/macros/s/AKfycbzxxcnMLuVew32JIY8NuzDsEc5JsDaB0RsjwtKI_3_4_ZSkageQGTk8CjM_dGa4wPlI/exec";
     
         JsonData data = new JsonData
         {
             name = name,
             score = score,
-            animal = JudgeAnimal(name)
+            animal = JudgeAnimal(name),
+            dateTime = dateTime
         };
         
         if (data.animal == null)
@@ -631,6 +632,7 @@ void UpdatePlayerNameListProperty()
         public string name;
         public int score;
         public string animal;
+        public string dateTime;
     }
 }
 
