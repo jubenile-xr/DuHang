@@ -53,8 +53,6 @@ public class TimeManager : MonoBehaviour
             }
         }
 
-    }
-
     private string FormatTime(float time)
     {
         int minutes = (int)time / 60;
