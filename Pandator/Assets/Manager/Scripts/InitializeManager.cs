@@ -6,6 +6,7 @@ using UnityEngine;
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
     public GameObject PhotonFailureObject;
+
     public enum GameCharacter
     {
         BIRD,
@@ -14,15 +15,73 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         PANDA,
         GOD
     }
+
     [SerializeField] private GameCharacter character;
     private GameManager gameManager;
     private GameObject player;
     private GameObject camera;
 
+    private static string playerName;
+    private bool hasPlayerNameCreated = false;
+    private StateManager stateManager;
+    private ScoreManager scoreManager;
+    private GameObject playerPrefab;
+    private string gameCharString;
+    [SerializeField] private GameObject loadingScene;
+    public GameObject MRUI;
     void Start()
     {
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                character = GameCharacter.BIRD;
+                break;
+            case Character.GameCharacters.RABBIT:
+                character = GameCharacter.RABBIT;
+                break;
+            case Character.GameCharacters.MOUSE:
+                character = GameCharacter.MOUSE;
+                break;
+            case Character.GameCharacters.PANDA:
+                character = GameCharacter.PANDA;
+                break;
+            default:
+                Debug.LogError("Invalid character selected.");
+                return; // 不正なキャラクターが選択された場合は処理を中断
+        }
         PhotonNetwork.ConnectUsingSettings();
     }
+
+    void Update()
+    {
+        GameObject masterPlayer = GameObject.FindWithTag("MasterPlayer");
+        if (masterPlayer == null) return;
+
+        string formattedGameChar = GetFormattedGameCharacter();
+        if (!masterPlayer.name.Contains(formattedGameChar)) return;
+
+        if (stateManager == null)
+        {
+            stateManager = masterPlayer.GetComponentInChildren<StateManager>();
+        }
+
+        if (scoreManager == null)
+        {
+            scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
+        }
+    }
+
+    private string GetFormattedGameCharacter()
+    {
+        string gameCharString = GetGameCharacter().ToString();
+        if (!string.IsNullOrEmpty(gameCharString))
+        {
+            // 1文字目を大文字、2文字目以降を小文字に変換
+            return gameCharString.Substring(0, 1).ToUpper() + gameCharString.Substring(1).ToLower();
+        }
+        return gameCharString;
+    }
+
 
     // ルームに参加する処理
     public override void OnConnectedToMaster()
@@ -43,6 +102,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        // ローディングカメラを非表示にする
+        loadingScene.SetActive(false);
         if (character != GameCharacter.PANDA)
         {
             StartCoroutine(WaitForGameManager());
@@ -69,10 +130,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.PANDA:
                 player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
-                // TODO: GameManagerの生成を消して、GameManagerがカスタムプロパティを共有できるように
-                PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
             case GameCharacter.GOD:
+                PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
                 break;
         }
 
@@ -98,6 +158,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.PANDA:
                 CanvasCameraSetter.Instance.SetCanvasCamera();
                 CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                MRUI.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
                 MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
@@ -107,6 +168,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 mouseMoveScript.SetMouseOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.RABBIT:
                 RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
@@ -116,9 +179,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     return;
                 }
                 rabbitMoveScript.SetRabbitOVRCameraRig();
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             case GameCharacter.BIRD:
                 // BIRD用の処理があれば追加
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 break;
             default:
                 Debug.LogWarning("未処理のキャラクタータイプです: " + character);
@@ -139,7 +206,33 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 if (gameManager)
                 {
                     Debug.Log("GameManager found.");
-                    gameManager.SetIncrementAliveCount();
+                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.VR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.PANDA)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.MR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.GOD)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.GOD);
+                    }
+                    else
+                    {
+                        Debug.LogError("Unknown player type");
+                    }
+
+                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                    {
+                        hasPlayerNameCreated = true;
+                    }
+
+                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    {
+                        CreatePlayerName();
+                        hasPlayerNameCreated = true;
+                    }
                     yield break;
                 }
                 else
@@ -170,6 +263,39 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         else
         {
             Debug.LogError("PhotonFailureObject is not set in the inspector.");
+        }
+    }
+
+    private void CreatePlayerName()
+    {
+        Debug.LogWarning("CreatePlayerName");
+        int i = 1;
+        string candidateName = "";
+
+        while (true)
+        {
+            candidateName = character.ToString() + i.ToString();
+
+            bool exists = false;
+            foreach (string existingName in gameManager.GetAllPlayerNames())
+            {
+                if (existingName.Equals(candidateName))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+
+            // candidateName が存在しなければ設定処理を実行
+            if (!exists)
+            {
+                Debug.LogWarning("PlayerName Created! " + candidateName);
+                gameManager.AddLocalPlayerName(candidateName);
+                stateManager.SetPlayerName(candidateName);
+                scoreManager.SetPlayerName(candidateName);
+                break;
+            }
+            i++;
         }
     }
 

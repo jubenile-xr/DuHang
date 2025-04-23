@@ -1,20 +1,8 @@
 using UnityEngine;
 
-// インスペクターで選択するEnumを定義
-public enum ResultPlayerType
-{
-    Panda,
-    Bird,
-    Rabbit,
-    Mouse
-}
 
 public class ResultSceneInitialize : MonoBehaviour
 {
-    // インスペクターからEnumで選択可能にする
-    [SerializeField]
-    private ResultPlayerType playerType = ResultPlayerType.Panda;
-
     // インスタンス化する位置
     [SerializeField]
     private Vector3 spawnPosition = new Vector3(203.0545f, -154f, 342.9874f);
@@ -28,8 +16,12 @@ public class ResultSceneInitialize : MonoBehaviour
     private Vector3 spawnScale = new Vector3(100f, 100f, 100f);
 
     // 回転速度 (度/秒)
-    [SerializeField]
-    private float rotationSpeed = 30f;
+    [SerializeField]private float rotationSpeed = 30f;
+    [Header("GODかどうか")]
+    [SerializeField] private bool isGod = false; // GODかどうかのフラグ
+    // プレハブのインスタンスを格納する変数
+    [Header("GODの時だけ名前をいれる")]
+    [SerializeField] private string prefabName = "Panda";
 
     // 生成したプレハブの参照
     private GameObject spawnedInstance;
@@ -38,23 +30,28 @@ public class ResultSceneInitialize : MonoBehaviour
     {
         // Enumの値からResourcesフォルダ内のプレハブパスを決定
         string prefabPath = "";
-        switch (playerType)
+        switch (Character.GetSelectedAnimal())
         {
-            case ResultPlayerType.Panda:
-                prefabPath = "ResultPlayer/ResultPanda";
-                break;
-            case ResultPlayerType.Bird:
+            case Character.GameCharacters.BIRD:
                 prefabPath = "ResultPlayer/ResultBird";
                 break;
-            case ResultPlayerType.Rabbit:
+            case Character.GameCharacters.RABBIT:
                 prefabPath = "ResultPlayer/ResultRabbit";
                 break;
-            case ResultPlayerType.Mouse:
+            case Character.GameCharacters.MOUSE:
                 prefabPath = "ResultPlayer/ResultMouse";
                 break;
+            case Character.GameCharacters.PANDA:
+                prefabPath = "ResultPlayer/ResultPanda";
+                break;
             default:
-                Debug.LogError("不明なResultPlayerType");
+                Debug.LogError("不正なキャラクターが選択されました");
                 return;
+        }
+
+        if (isGod)
+        {
+            prefabPath = "ResultPlayer/Result" + prefabName;
         }
 
         // Resourcesからプレハブをロード

@@ -1,19 +1,32 @@
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Networking;
 
 public class ScoreManager : MonoBehaviour
 {
     private float score;
     private float aliveTime;
     private int interruptedCount;
-
+    private string playerName;
+    [Header("ゲームマネージャー")] private GameManager gameManager;
+    private TimeManager timeManager;
+    [Header("スコア計算用の定数")]
+    [SerializeField] private float scoreMultiplier = 100f; // スコア計算のための定数
+    [SerializeField] private float hitPoint = 50f; // 妨害のポイント
+    [SerializeField] private float PandaMaxPoint = 1500; // パンダの最大ポイント
     private void Start()
     {
         score = 0;
         aliveTime = 0;
         interruptedCount = 0;
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
     private void Update()
     {
+        if (gameManager.GetGameState() == GameManager.GameState.END)
+        {
+            SendScoreToGameManager();
+        }
 
     }
 
@@ -38,7 +51,46 @@ public class ScoreManager : MonoBehaviour
     // スコア計算 10ポイント/秒 + 5ポイント/中断 これは適当
     private void CalculateScore()
     {
-        score = aliveTime * 10 + interruptedCount * 5;
+        if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
+        {
+            // パンダのスコア計算
+            score = PandaMaxPoint - (int)timeManager.GetGameTime() * 5;
+        }
+        else if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+        {
+            score = Mathf.Pow(aliveTime, 2) / scoreMultiplier + interruptedCount * hitPoint;
+        }
+        else
+        {
+            score = -1; // 不明な動物の場合はスコアを-1に設定
+        }
         ScoreField.SetDataScore(score);
     }
+
+    private void SendScoreToGameManager()
+    {
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        Debug.Log("Score:DeadLogic: Player Names: " + string.Join(", ", playerNames));
+        Debug.Log("Score:PlayerName" + playerName);
+
+        if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+        {
+            for (int i = 0; i < playerNames.Length; i++)
+            {
+                Debug.Log("Score:PlayerNames TF" + playerNames[i].Contains(playerName));
+                if (playerNames[i].Contains(playerName))
+                {
+                    gameManager.SetLocalPlayerScore(i, GetScore());
+                }
+            }
+        } else if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
+        {
+            gameManager.SetLocalPlayerScore(-1, GetScore());
+        }
+  
+
+    }
+
+    public void SetPlayerName(string name) => playerName = name;
+    public string GetPlayerName() => playerName;
 }

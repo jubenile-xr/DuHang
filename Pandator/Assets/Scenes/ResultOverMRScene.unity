@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ResultOverMRScene
       objectReference: {fileID: 0}
+    - target: {fileID: 8898494550775301356, guid: ee0a1da099a1a4db7a3bbefbf70480b4, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

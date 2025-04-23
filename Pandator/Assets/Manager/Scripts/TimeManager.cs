@@ -7,38 +7,52 @@ public class TimeManager : MonoBehaviour
     private float gameTime;
 
     [Header("ゲームの終了時間")]
-    [SerializeField]private float gameEndTime = 5;
+    [SerializeField]private float gameEndTime = 500;
     private GameManager gameManager;
+    private GameObject canvas;
     private CanvasDispTime canvasDispTime;
 
     private void Start()
     {
         gameTime = 0;
-        gameManager = this.GetComponent<GameManager>();
-        if (gameManager == null)
-        {
-            Debug.Log("GameManagerがアタッチされていません");
-        }
-        gameManager.SetGameState(GameManager.GameState.START);
 
+        GameObject gmObj = GameObject.FindWithTag("GameManager");
+        if (gmObj)
+        {
+            gameManager = gmObj.GetComponent<GameManager>();
+            if (gameManager)
+            {
+                Debug.Log("GameManager found.");
+            }
+        }
         // CanvasDispTimeのインスタンスを取得
         // PandaCanvasの中にある子オブジェクトのTimeからCanvasDispTimeを取得
-        GameObject canvasObj = GameObject.Find("PandaCanvas");
-        if (canvasObj == null)
+
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        if (canvas == null)
         {
-            Debug.Log("PandaCanvasが見つかりません");
-        }else{
-            canvasDispTime = canvasObj.GetComponentInChildren<CanvasDispTime>();
+            Debug.LogWarning("Canvasが見つかりません");
+        }
+        // CanvasDispTimeのインスタンスを取得
+        canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+        if (canvasDispTime == null)
+        {
+            Debug.LogWarning("CanvasDispTimeが見つかりません");
         }
     }
     private void Update()
     {
-        gameTime += Time.deltaTime;
-        SwitchGameState();
-        // SmallAnimalはまだ作成していない
-        if(canvasDispTime != null){
+        if (canvasDispTime != null)
+        {
             canvasDispTime.SetTimeText(FormatTime(gameTime));
         }
+        // SmallAnimalはまだ作成していない
+            if(canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY){
+                gameTime += Time.deltaTime;
+                SwitchGameState();
+            }
+        }
+
     }
 
     private string FormatTime(float time)
@@ -61,6 +75,4 @@ public class TimeManager : MonoBehaviour
             gameManager.SetGameState(GameManager.GameState.END);
         }
     }
-
-
 }

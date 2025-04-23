@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour
@@ -9,12 +11,14 @@ public class StateManager : MonoBehaviour
     private float time;
     [SerializeField] private PlayerColorManager playerColorManager;
     [Header("ゲームマネージャー")] private GameManager gameManager;
+    private GameObject canvasObject;
     [SerializeField] private ScoreManager scoreManager;
     [Header("親オブジェクト操作用"), SerializeField] private GameObject parentObject;
     [SerializeField] private RabbitMove rabbitMove;
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
+    private string playerName;
     private enum GameCharacter
     {
         BIRD,
@@ -23,15 +27,36 @@ public class StateManager : MonoBehaviour
     }
     [Header("キャラクターの種類"), SerializeField] private GameCharacter character;
 
-    void Start()
+    private void Start()
     {
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                character = GameCharacter.BIRD;
+                break;
+            case Character.GameCharacters.RABBIT:
+                character = GameCharacter.RABBIT;
+                break;
+            case Character.GameCharacters.MOUSE:
+                character = GameCharacter.MOUSE;
+                break;
+            default:
+                Debug.LogError("Invalid character selected.");
+                return; // 不正なキャラクターが選択された場合は処理を中断
+        }
+
+        canvasObject = GameObject.FindWithTag("Canvas");
+        if (canvasObject == null)
+        {
+            Debug.LogError("GameManager object not found!");
+        }
     }
 
-    void Update()
+    private void Update()
     {
         if (isInterrupted)
         {
@@ -41,6 +66,8 @@ public class StateManager : MonoBehaviour
                 ResetState();
             }
         }
+
+
     }
 
     private void ResetState()
@@ -100,10 +127,26 @@ public class StateManager : MonoBehaviour
         if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
+
+
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
+        Debug.Log("State:PlayerName" + playerName);
+
+        for (int i = 0; i < playerNames.Length; i++)
+        {
+            Debug.Log("State:PlayerNames TF" + playerNames[i].Contains(playerName));
+            if (playerNames[i].Contains(playerName))
+            {
+                gameManager.SetPlayerDeadStatusTrue(i);
+            }
+        }
+
         //地面に落とす
         //TODO: 実際の地面との調整が必要
         // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
         Debug.Log("Dead");
+
     }
 
     private void InterruptLogic()
@@ -125,5 +168,29 @@ public class StateManager : MonoBehaviour
                 Debug.Log("Unknown character type: " + character);
                 break;
         }
+    }
+
+    private int GetPlayerIndexByName(string playerName)
+    {
+        // PhotonNetwork.PlayerList からプレイヤー情報をリストに格納し、ActorNumber の昇順にソートする
+        List<Player> players = new List<Player>(PhotonNetwork.PlayerList);
+        players.Sort((a, b) => a.ActorNumber.CompareTo(b.ActorNumber));
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i].CustomProperties.TryGetValue("playerName", out object existingName))
+            {
+                if (existingName.ToString() == playerName)
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void SetPlayerName(string name)
+    {
+        playerName = name;
     }
 }

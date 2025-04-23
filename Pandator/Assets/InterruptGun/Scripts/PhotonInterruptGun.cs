@@ -16,18 +16,29 @@ public class PhotonInterruptGun : MonoBehaviour
     private bool shotable = true;
     [SerializeField]private GameObject shootSE;
     [SerializeField]private GameObject reloadSE;
+    public GameManager gameManager;
     // private Animator animator;
 
     private void Start()
     {
         // animator = GetComponent<Animator>();
+
+        // gameManagerの取得
+        if (gameManager == null)
+        {
+            gameManager = GameObject.Find("GameManager(Clone)").GetComponent<GameManager>();
+            if (gameManager == null)
+            {
+                Debug.LogError("GameManager not found");
+            }
+        }
     }
 
     private void Update()
     {
         if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
         {
-            if (shotable)
+            if (shotable && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
                 Shot();
                 shotable = false;

@@ -1,18 +1,22 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI; // UIコンポーネントを使用するために必要
 
-public class MRKilleImagedAttach : MonoBehaviour
+public class KilledImagedAttach : MonoBehaviour
 {
     [SerializeField] private GameObject FirstKilledImage; // インスペクターでUI画像を指定
     [SerializeField] private GameObject SecondKilledImage; // インスペクターでUI画像を指定
     [SerializeField] private GameObject ThirdKilledImage; // インスペクターでUI画像を指定
 
+    private bool isFirstCharacterSet = false;
+    private bool isSecondCharacterSet = false;
+    private bool isThirdCharacterSet = false;
     private bool isFirstPlayerDead = false;
     private bool isSecondPlayerDead = false;
     private bool isThirdPlayerDead = false;
-    private InitializeManager.GameCharacter firstCharacter;
-    private InitializeManager.GameCharacter secondCharacter;
-    private InitializeManager.GameCharacter thirdCharacter;
+    private static string firstCharacter = null;
+    private static string secondCharacter = null;
+    private static string thirdCharacter = null;
     [SerializeField] private GameObject canvas; // インスペクターでCanvasを指定
     [SerializeField] private Texture2D RabbitImage;
     [SerializeField] private Texture2D BirdImage;
@@ -38,22 +42,6 @@ public class MRKilleImagedAttach : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            isFirstPlayerDead = true;
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            isSecondPlayerDead = true;
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            isThirdPlayerDead = true;
-        }
-        FirstKilledImage.SetActive(isFirstPlayerDead);
-        ThirdKilledImage.SetActive(isSecondPlayerDead);
-        SecondKilledImage.SetActive(isThirdPlayerDead);
-
         if (Input.GetKeyDown(KeyCode.L))
         {
             if (RabbitImage != null)
@@ -64,42 +52,28 @@ public class MRKilleImagedAttach : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!isFirstCharacterSet && firstCharacter != null)
         {
-            changeCharacterNameToImage(InitializeManager.GameCharacter.RABBIT);
+            changeCharacterNameToImage(firstCharacter);
+            isFirstCharacterSet = true;
         }
-    }
 
-    public void setIsFirstPlayerDead(bool isDead)
-    {
-        isFirstPlayerDead = isDead;
-    }
-    public void setIsSecondPlayerDead(bool isDead)
-    {
-        isSecondPlayerDead = isDead;
-    }
-    public void setIsThirdPlayerDead(bool isDead)
-    {
-        isThirdPlayerDead = isDead;
-    }
+        if (!isSecondCharacterSet && secondCharacter != null)
+        {
+            changeCharacterNameToImage(secondCharacter);
+            isSecondCharacterSet = true;
+        }
 
-    public void setFirstCharacterName(InitializeManager.GameCharacter characterName)
-    {
-        firstCharacter = characterName;
-    }
-
-    public void setSecondCharacterName(InitializeManager.GameCharacter characterName)
-    {
-        secondCharacter = characterName;
-    }
-    public void setThirdCharacterName(InitializeManager.GameCharacter characterName)
-    {
-        thirdCharacter = characterName;
+        if (!isThirdCharacterSet && thirdCharacter != null)
+        {
+            changeCharacterNameToImage(thirdCharacter);
+            isThirdCharacterSet = true;
+        }
     }
 
     //下のコードなんやけど多分これであってると思う→長張へ
     //これでテキスチャーを決定する感じ
-    private void changeCharacterNameToImage(InitializeManager.GameCharacter characterName)
+    private void changeCharacterNameToImage(string characterName)
     {
         RawImage img;
         characterNum++;
@@ -117,18 +91,20 @@ public class MRKilleImagedAttach : MonoBehaviour
             default:
                 return;
         }
-        switch (characterName)
+
+        if (characterName.Contains("MOUSE"))
         {
-            case InitializeManager.GameCharacter.RABBIT:
-                img.texture = RabbitImage;
-                break;
-            case InitializeManager.GameCharacter.BIRD:
-                img.texture = BirdImage;
-                break;
-            case InitializeManager.GameCharacter.MOUSE:
-                img.texture = MouseImage;
-                break;
+            img.texture = MouseImage;
         }
+        else if (characterName.Contains("BIRD"))
+        {
+            img.texture = BirdImage;
+        }
+        else if (characterName.Contains("RABBIT"))
+        {
+            img.texture = RabbitImage;
+        }
+
         switch (characterNum)
         {
             case 1:
@@ -146,7 +122,7 @@ public class MRKilleImagedAttach : MonoBehaviour
     }
 
     //以下は画像をセットしてくれるものです。
-    private void setFirstPosition()
+    public void setFirstPosition()
     {
         // Canvasに追加
         FirstImageObject.transform.SetParent(canvas.transform, false);
@@ -156,7 +132,7 @@ public class MRKilleImagedAttach : MonoBehaviour
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(350f, 200f); // 位置
     }
-    private void setSecondPosition()
+    public void setSecondPosition()
     {
         // Canvasに追加
         SecondImageObject.transform.SetParent(canvas.transform, false);
@@ -166,7 +142,7 @@ public class MRKilleImagedAttach : MonoBehaviour
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(210f, 200f); // 位置
     }
-    private void setThirdPosition()
+    public void setThirdPosition()
     {
         // Canvasに追加
         ThirdImageObject.transform.SetParent(canvas.transform, false);
@@ -176,4 +152,31 @@ public class MRKilleImagedAttach : MonoBehaviour
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(70f, 200f); // 位置
     }
+
+    public static void SetFirstCharacter(string character)
+    {
+        firstCharacter = character;
+    }
+    public static void SetSecondCharacter(string character)
+    {
+        secondCharacter = character;
+    }
+    public static void SetThirdCharacter(string character)
+    {
+        thirdCharacter = character;
+    }
+
+    public void SetFirstPlayerDead()
+    {
+        FirstKilledImage.SetActive(true);
+    }
+    public void SetSecondPlayerDead()
+    {
+        SecondKilledImage.SetActive(true);
+    }
+    public void SetThirdPlayerDead()
+    {
+        ThirdKilledImage.SetActive(true);
+    }
 }
+
