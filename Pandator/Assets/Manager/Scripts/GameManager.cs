@@ -71,6 +71,25 @@ public class GameManager : MonoBehaviourPunCallbacks
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
 
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.RABBIT:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.MOUSE:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.PANDA:
+                playerType = PlayerType.MR;
+                break;
+            default:
+                Debug.LogError("GOD PlayerType");
+                playerType = PlayerType.GOD;
+                break;
+        }
 
     }
 
@@ -532,24 +551,25 @@ void UpdatePlayerNameListProperty()
             );
         }
     }
-    
-    
+
+
     public void SaveRankingData()
     {
+        string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
-            StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i]));
+            StartCoroutine(PostToGAS(localPlayerNames[i], (int)localPlayerScores[i],now));
 
             if (i == localPlayerNames.Length - 1)
             {
-                StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1]));
+                StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1],now));
             }
        }
 
 
-       
+
        hasSendToGAS = true;
-       
+
     }
 
     private string JudgeAnimal(string playerName)
@@ -574,40 +594,41 @@ void UpdatePlayerNameListProperty()
         {
             return null;
         }
-        
+
 
 
     }
 
-    private IEnumerator PostToGAS(string name, int score)
+    private IEnumerator PostToGAS(string name, int score,string dateTime)
     {
-        string url = "https://script.google.com/macros/s/AKfycbzn6Gf0A_H40-PfM1wf7LRjDFOEHNNLutAMGTV5o4bYqTUE_Ppb7Nb1V5F6M7qWdY7N/exec";
-    
+        string url = "https://script.google.com/macros/s/AKfycbzxxcnMLuVew32JIY8NuzDsEc5JsDaB0RsjwtKI_3_4_ZSkageQGTk8CjM_dGa4wPlI/exec";
+
         JsonData data = new JsonData
         {
             name = name,
             score = score,
-            animal = JudgeAnimal(name)
+            animal = JudgeAnimal(name),
+            dateTime = dateTime
         };
-        
+
         if (data.animal == null)
         {
             Debug.LogError("Invalid animal type");
             yield break;
         }
-        
+
         string jsonString = JsonUtility.ToJson(data);
-        
+
         Debug.Log("jsonString: " + jsonString);
-    
+
         UnityWebRequest webRequest = new UnityWebRequest(url, "POST");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonString);
         webRequest.uploadHandler = new UploadHandlerRaw(jsonToSend);
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
-    
+
         yield return webRequest.SendWebRequest();
-    
+
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(webRequest.error);
@@ -620,17 +641,18 @@ void UpdatePlayerNameListProperty()
                 Debug.Log(text);
             }
         }
-        
+
         Debug.Log("SendToGAS: " + name + " " + score);
     }
-    
-    
+
+
     [System.Serializable]
     private class JsonData
     {
         public string name;
         public int score;
         public string animal;
+        public string dateTime;
     }
 }
 
