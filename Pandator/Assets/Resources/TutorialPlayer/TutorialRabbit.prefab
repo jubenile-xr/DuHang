@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rabbitCamera: {fileID: 7018434885849502005}
-  speedThreshold: 0.8
+  speedThreshold: 0.7
 --- !u!114 &5177446913065407743
 MonoBehaviour:
   m_ObjectHideFlags: 0
