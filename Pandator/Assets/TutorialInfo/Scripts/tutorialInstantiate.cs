@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class tutorialInstantiate : MonoBehaviour
 {
-    private enum GameCharacter
-    {
-        BIRD,
-        RABBIT,
-        MOUSE,
-        PANDA
-    }
-    [SerializeField] private GameCharacter character;
     private GameObject player;
     private GameObject camera;
     public GameObject roomPrefab;
@@ -17,26 +9,26 @@ public class tutorialInstantiate : MonoBehaviour
     public GameObject planePrefab;
     public GameObject OVRSceneManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        switch (character)
+        switch (Character.GetSelectedAnimal())
         {
             //各キャラの生成
-            case GameCharacter.BIRD:
+            case Character.GameCharacters.BIRD:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), eyePos.transform.position, Quaternion.identity);
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 break;
-            case GameCharacter.RABBIT:
+            case Character.GameCharacters.RABBIT:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
-            case GameCharacter.MOUSE:
+            case Character.GameCharacters.MOUSE:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
-            case GameCharacter.PANDA:
+            case Character.GameCharacters.PANDA:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 break;
@@ -55,16 +47,15 @@ public class tutorialInstantiate : MonoBehaviour
         }
         avatarScript.ExecuteCreatePhotonAvatar();
 
-        switch (character)
+        switch (Character.GetSelectedAnimal())
         {
-            case GameCharacter.PANDA:
-                
+            case Character.GameCharacters.PANDA:
                 roomPrefab.SetActive(false);
                 passthrough.SetActive(true);
                 planePrefab.SetActive(true);
                 OVRSceneManager.SetActive(true);
                 break;
-            case GameCharacter.MOUSE:
+            case Character.GameCharacters.MOUSE:
                 TutorialMouseMove mouseMoveScript = player.GetComponentInChildren<TutorialMouseMove>();
                 if (mouseMoveScript == null)
                 {
@@ -73,7 +64,7 @@ public class tutorialInstantiate : MonoBehaviour
                 }
                 mouseMoveScript.SetMouseOVRCameraRig();
                 break;
-            case GameCharacter.RABBIT:
+            case Character.GameCharacters.RABBIT:
                 TutorialRabbitMove rabbitMoveScript = player.GetComponentInChildren<TutorialRabbitMove>();
                 if (rabbitMoveScript == null)
                 {
@@ -82,20 +73,14 @@ public class tutorialInstantiate : MonoBehaviour
                 }
                 rabbitMoveScript.SetRabbitOVRCameraRig();
                 break;
-            case GameCharacter.BIRD:
+            case Character.GameCharacters.BIRD:
                 // BIRD用の処理があれば追加
                 break;
             default:
-                Debug.LogWarning("未処理のキャラクタータイプです: " + character);
+                Debug.LogWarning("未処理のキャラクタータイプです: " + Character.GetSelectedAnimal());
                 break;
         }
         CanvasCameraSetter.Instance.SetCanvasCamera();
         CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

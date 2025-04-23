@@ -27,9 +27,28 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private ScoreManager scoreManager;
     private GameObject playerPrefab;
     private string gameCharString;
-
+    [SerializeField] private GameObject loadingScene;
+    public GameObject MRUI;
     void Start()
     {
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                character = GameCharacter.BIRD;
+                break;
+            case Character.GameCharacters.RABBIT:
+                character = GameCharacter.RABBIT;
+                break;
+            case Character.GameCharacters.MOUSE:
+                character = GameCharacter.MOUSE;
+                break;
+            case Character.GameCharacters.PANDA:
+                character = GameCharacter.PANDA;
+                break;
+            default:
+                Debug.LogError("Invalid character selected.");
+                return; // 不正なキャラクターが選択された場合は処理を中断
+        }
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -83,6 +102,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        // ローディングカメラを非表示にする
+        loadingScene.SetActive(false);
         if (character != GameCharacter.PANDA)
         {
             StartCoroutine(WaitForGameManager());
@@ -137,6 +158,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.PANDA:
                 CanvasCameraSetter.Instance.SetCanvasCamera();
                 CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                MRUI.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
                 MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();

@@ -15,39 +15,40 @@ TagManager:
   - Ground
   - PandaPlayer
   - Canvas
+  - TrackedCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  -
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
   - Bird
-  - 
-  - 
-  - 
+  -
+  -
+  -
   - FrontUI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
   m_SortingLayers:
   - name: Default
     uniqueID: 0
