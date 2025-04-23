@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    [Header("ゲーム中の時間")]
-    private float gameTime;
+    [Header("ゲーム中の時間")] private float gameTime;
 
-    [Header("ゲームの終了時間")]
-    [SerializeField]private float gameEndTime = 500;
+    [Header("ゲームの終了時間")] [SerializeField] private float gameEndTime = 500;
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;
@@ -33,6 +31,7 @@ public class TimeManager : MonoBehaviour
         {
             Debug.LogWarning("Canvasが見つかりません");
         }
+
         // CanvasDispTimeのインスタンスを取得
         canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
         if (canvasDispTime == null)
@@ -40,17 +39,19 @@ public class TimeManager : MonoBehaviour
             Debug.LogWarning("CanvasDispTimeが見つかりません");
         }
     }
+
     private void Update()
     {
         if (canvasDispTime != null)
         {
             canvasDispTime.SetTimeText(FormatTime(gameTime));
         }
+
         // SmallAnimalはまだ作成していない
-            if(canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY){
-                gameTime += Time.deltaTime;
-                SwitchGameState();
-            }
+        if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+        {
+            gameTime += Time.deltaTime;
+            SwitchGameState();
         }
 
     }
