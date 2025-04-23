@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PLAY,
         END
     }
+
     public enum PlayerType
     {
         MR,
@@ -26,22 +27,23 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private GameObject canvasObject;
 
-    [Header("ゲームの状態はこっちで完全管理")]
-    private GameState state = GameState.START;
+    [Header("ゲームの状態はこっちで完全管理")] private GameState state = GameState.START;
     private bool hasPlayerNameCreated = false;
-    [Header("プレイヤーの種類")]
-    private PlayerType playerType = PlayerType.MR;
+
+    [SerializeField] private PlayerType playerType = PlayerType.MR;
 
     private int aliveCount;
     private bool hasSendToGAS = false;
+    private int previousLocalPlayerNameCount = 0;
+
     private enum Winner
     {
         NONE,
         SMALLANIMAL,
         PANDA,
     }
-    [SerializeField]
-    private Winner winner;
+
+    [SerializeField] private Winner winner;
     private List<string> winnerAnimalNameList;
 
     // プレイヤー死亡状態を管理するローカル配列
@@ -123,10 +125,64 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetupDeadUI();
         }
 
-        if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS &&playerType == PlayerType.GOD)
+        if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
         {
             SaveRankingData();
             LoadResultScene();
+        }
+
+        // ここほんまにむずかった
+        // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
+        if (GetPlayerType() == PlayerType.GOD)
+        {
+            if (localPlayerNames.Length > previousLocalPlayerNameCount)
+            {
+                for (int i = previousLocalPlayerNameCount; i < localPlayerNames.Length; i++)
+                {
+                    string addedName = localPlayerNames[i];
+                    GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
+                    if (masterPlayers != null && masterPlayers.Length > 0)
+                    {
+                        foreach (GameObject masterPlayer in masterPlayers)
+                        {
+                            bool match = false;
+                            if (addedName.Contains("RABBIT") && masterPlayer.name.Contains("Rabbit"))
+                            {
+                                match = true;
+                            }
+                            else if (addedName.Contains("BIRD") && masterPlayer.name.Contains("Bird"))
+                            {
+                                match = true;
+                            }
+                            else if (addedName.Contains("MOUSE") && masterPlayer.name.Contains("Mouse"))
+                            {
+                                match = true;
+                            }
+
+                            if (match)
+                            {
+                                ScoreManager scoreManager = masterPlayer.GetComponent<ScoreManager>();
+                                if (scoreManager != null)
+                                {
+                                    if (!scoreManager.GetPlayerName().Equals(addedName))
+                                    {
+                                        scoreManager.SetPlayerName(addedName);
+                                    }
+                                }
+                                else
+                                {
+                                    Debug.LogError("MasterPlayer に ScoreManager コンポーネントが存在しません。");
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("タグ 'MasterPlayer' の GameObject がシーンに存在しません。");
+                    }
+                }
+                previousLocalPlayerNameCount = localPlayerNames.Length;
+            }
         }
 
 
@@ -140,6 +196,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             return (GameState)(int)gs;
         }
+
         return state;
     }
 
@@ -162,6 +219,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         aliveCount = count;
         UpdateAliveCountProperty();
     }
+
     public void SetDecrementAliveCount()
     {
         aliveCount--;
@@ -244,9 +302,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.LogError("Canvas に KilledImagedAttach がない！");
             return;
         }
+
         Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
-        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ",GetPlayerDeadStatus()));
+        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
 
         for (int i = 0; i < GetPlayerDeadStatus().Length; i++)
         {
@@ -318,9 +377,32 @@ public class GameManager : MonoBehaviourPunCallbacks
         localPlayerNames = list.ToArray();
         UpdatePlayerNameListProperty();
 
+        if (GetPlayerType() == PlayerType.GOD)
+        {
+            // タグ「MasterPlayer」のオブジェクトを取得
+            GameObject masterPlayer = GameObject.FindWithTag("MasterPlayer");
+            if (masterPlayer != null && masterPlayer.name.Contains("Rabbit") ||
+                masterPlayer.name.Contains("Bird") || masterPlayer.name.Contains("Mouse"))
+            {
+                ScoreManager scoreManager = masterPlayer.GetComponent<ScoreManager>();
+                if (scoreManager != null)
+                {
+                    // 追加された名前を ScoreManager に設定
+                    scoreManager.SetPlayerName(name);
+                }
+                else
+                {
+                    Debug.LogError("MasterPlayer オブジェクトに ScoreManager コンポーネントが存在しません。");
+                }
+            }
+            else
+            {
+                Debug.LogError("タグ 'MasterPlayer' の GameObject がシーンに存在しません。");
+            }
+        }
     }
 
-    private void UpdatePlayerNameListProperty()
+void UpdatePlayerNameListProperty()
     {
         if (PhotonNetwork.InRoom)
         {

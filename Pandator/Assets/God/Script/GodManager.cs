@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GodManager : MonoBehaviour
@@ -5,14 +6,19 @@ public class GodManager : MonoBehaviour
     [Tooltip("追従させるカメラオブジェクト")]
     public GameObject godCamera;
 
+    [Tooltip("追従させるプレイヤーの種類，PlayerNameArrayの配列のインデックスに対応(PandaとGodは除く)")]
     public enum FollowTargetType
     {
-        Rabbit,
-        Bird,
-        Mouse,
+        Zero,
+        One,
+        Two,
         Panda,
         God
     }
+
+    [Tooltip("GameManagerから取得するPlayerNameの配列")]
+    private string[] playerNameArray;
+
 
     [Header("追従対象の設定")]
     [Tooltip("追従させるプレイヤーの種類")]
@@ -25,8 +31,13 @@ public class GodManager : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
-    // シーン開始時にカメラの初期位置と回転を記録
-    private void Start()
+    // GameManager
+    private GameManager gameManager;
+
+    // PlayerNameArrayが作成されたかどうかを示すフラグ
+    private bool hasPlayerNameCreated;
+
+    void Start()
     {
         if (godCamera != null)
         {
@@ -35,9 +46,161 @@ public class GodManager : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    void Update()
     {
-        // followTargetがGodの場合は、カメラを初期位置と回転に戻す
+        if (gameManager == null)
+        {
+            GameObject gmObj = GameObject.FindWithTag("GameManager");
+            if (gmObj)
+            {
+                gameManager = gmObj.GetComponent<GameManager>();
+            }
+        }
+
+        if (gameManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.GOD
+            && gameManager.GetGameState() == GameManager.GameState.PLAY
+            && !hasPlayerNameCreated)
+        {
+            SetPlayerNameArray(gameManager.GetAllPlayerNames());
+            hasPlayerNameCreated = true;
+        }
+
+        // ゲーム終了時は初期状態に戻す
+        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.END)
+        {
+            if (godCamera != null)
+            {
+                godCamera.transform.position = initialPosition;
+                godCamera.transform.rotation = initialRotation;
+            }
+        }
+    }
+
+    // Inspector上で値が変更されたときに呼ばれる
+    void OnValidate()
+    {
+        // Playモードの場合のみ更新する
+        if (Application.isPlaying)
+        {
+            UpdateTargetCamera();
+        }
+    }
+
+    // 指定した親オブジェクトの子から指定タグを持つオブジェクトを探索するヘルパーメソッド
+    GameObject FindChildWithTag(GameObject parent, string tag)
+    {
+        foreach (Transform child in parent.transform)
+        {
+            if (child.CompareTag(tag))
+                return child.gameObject;
+        }
+        return null;
+    }
+
+    // followTargetに基づいて対象のカメラを探索し、godCameraに反映する処理
+    private void UpdateTargetCamera()
+    {
+        if (godCamera == null)
+            return;
+
+        GameObject targetCamera = null;
+        GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
+        Debug.LogWarning("masterPlayers length = " + masterPlayers.Length);
+
+        if (followTarget == FollowTargetType.Zero)
+        {
+            Debug.LogWarning("followTarget: " + followTarget);
+            foreach (GameObject master in masterPlayers)
+            {
+                ScoreManager scoreManager = master.GetComponent<ScoreManager>();
+                if (scoreManager != null &&
+                    scoreManager.GetPlayerName() == GetPlayerNameArray()[0])
+                {
+                    Debug.LogWarning("scoreManager.GetPlayerName() = " + scoreManager.GetPlayerName());
+                    Debug.LogWarning("GetPlayerNameArray()[0] = " + GetPlayerNameArray()[0]);
+                    GameObject tc = FindChildWithTag(master, "TrackedCamera");
+                    if (tc != null)
+                    {
+                        Debug.LogWarning("targetCamera = " + tc);
+                        targetCamera = tc;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (followTarget == FollowTargetType.One)
+        {
+            foreach (GameObject master in masterPlayers)
+            {
+                ScoreManager scoreManager = master.GetComponent<ScoreManager>();
+                if (scoreManager != null &&
+                    scoreManager.GetPlayerName() == GetPlayerNameArray()[1])
+                {
+                    GameObject tc = FindChildWithTag(master, "TrackedCamera");
+                    if (tc != null)
+                    {
+                        targetCamera = tc;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (followTarget == FollowTargetType.Two)
+        {
+            foreach (GameObject master in masterPlayers)
+            {
+                ScoreManager scoreManager = master.GetComponent<ScoreManager>();
+                if (scoreManager != null &&
+                    scoreManager.GetPlayerName() == GetPlayerNameArray()[2])
+                {
+                    GameObject tc = FindChildWithTag(master, "TrackedCamera");
+                    if (tc != null)
+                    {
+                        targetCamera = tc;
+                        break;
+                    }
+                }
+            }
+        }
+        else if (followTarget == FollowTargetType.Panda)
+        {
+            // 全てのMasterPlayerから名前に「Panda」を含むオブジェクトを対象とする
+            foreach (GameObject master in masterPlayers)
+            {
+                if (master.gameObject.name.Contains("Panda"))
+                {
+                    GameObject tc = FindChildWithTag(master, "TrackedCamera");
+                    if (tc != null)
+                    {
+                        targetCamera = tc;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (targetCamera == null)
+        {
+            Debug.LogWarning("対象のタグに一致するプレイヤーが設定されていません。");
+            return;
+        }
+
+        godCamera.transform.position = targetCamera.transform.position + followOffset;
+        godCamera.transform.rotation = targetCamera.transform.rotation;
+    }
+
+    private void SetPlayerNameArray(string[] playerNames)
+    {
+        playerNameArray = playerNames;
+    }
+
+    private string[] GetPlayerNameArray()
+    {
+        return playerNameArray;
+    }
+
+    void LateUpdate()
+    {
         if (followTarget == FollowTargetType.God)
         {
             if (godCamera != null)
@@ -48,54 +211,10 @@ public class GodManager : MonoBehaviour
             return;
         }
 
-        // godCameraが登録されていなければ処理を中断
-        if (godCamera == null)
-            return;
-
-        GameObject[] players = null; // 初期化
-        GameObject targetPlayer = null;
-
-        // followTargetに応じて異なるタグから対象のプレイヤーを取得する
-        if (followTarget == FollowTargetType.Mouse || followTarget == FollowTargetType.Rabbit)
+        // Playモード中はOnValidateとは別にLateUpdateでも更新
+        if (Application.isPlaying)
         {
-            players = GameObject.FindGameObjectsWithTag("Player");
-        }
-        else if (followTarget == FollowTargetType.Bird)
-        {
-            players = GameObject.FindGameObjectsWithTag("MasterPlayer");
-        }
-        else if (followTarget == FollowTargetType.Panda)
-        {
-            players = GameObject.FindGameObjectsWithTag("PandaPlayer");
-        }
-
-        // もしplayersが初期化されていなければ、警告を表示して中断
-        if (players == null)
-        {
-            Debug.LogWarning("対象のタグに一致するプレイヤーが設定されていません。");
-            return;
-        }
-
-        string targetKeyword = followTarget.ToString();
-
-        foreach (GameObject player in players)
-        {
-            if (player.name.Contains(targetKeyword))
-            {
-                targetPlayer = player;
-                Debug.Log("target Player Name: " + targetPlayer.name);
-                break;
-            }
-        }
-
-        if (targetPlayer != null)
-        {
-            godCamera.transform.position = targetPlayer.transform.position + followOffset;
-            godCamera.transform.rotation = targetPlayer.transform.rotation;
-        }
-        else
-        {
-            Debug.LogWarning("対象のプレイヤーが見つかりませんでした。");
+            UpdateTargetCamera();
         }
     }
 }

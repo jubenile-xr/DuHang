@@ -15,6 +15,7 @@ TagManager:
   - Ground
   - PandaPlayer
   - Canvas
+  - TrackedCamera
   layers:
   - Default
   - TransparentFX
