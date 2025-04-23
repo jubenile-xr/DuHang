@@ -20,11 +20,13 @@ public class ScoreManager : MonoBehaviour
     public void SetAliveTime(float time)
     {
         aliveTime = time;
+        ScoreField.SetDataAliveTime(aliveTime);
     }
 
     public void SetIncrementInterruptedCount()
     {
         interruptedCount++;
+        ScoreField.SetIncrementInterruptedCount(interruptedCount);
     }
 
     public float GetScore()
@@ -37,5 +39,6 @@ public class ScoreManager : MonoBehaviour
     private void CalculateScore()
     {
         score = aliveTime * 10 + interruptedCount * 5;
+        ScoreField.SetDataScore(score);
     }
 }
