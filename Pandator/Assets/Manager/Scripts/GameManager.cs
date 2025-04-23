@@ -29,8 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("ゲームの状態はこっちで完全管理")]
     private GameState state = GameState.START;
     private bool hasPlayerNameCreated = false;
-
-    [SerializeField]
+    [Header("プレイヤーの種類")]
     private PlayerType playerType = PlayerType.MR;
 
     private int aliveCount;
@@ -60,7 +59,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         aliveCount = -1;
         winner = Winner.NONE;
         winnerAnimalNameList = new List<string>();
-        
+
         // Room に入室済みなら既存の playerNameList を取ってくる
         FetchPlayerNameListFromRoom();
 
@@ -69,6 +68,26 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
+
+        switch (Character.GetSelectedAnimal())
+        {
+            case Character.GameCharacters.BIRD:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.RABBIT:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.MOUSE:
+                playerType = PlayerType.VR;
+                break;
+            case Character.GameCharacters.PANDA:
+                playerType = PlayerType.MR;
+                break;
+            default:
+                Debug.LogError("GOD PlayerType");
+                playerType = PlayerType.GOD;
+                break;
+        }
 
     }
 
@@ -450,10 +469,10 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-    
-    
+
+
     public void SaveRankingData()
-    { 
+    {
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
@@ -466,9 +485,9 @@ public class GameManager : MonoBehaviourPunCallbacks
        }
 
 
-       
+
        hasSendToGAS = true;
-       
+
     }
 
     private string JudgeAnimal(string playerName)
@@ -493,7 +512,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             return null;
         }
-        
+
 
 
     }
@@ -501,7 +520,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private IEnumerator PostToGAS(string name, int score,string dateTime)
     {
         string url = "https://script.google.com/macros/s/AKfycbzxxcnMLuVew32JIY8NuzDsEc5JsDaB0RsjwtKI_3_4_ZSkageQGTk8CjM_dGa4wPlI/exec";
-    
+
         JsonData data = new JsonData
         {
             name = name,
@@ -509,25 +528,25 @@ public class GameManager : MonoBehaviourPunCallbacks
             animal = JudgeAnimal(name),
             dateTime = dateTime
         };
-        
+
         if (data.animal == null)
         {
             Debug.LogError("Invalid animal type");
             yield break;
         }
-        
+
         string jsonString = JsonUtility.ToJson(data);
-        
+
         Debug.Log("jsonString: " + jsonString);
-    
+
         UnityWebRequest webRequest = new UnityWebRequest(url, "POST");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonString);
         webRequest.uploadHandler = new UploadHandlerRaw(jsonToSend);
         webRequest.downloadHandler = new DownloadHandlerBuffer();
         webRequest.SetRequestHeader("Content-Type", "application/json");
-    
+
         yield return webRequest.SendWebRequest();
-    
+
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(webRequest.error);
@@ -540,11 +559,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Debug.Log(text);
             }
         }
-        
+
         Debug.Log("SendToGAS: " + name + " " + score);
     }
-    
-    
+
+
     [System.Serializable]
     private class JsonData
     {

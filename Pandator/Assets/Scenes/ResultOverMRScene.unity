@@ -167,13 +167,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1908890975286009544, guid: ee0a1da099a1a4db7a3bbefbf70480b4, type: 3}
-      propertyPath: playerType
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2883261423336529198, guid: ee0a1da099a1a4db7a3bbefbf70480b4, type: 3}
       propertyPath: m_Name
       value: ResultOverMRScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898494550775301356, guid: ee0a1da099a1a4db7a3bbefbf70480b4, type: 3}
+      propertyPath: m_Camera
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
