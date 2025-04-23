@@ -168,10 +168,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: MRUI
-      value: 
-      objectReference: {fileID: 192549036}
-    - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1817467966086702872}
@@ -179,24 +175,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MRScene
       objectReference: {fileID: 0}
-    - target: {fileID: 7297887214145469082, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7297887214145469082, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
---- !u!1 &192549036 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1815615267537046740, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-  m_PrefabInstance: {fileID: 192549035}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1817467966086702872 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5445183556496138511, guid: 77a79c0d18de54ff6a375e4f94001149, type: 3}

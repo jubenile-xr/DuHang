@@ -31,24 +31,28 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     public GameObject MRUI;
     void Start()
     {
-        switch (Character.GetSelectedAnimal())
+        if (character != GameCharacter.GOD)
         {
-            case Character.GameCharacters.BIRD:
-                character = GameCharacter.BIRD;
-                break;
-            case Character.GameCharacters.RABBIT:
-                character = GameCharacter.RABBIT;
-                break;
-            case Character.GameCharacters.MOUSE:
-                character = GameCharacter.MOUSE;
-                break;
-            case Character.GameCharacters.PANDA:
-                character = GameCharacter.PANDA;
-                break;
-            default:
-                Debug.LogError("Invalid character selected.");
-                return; // 不正なキャラクターが選択された場合は処理を中断
+            switch (Character.GetSelectedAnimal())
+            {
+                case Character.GameCharacters.BIRD:
+                    character = GameCharacter.BIRD;
+                    break;
+                case Character.GameCharacters.RABBIT:
+                    character = GameCharacter.RABBIT;
+                    break;
+                case Character.GameCharacters.MOUSE:
+                    character = GameCharacter.MOUSE;
+                    break;
+                case Character.GameCharacters.PANDA:
+                    character = GameCharacter.PANDA;
+                    break;
+                default:
+                    Debug.LogError("Invalid character selected.");
+                    return; // 不正なキャラクターが選択された場合は処理を中断
+            }
         }
+
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -102,10 +106,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
-        if (character != GameCharacter.GOD)
+        StartCoroutine(WaitForGameManager());
+
+        if (gameManager != null)
         {
-            loadingScene.SetActive(false);
-            StartCoroutine(WaitForGameManager());
+            if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
+            {
+                loadingScene.SetActive(false);
+            }
         }
 
         // プレイヤーキャラクターの生成およびカメラの生成
