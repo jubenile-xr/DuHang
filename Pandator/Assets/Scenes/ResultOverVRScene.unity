@@ -168,12 +168,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1908890975286009544, guid: 9c229bf76529e4642bedd75f7f0d2598, type: 3}
-      propertyPath: playerType
+      propertyPath: isGod
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2883261423336529198, guid: 9c229bf76529e4642bedd75f7f0d2598, type: 3}
       propertyPath: m_Name
       value: ResultVRScene
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898494550775301356, guid: 9c229bf76529e4642bedd75f7f0d2598, type: 3}
+      propertyPath: m_Camera
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
