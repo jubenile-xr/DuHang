@@ -86,8 +86,6 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerName(string name)
-    {
-        playerName = name;
-    }
+    public void SetPlayerName(string name) => playerName = name;
+    public string GetPlayerName() => playerName;
 }
