@@ -34,6 +34,19 @@ public class TutorialMouseMove : MonoBehaviour
         float speedR = Mathf.Abs(velocityR.y);
         float speedL = Mathf.Abs(velocityL.y);
 
+        // カメラの位置をねずみの位置に合わせる
+        Vector3 cameraPosition = transform.position;
+        cameraPosition.y += 0.2f; // y軸を+0.2
+        mouseOVRCameraRig.transform.position = cameraPosition;
+
+        // カメラの向きをねずみの向きに合わせる
+        Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
+        transform.rotation = targetRotation;
+
+        // 左スティックの入力を0にする
+        Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        leftStick = Vector2.zero; // 強引に0にする
+
         // 速度が閾値以下の場合は移動しない
         if (speedR < speedThreshold && speedL < speedThreshold)
         {
@@ -57,15 +70,6 @@ public class TutorialMouseMove : MonoBehaviour
         {
             transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
         }
-
-        // カメラの位置をねずみの位置に合わせる
-        Vector3 cameraPosition = transform.position;
-        cameraPosition.y += 0.2f; // y軸を+0.2
-        mouseOVRCameraRig.transform.position = cameraPosition;
-
-        // カメラの向きをねずみの向きに合わせる
-        Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
-        transform.rotation = targetRotation;
     }
 
     public void SetMouseOVRCameraRig()
