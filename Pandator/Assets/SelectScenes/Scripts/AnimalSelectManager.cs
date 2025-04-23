@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement; // シーン遷移に必要
 public class AnimalSelectManager : MonoBehaviour
 {
     private bool isAnimalSelected = false; // 動物が選択されたかどうかのフラグ
-    [SerializeField] private bool isDebugFlag = false; // 動物選択UI
+    [SerializeField] private bool isDebugFlag = true; // 動物選択UI
     [SerializeField] private SelectedAnimalUI selectedAnimalUI; // 動物選択UI
 
     // Update is called once per frame

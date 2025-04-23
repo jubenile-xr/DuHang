@@ -102,10 +102,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
-        // ローディングカメラを非表示にする
-        loadingScene.SetActive(false);
-        if (character != GameCharacter.PANDA)
+        if (character != GameCharacter.GOD)
         {
+            loadingScene.SetActive(false);
             StartCoroutine(WaitForGameManager());
         }
 

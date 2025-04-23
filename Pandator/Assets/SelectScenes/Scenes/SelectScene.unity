@@ -370,7 +370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f124f9284eb147ccbf64ca55743b463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugFlag: 0
+  isDebugFlag: 1
   selectedAnimalUI: {fileID: 1291871504}
 --- !u!1 &699490249
 GameObject:

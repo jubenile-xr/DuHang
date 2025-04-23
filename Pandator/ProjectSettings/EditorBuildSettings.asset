@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ResultOverVRScene.unity
     guid: a43511a8409344ca0b5e1c3994dbfe59
+  - enabled: 1
+    path: Assets/Scenes/GodScene.unity
+    guid: 6eceff188df764280a8a222a2085c8c4
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: e95e4443513354b4992177bb2a4317e1, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7592a1c1a8c554fc4811de8d921dea7a, type: 2}
