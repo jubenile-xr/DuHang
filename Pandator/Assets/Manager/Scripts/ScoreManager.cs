@@ -70,18 +70,22 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("Score:DeadLogic: Player Names: " + string.Join(", ", playerNames));
         Debug.Log("Score:PlayerName" + playerName);
 
-        for (int i = 0; i < playerNames.Length; i++)
+        if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
         {
-            Debug.Log("Score:PlayerNames TF" + playerNames[i].Contains(playerName));
-            if (playerNames[i].Contains(playerName))
+            for (int i = 0; i < playerNames.Length; i++)
             {
-                gameManager.SetLocalPlayerScore(i, GetScore());
+                Debug.Log("Score:PlayerNames TF" + playerNames[i].Contains(playerName));
+                if (playerNames[i].Contains(playerName))
+                {
+                    gameManager.SetLocalPlayerScore(i, GetScore());
+                }
             }
+        } else if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
+        {
+            gameManager.SetLocalPlayerScore(-1, GetScore());
         }
     }
 
-    public void SetPlayerName(string name)
-    {
-        playerName = name;
-    }
+    public void SetPlayerName(string name) => playerName = name;
+    public string GetPlayerName() => playerName;
 }
