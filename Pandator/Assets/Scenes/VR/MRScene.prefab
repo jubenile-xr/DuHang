@@ -979,6 +979,7 @@ MonoBehaviour:
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 3
   loadingScene: {fileID: 0}
+  MRUI: {fileID: 1815615267537046740}
 --- !u!1 &9021320312689334678
 GameObject:
   m_ObjectHideFlags: 0

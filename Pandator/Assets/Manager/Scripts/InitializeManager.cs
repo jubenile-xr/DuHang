@@ -28,6 +28,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject playerPrefab;
     private string gameCharString;
     [SerializeField] private GameObject loadingScene;
+    public GameObject MRUI;
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
@@ -139,6 +140,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case GameCharacter.PANDA:
                 CanvasCameraSetter.Instance.SetCanvasCamera();
                 CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                MRUI.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
                 MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();

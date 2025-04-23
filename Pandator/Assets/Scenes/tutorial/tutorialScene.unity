@@ -167,6 +167,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 905146890366016333, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: m_PlaneDistance
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2632223353020900461, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: m_Name
       value: tutorialScene
