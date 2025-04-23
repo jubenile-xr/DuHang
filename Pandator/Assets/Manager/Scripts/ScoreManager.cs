@@ -33,11 +33,13 @@ public class ScoreManager : MonoBehaviour
     public void SetAliveTime(float time)
     {
         aliveTime = time;
+        ScoreField.SetDataAliveTime(aliveTime);
     }
 
     public void SetIncrementInterruptedCount()
     {
         interruptedCount++;
+        ScoreField.SetIncrementInterruptedCount(interruptedCount);
     }
 
     public float GetScore()
@@ -62,6 +64,7 @@ public class ScoreManager : MonoBehaviour
         {
             score = -1; // 不明な動物の場合はスコアを-1に設定
         }
+        ScoreField.SetDataScore(score);
     }
 
     private void SendScoreToGameManager()
@@ -84,6 +87,8 @@ public class ScoreManager : MonoBehaviour
         {
             gameManager.SetLocalPlayerScore(-1, GetScore());
         }
+  
+
     }
 
     public void SetPlayerName(string name) => playerName = name;
