@@ -9,15 +9,12 @@ public class TimeManager : MonoBehaviour
     [Header("ゲームの終了時間")]
     [SerializeField]private float gameEndTime = 500;
     private GameManager gameManager;
+    private GameObject canvas;
     private CanvasDispTime canvasDispTime;
 
     private void Start()
     {
         gameTime = 0;
-        if (canvasDispTime != null)
-        {
-            canvasDispTime.SetTimeText(FormatTime(gameTime));
-        }
 
         GameObject gmObj = GameObject.FindWithTag("GameManager");
         if (gmObj)
@@ -30,25 +27,32 @@ public class TimeManager : MonoBehaviour
         }
         // CanvasDispTimeのインスタンスを取得
         // PandaCanvasの中にある子オブジェクトのTimeからCanvasDispTimeを取得
-        GameObject canvasObj = GameObject.Find("PandaCanvas");
-        if (canvasObj == null)
+
+        canvas = GameObject.FindGameObjectWithTag("Canvas");
+        if (canvas == null)
         {
-            Debug.Log("PandaCanvasが見つかりません");
-        }else{
-            canvasDispTime = canvasObj.GetComponentInChildren<CanvasDispTime>();
+            Debug.LogWarning("Canvasが見つかりません");
+        }
+        // CanvasDispTimeのインスタンスを取得
+        canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+        if (canvasDispTime == null)
+        {
+            Debug.LogWarning("CanvasDispTimeが見つかりません");
         }
     }
     private void Update()
     {
-        if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
+        if (canvasDispTime != null)
         {
             canvasDispTime.SetTimeText(FormatTime(gameTime));
+        }
         // SmallAnimalはまだ作成していない
             if(canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY){
                 gameTime += Time.deltaTime;
                 SwitchGameState();
             }
         }
+
     }
 
     private string FormatTime(float time)
