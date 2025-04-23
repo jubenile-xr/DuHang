@@ -8,11 +8,7 @@ public class tutorialSceneTransition : MonoBehaviour
     [SerializeField] private setChangeSceneLogo setChangeSceneLogoScript; // setChangeSceneLogoスクリプトの参照
 
     private void Start(){
-        if(Character.GetSelectedAnimal() == Character.GameCharacters.GOD)
-        {
-            nextSceneName = "GodScene";
-        }
-        else if(Character.GetSelectedAnimal() == Character.GameCharacters.PANDA)
+        if(Character.GetSelectedAnimal() == Character.GameCharacters.PANDA)
         {
             nextSceneName = "MRScene";
         }else{

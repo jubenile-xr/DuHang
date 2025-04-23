@@ -7,7 +7,6 @@ public static class Character
         RABBIT,
         MOUSE,
         PANDA,
-        GOD
     }
     private static GameCharacters selectedAnimal = GameCharacters.BIRD; // デフォルトはウサギ
 

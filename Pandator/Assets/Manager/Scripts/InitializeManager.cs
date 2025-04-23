@@ -44,9 +44,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             case Character.GameCharacters.PANDA:
                 character = GameCharacter.PANDA;
                 break;
-            case Character.GameCharacters.GOD:
-                character = GameCharacter.GOD;
-                break;
             default:
                 Debug.LogError("Invalid character selected.");
                 return; // 不正なキャラクターが選択された場合は処理を中断
