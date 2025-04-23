@@ -83,7 +83,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ecb01b3775f145e1a9acd85afe67adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: 0
   setChangeSceneLogoScript: {fileID: 1025172280617525646}
 --- !u!1 &6045353009627044728
 GameObject:
@@ -447,7 +446,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 346653f9a4b2f4ac2a19a4b705cbe2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: 3
   roomPrefab: {fileID: 5991780742326204619}
   passthrough: {fileID: 6045353009627044728}
   planePrefab: {fileID: 8964321946455890345}

@@ -255,9 +255,7 @@ PrefabInstance:
       value: VRScene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5144149069998315283, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-    - {fileID: 1496889993249870561, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
