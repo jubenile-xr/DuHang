@@ -90,6 +90,10 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         if (isCreated)
         {
             this.transform.position = masterPlayerObject.transform.position;
