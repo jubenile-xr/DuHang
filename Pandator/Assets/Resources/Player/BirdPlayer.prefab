@@ -564,6 +564,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4549435062556395408, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3233787221531104439}
+    - targetCorrespondingSourceObject: {fileID: 4549435062556395408, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4443552205284740040}
   m_SourcePrefab: {fileID: 100100000, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
 --- !u!4 &3621555379604008764 stripped
 Transform:
@@ -642,6 +645,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraRig: {fileID: 8588892767502187748}
+--- !u!114 &4443552205284740040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4109967603769013638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 0
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &5338401572920123032 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5493988184530889870, guid: ae6c99a9b9fae4ff887cf09947264e97, type: 3}
