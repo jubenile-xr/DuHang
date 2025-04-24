@@ -34,8 +34,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
     [SerializeField]private GameObject VRModel;
-    [SerializeField] private GameObject MRKabe1;
-    [SerializeField] private GameObject MRKabe2;
 
     void Start()
     {
@@ -82,11 +80,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 loadingScene.SetActive(false);
                 eventSystem.SetActive(true);
-                if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
-                {
-                    MRKabe1.SetActive(true);
-                    MRKabe2.SetActive(true);
-                }else if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                 {
                     VRModel.SetActive(true);
                 }

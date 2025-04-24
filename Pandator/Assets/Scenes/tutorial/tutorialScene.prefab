@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 346653f9a4b2f4ac2a19a4b705cbe2e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomPrefab: {fileID: 0}
+  roomPrefab: {fileID: 7479661031460463461}
   passthrough: {fileID: 6045353009627044728}
   planePrefab: {fileID: 8964321946455890345}
   OVRSceneManager: {fileID: 841676588387879430}
@@ -767,6 +767,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: room_complete
       objectReference: {fileID: 0}
+    - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7963138537877439857, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.53
@@ -812,6 +816,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
+--- !u!1 &7479661031460463461 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
+  m_PrefabInstance: {fileID: 145250947504848046}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7820158499303209439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7963138537877439857, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}

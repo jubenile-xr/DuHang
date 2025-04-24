@@ -978,9 +978,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 3
+  eventSystem: {fileID: 2398792433572911778}
   loadingScene: {fileID: 0}
   canvas: {fileID: 1815615267537046740}
   MRUI: {fileID: 1815615267537046740}
+  VRModel: {fileID: 0}
 --- !u!1 &9021320312689334678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,6 +1124,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 041eaca3ce89e43f28ea8a062b95cf02, type: 3}
+--- !u!1 &2398792433572911778 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3406739899616702418, guid: 041eaca3ce89e43f28ea8a062b95cf02, type: 3}
+  m_PrefabInstance: {fileID: 1012486252492993904}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3331061882317318051 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2321427228380992211, guid: 041eaca3ce89e43f28ea8a062b95cf02, type: 3}

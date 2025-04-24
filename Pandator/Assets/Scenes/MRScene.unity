@@ -168,6 +168,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 192549036}
+    - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1239429730}
@@ -180,6 +184,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+--- !u!1 &192549036 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2398792433572911778, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+  m_PrefabInstance: {fileID: 192549035}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &214498599
 PrefabInstance:
   m_ObjectHideFlags: 0
