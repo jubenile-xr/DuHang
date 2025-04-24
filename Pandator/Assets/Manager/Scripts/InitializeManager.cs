@@ -23,6 +23,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
+    private GameObject masterPlayer;
     private StateManager stateManager;
     private ScoreManager scoreManager;
     private GameObject playerPrefab;
@@ -186,45 +187,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             SetPlayerCreated(true);
         }
-
-        GameObject masterPlayer = GameObject.FindWithTag("MasterPlayer");
-        if (masterPlayer == null)
-        {
-            Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
-        }
-        else
-        {
-            masterPlayer.SetActive(true);
-        }
-
-        string formattedGameChar = GetFormattedGameCharacter();
-        if (!masterPlayer.name.Contains(formattedGameChar))
-        {
-            Debug.Log("MasterPlayer name does not match the character type.");
-        }
-
-        if (stateManager == null)
-        {
-            stateManager = masterPlayer.GetComponentInChildren<StateManager>();
-        }
-
-        if (scoreManager == null)
-        {
-            scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
-        }
     }
-
-    private string GetFormattedGameCharacter()
-    {
-        string gameCharString = GetGameCharacter().ToString();
-        if (!string.IsNullOrEmpty(gameCharString))
-        {
-            // 1文字目を大文字、2文字目以降を小文字に変換
-            return gameCharString.Substring(0, 1).ToUpper() + gameCharString.Substring(1).ToLower();
-        }
-        return gameCharString;
-    }
-
 
     // ルームに参加する処理
     public override void OnConnectedToMaster()
@@ -264,7 +227,24 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 gameManager = gmObj.GetComponent<GameManager>();
                 if (gameManager)
                 {
+                    if (masterPlayer == null)
+                    {
+                        masterPlayer = GameObject.FindWithTag("MasterPlayer");
 
+                    }
+                    else
+                    {
+                        masterPlayer.SetActive(true);
+                    }
+                    if (stateManager == null)
+                    {
+                        stateManager = masterPlayer.GetComponentInChildren<StateManager>();
+                    }
+
+                    if (scoreManager == null)
+                    {
+                        scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
+                    }
                     Debug.Log("GameManager found.");
                     if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
                         GetGameCharacter() == GameCharacter.RABBIT)
