@@ -171,11 +171,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: tutorialScene
       objectReference: {fileID: 0}
+    - target: {fileID: 4406341001301152750, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: roomPrefab
+      value: 
+      objectReference: {fileID: 964947901}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+--- !u!1 &964947901 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6899010298497919539, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+  m_PrefabInstance: {fileID: 107610198}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
