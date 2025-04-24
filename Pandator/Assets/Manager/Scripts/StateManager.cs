@@ -52,7 +52,7 @@ public class StateManager : MonoBehaviour
         canvasObject = GameObject.FindWithTag("Canvas");
         if (canvasObject == null)
         {
-            Debug.LogError("GameManager object not found!");
+            Debug.LogError("Canvas object not found!");
         }
     }
 

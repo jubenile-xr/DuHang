@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                                 ScoreManager scoreManager = masterPlayer.GetComponent<ScoreManager>();
                                 if (scoreManager != null)
                                 {
-                                    if (!scoreManager.GetPlayerName().Equals(addedName))
+                                    if (scoreManager.GetPlayerName() == null || !scoreManager.GetPlayerName().Equals(addedName))
                                     {
                                         scoreManager.SetPlayerName(addedName);
                                     }
