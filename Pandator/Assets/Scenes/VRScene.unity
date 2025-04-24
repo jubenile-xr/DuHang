@@ -201,7 +201,7 @@ PrefabInstance:
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: VRModel
       value: 
-      objectReference: {fileID: 1668314335}
+      objectReference: {fileID: 1353542806}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: eventSystem
       value: 
@@ -259,9 +259,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
---- !u!1 &1668314335 stripped
+--- !u!1 &1353542806 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 7089108233660572524, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+  m_CorrespondingSourceObject: {fileID: 9030052434971192499, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
   m_PrefabInstance: {fileID: 1353542805}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
