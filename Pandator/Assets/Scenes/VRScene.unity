@@ -192,15 +192,11 @@ PrefabInstance:
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: VRModel
       value: 
-      objectReference: {fileID: 1353542806}
+      objectReference: {fileID: 1668314335}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1095328261}
-    - target: {fileID: 3636607609845746166, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8716894927445767245, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -250,9 +246,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
---- !u!1 &1353542806 stripped
+--- !u!1 &1668314335 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3636607609845746166, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7089108233660572524, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
   m_PrefabInstance: {fileID: 1353542805}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
