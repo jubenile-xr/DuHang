@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &895653724 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 223823052533717721, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+  m_PrefabInstance: {fileID: 6758587753653804921}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6758587753653804921
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,6 +196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AnimalsWinAnimation
       objectReference: {fileID: 0}
+    - target: {fileID: 6611196645530977069, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
+      propertyPath: panda
+      value: 
+      objectReference: {fileID: 895653724}
     - target: {fileID: 6611196645530977069, guid: 1862492e2aabdcc4c9edc1c5d161e7c1, type: 3}
       propertyPath: birdWin
       value: 1
