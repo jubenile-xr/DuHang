@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class ShareData
 {
-    private static string winner = "PANDA";
+    private static string winner = "SMALLANIMAL";
     
     public static string GetWinner()
     {
