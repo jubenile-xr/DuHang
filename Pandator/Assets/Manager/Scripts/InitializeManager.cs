@@ -2,6 +2,7 @@ using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
@@ -23,11 +24,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
-    private GameObject masterPlayer;
     private StateManager stateManager;
     private ScoreManager scoreManager;
-    private GameObject playerPrefab;
-    private string gameCharString;
+    [SerializeField]private GameObject eventSystem;
     private bool isAnimationFinished = false;
     private bool isPlayerCreated = false;
     [Header("ローディング中の時間")] private float loadingTime;
@@ -82,6 +81,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
             {
                 loadingScene.SetActive(false);
+                eventSystem.SetActive(true);
                 if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
                 {
                     MRKabe1.SetActive(true);
@@ -96,6 +96,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         case GameCharacter.BIRD:
                             player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 1.0f, 0f),
                                 Quaternion.identity);
+                            stateManager = player.GetComponentInChildren<StateManager>();
+                            scoreManager = player.GetComponentInChildren<ScoreManager>();
                             GameObject eyePos = player.transform.Find("eyePos").gameObject;
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"),
                                 eyePos.transform.position, Quaternion.identity);
@@ -107,6 +109,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         case GameCharacter.RABBIT:
                             player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f),
                                 Quaternion.identity);
+                            stateManager = player.GetComponentInChildren<StateManager>();
+                            scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
                                 new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                             canvas.SetActive(true);
@@ -114,6 +118,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         case GameCharacter.MOUSE:
                             player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f),
                                 Quaternion.identity);
+                            stateManager = player.GetComponentInChildren<StateManager>();
+                            scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
                                 new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                             canvas.SetActive(true);
@@ -121,6 +127,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         case GameCharacter.PANDA:
                             player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f),
                                 Quaternion.identity);
+                            scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
                                 new Vector3(0f, 0.5f, 0f), Quaternion.identity);
                             canvas.SetActive(true);
@@ -208,6 +215,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
+        Debug.LogWarning("OnJoinedRoom");
         StartCoroutine(WaitForGameManager());
         if (GetGameCharacter() == GameCharacter.GOD)
         {
@@ -217,81 +225,72 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     //コルーチンでOnJoinedRoom内でリトライ機構ができるように
     //GameManagerの取得とaliveCountのインクリメントを行う
-    private IEnumerator WaitForGameManager()
+private IEnumerator WaitForGameManager()
+{
+    while (!gameManager)
     {
-        while (!gameManager)
+        GameObject gmObj = GameObject.FindWithTag("GameManager");
+        if (gmObj)
         {
-            GameObject gmObj = GameObject.FindWithTag("GameManager");
-            if (gmObj)
+            gameManager = gmObj.GetComponent<GameManager>();
+            if (gameManager)
             {
-                gameManager = gmObj.GetComponent<GameManager>();
-                if (gameManager)
+                Debug.Log("GameManager found.");
+                if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
+                    GetGameCharacter() == GameCharacter.RABBIT)
                 {
-                    if (masterPlayer == null)
-                    {
-                        masterPlayer = GameObject.FindWithTag("MasterPlayer");
-
-                    }
-                    else
-                    {
-                        masterPlayer.SetActive(true);
-                    }
-                    if (stateManager == null)
-                    {
-                        stateManager = masterPlayer.GetComponentInChildren<StateManager>();
-                    }
-
-                    if (scoreManager == null)
-                    {
-                        scoreManager = masterPlayer.GetComponentInChildren<ScoreManager>();
-                    }
-                    Debug.Log("GameManager found.");
-                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
-                        GetGameCharacter() == GameCharacter.RABBIT)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.VR);
-                    }
-                    else if (GetGameCharacter() == GameCharacter.PANDA)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.MR);
-                    }
-                    else if (GetGameCharacter() == GameCharacter.GOD)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.GOD);
-                    }
-                    else
-                    {
-                        Debug.LogError("Unknown player type");
-                    }
-
-                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-                    {
-                        hasPlayerNameCreated = true;
-                    }
-
-                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null &&
-                        gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-                    {
-                        CreatePlayerName();
-                        hasPlayerNameCreated = true;
-                    }
-
-                    yield break;
+                    gameManager.SetPlayerType(GameManager.PlayerType.VR);
+                }
+                else if (GetGameCharacter() == GameCharacter.PANDA)
+                {
+                    gameManager.SetPlayerType(GameManager.PlayerType.MR);
+                }
+                else if (GetGameCharacter() == GameCharacter.GOD)
+                {
+                    gameManager.SetPlayerType(GameManager.PlayerType.GOD);
                 }
                 else
                 {
-                    Debug.LogError("GameManager object found, but component is missing.");
+                    Debug.LogError("Unknown player type");
                 }
+
+                if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                {
+                    hasPlayerNameCreated = true;
+                }
+
+                // player が生成され、stateManager と scoreManager が取得できるまで待機
+                if (GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+                {
+                    while (stateManager == null || scoreManager == null)
+                    {
+                        Debug.Log("Waiting for player instantiation...");
+                        yield return null;
+                    }
+                }
+
+                Debug.Log("状態確認: hasPlayerNameCreated=" + hasPlayerNameCreated +
+                          ", stateManager=" + stateManager +
+                          ", scoreManager=" + scoreManager +
+                          ", GameManager.PlayerType=" + gameManager.GetPlayerType());
+
+                if (!hasPlayerNameCreated && stateManager != null && scoreManager != null &&
+                    GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+                {
+                    CreatePlayerName();
+                    hasPlayerNameCreated = true;
+                }
+
+                yield break;
             }
             else
             {
-                // Debug.Log("GameManager object not found. Waiting...");
+                Debug.LogError("GameManager object found, but component is missing.");
             }
-
-            yield return null; // 1フレーム待機
         }
-
+        yield return null;
     }
+}
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
     public override void OnDisconnected(DisconnectCause cause)
