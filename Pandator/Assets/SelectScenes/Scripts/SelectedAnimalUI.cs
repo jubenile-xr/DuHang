@@ -48,5 +48,4 @@ public class SelectedAnimalUI : MonoBehaviour
         mouseFrame.color = Color.yellow;
         mouseNameUI.color = Color.yellow;
     }
-
 }
