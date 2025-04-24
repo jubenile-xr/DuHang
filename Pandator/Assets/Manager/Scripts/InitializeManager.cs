@@ -27,10 +27,19 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private ScoreManager scoreManager;
     private GameObject playerPrefab;
     private string gameCharString;
+    private bool isAnimationFinished = false;
+    private bool isPlayerCreated = false;
+    [Header("ローディング中の時間")] private float loadingTime;
     [SerializeField] private GameObject loadingScene;
+    [SerializeField] private GameObject canvas;
     public GameObject MRUI;
+    [SerializeField]private GameObject VRModel;
+    [SerializeField] private GameObject MRKabe1;
+    [SerializeField] private GameObject MRKabe2;
+
     void Start()
     {
+        loadingTime = 0;
         if (character != GameCharacter.GOD)
         {
             switch (Character.GetSelectedAnimal())
@@ -58,11 +67,141 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if (!isAnimationFinished)
+        {
+            loadingTime += Time.deltaTime;
+            if (loadingTime > 14f)
+            {
+                SetIsAnimationFinished(true);
+            }
+        }
+
+        if (gameManager && isAnimationFinished && !isPlayerCreated)
+        {
+            if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
+            {
+                loadingScene.SetActive(false);
+                if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
+                {
+                    MRKabe1.SetActive(true);
+                    MRKabe2.SetActive(true);
+                }else if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                {
+                    VRModel.SetActive(true);
+                }
+                // プレイヤーキャラクターの生成およびカメラの生成
+                    switch (character)
+                    {
+                        case GameCharacter.BIRD:
+                            player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 1.0f, 0f),
+                                Quaternion.identity);
+                            GameObject eyePos = player.transform.Find("eyePos").gameObject;
+                            camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"),
+                                eyePos.transform.position, Quaternion.identity);
+                            player.GetComponent<BirdMoveController>()
+                                .SetCenterEyeAnchor(
+                                    camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
+                            canvas.SetActive(true);
+                            break;
+                        case GameCharacter.RABBIT:
+                            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f),
+                                Quaternion.identity);
+                            camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
+                                new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                            canvas.SetActive(true);
+                            break;
+                        case GameCharacter.MOUSE:
+                            player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f),
+                                Quaternion.identity);
+                            camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
+                                new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                            canvas.SetActive(true);
+                            break;
+                        case GameCharacter.PANDA:
+                            player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f),
+                                Quaternion.identity);
+                            camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
+                                new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+                            canvas.SetActive(true);
+                            break;
+                    }
+
+                    //カメラ生成の確認
+                    if (camera == null)
+                    {
+                        Debug.LogError("CameraRig is missing in the inspector.");
+                    }
+
+                    //カメラの親子関係を設定
+                    camera.transform.SetParent(player.transform);
+
+                    //CreatePhotonAvatarのOnCreate()を実行
+                    CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
+                    if (avatarScript == null)
+                    {
+                        Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
+                    }
+
+                    avatarScript.ExecuteCreatePhotonAvatar();
+
+                    switch (character)
+                    {
+                        case GameCharacter.PANDA:
+                            CanvasCameraSetter.Instance.SetCanvasCamera();
+                            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                            MRUI.SetActive(true);
+                            break;
+                        case GameCharacter.MOUSE:
+                            MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+                            if (mouseMoveScript == null)
+                            {
+                                Debug.LogError("MouseMove script is missing on the instantiated player object!");
+                            }
+
+                            mouseMoveScript.SetMouseOVRCameraRig();
+                            CanvasCameraSetter.Instance.SetCanvasCamera();
+                            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                            break;
+                        case GameCharacter.RABBIT:
+                            RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
+                            if (rabbitMoveScript == null)
+                            {
+                                Debug.LogError("RabbitMove script is missing on the instantiated player object!");
+                            }
+
+                            rabbitMoveScript.SetRabbitOVRCameraRig();
+                            CanvasCameraSetter.Instance.SetCanvasCamera();
+                            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                            break;
+                        case GameCharacter.BIRD:
+                            // BIRD用の処理があれば追加
+                            CanvasCameraSetter.Instance.SetCanvasCamera();
+                            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                            break;
+                        default:
+                            Debug.LogWarning("未処理のキャラクタータイプです: " + character);
+                            break;
+                    }
+
+            }
+            SetPlayerCreated(true);
+        }
+
         GameObject masterPlayer = GameObject.FindWithTag("MasterPlayer");
-        if (masterPlayer == null) return;
+        if (masterPlayer == null)
+        {
+            Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
+        }
+        else
+        {
+            masterPlayer.SetActive(true);
+        }
 
         string formattedGameChar = GetFormattedGameCharacter();
-        if (!masterPlayer.name.Contains(formattedGameChar)) return;
+        if (!masterPlayer.name.Contains(formattedGameChar))
+        {
+            Debug.Log("MasterPlayer name does not match the character type.");
+        }
 
         if (stateManager == null)
         {
@@ -107,96 +246,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         StartCoroutine(WaitForGameManager());
-
-        if (gameManager != null)
+        if (GetGameCharacter() == GameCharacter.GOD)
         {
-            if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
-            {
-                loadingScene.SetActive(false);
-            }
-        }
-
-        // プレイヤーキャラクターの生成およびカメラの生成
-        switch (character)
-        {
-            case GameCharacter.BIRD:
-                player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                GameObject eyePos = player.transform.Find("eyePos").gameObject;
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"), eyePos.transform.position, Quaternion.identity);
-                player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
-                Debug.Log("BirdJoin");
-                break;
-            case GameCharacter.RABBIT:
-                player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                break;
-            case GameCharacter.MOUSE:
-                player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                break;
-            case GameCharacter.PANDA:
-                player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.566f, 1.7f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 0.5f, 0f), Quaternion.identity);
-                break;
-            case GameCharacter.GOD:
-                PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
-                break;
-        }
-
-        //カメラ生成の確認
-        if (camera == null)
-        {
-            Debug.LogError("CameraRig is missing in the inspector.");
-        }
-        //カメラの親子関係を設定
-        camera.transform.SetParent(player.transform);
-
-        //CreatePhotonAvatarのOnCreate()を実行
-        CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
-        if (avatarScript == null)
-        {
-            Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
-            return;
-        }
-        avatarScript.ExecuteCreatePhotonAvatar();
-
-        switch (character)
-        {
-            case GameCharacter.PANDA:
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                MRUI.SetActive(true);
-                break;
-            case GameCharacter.MOUSE:
-                MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
-                if (mouseMoveScript == null)
-                {
-                    Debug.LogError("MouseMove script is missing on the instantiated player object!");
-                    return;
-                }
-                mouseMoveScript.SetMouseOVRCameraRig();
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            case GameCharacter.RABBIT:
-                RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
-                if (rabbitMoveScript == null)
-                {
-                    Debug.LogError("RabbitMove script is missing on the instantiated player object!");
-                    return;
-                }
-                rabbitMoveScript.SetRabbitOVRCameraRig();
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            case GameCharacter.BIRD:
-                // BIRD用の処理があれば追加
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            default:
-                Debug.LogWarning("未処理のキャラクタータイプです: " + character);
-                break;
+            PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
     }
 
@@ -212,8 +264,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 gameManager = gmObj.GetComponent<GameManager>();
                 if (gameManager)
                 {
+
                     Debug.Log("GameManager found.");
-                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE || GetGameCharacter() == GameCharacter.RABBIT)
+                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
+                        GetGameCharacter() == GameCharacter.RABBIT)
                     {
                         gameManager.SetPlayerType(GameManager.PlayerType.VR);
                     }
@@ -235,11 +289,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         hasPlayerNameCreated = true;
                     }
 
-                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null && gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    if (!hasPlayerNameCreated && stateManager != null && scoreManager != null &&
+                        gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                     {
                         CreatePlayerName();
                         hasPlayerNameCreated = true;
                     }
+
                     yield break;
                 }
                 else
@@ -251,8 +307,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 // Debug.Log("GameManager object not found. Waiting...");
             }
+
             yield return null; // 1フレーム待機
         }
+
     }
 
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
@@ -309,5 +367,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     public GameCharacter GetGameCharacter()
     {
         return character;
+    }
+
+    private void SetIsAnimationFinished(bool isFinished)
+    {
+        isAnimationFinished = isFinished;
+    }
+    private void SetPlayerCreated(bool isCreated)
+    {
+        isPlayerCreated = isCreated;
     }
 }
