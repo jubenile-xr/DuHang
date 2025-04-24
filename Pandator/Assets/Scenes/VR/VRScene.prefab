@@ -373,6 +373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 1
+  eventSystem: {fileID: 0}
   loadingScene: {fileID: 0}
   canvas: {fileID: 4568707597392253435}
   MRUI: {fileID: 4568707597392253435}
@@ -643,6 +644,10 @@ PrefabInstance:
     - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_Name
       value: room_complete
+      objectReference: {fileID: 0}
+    - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7963138537877439857, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_LocalPosition.x
