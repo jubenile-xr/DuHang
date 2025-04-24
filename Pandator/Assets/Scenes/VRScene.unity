@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &597934996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 442333737079542751, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+  m_PrefabInstance: {fileID: 1353542805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1095328260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,10 +194,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 442333737079542751, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: VRModel
       value: 
       objectReference: {fileID: 1668314335}
+    - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 597934996}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: loadingScene
       value: 
