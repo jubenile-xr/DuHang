@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             SetupDeadUI();
         }
 
-        if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
+        if (GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
         {
             SaveRankingData();
             LoadResultScene();
@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             //     SceneManager.LoadScene("Scenes/PandaWinGameClear");
             // }
         }
+        
 
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
@@ -563,6 +564,7 @@ void UpdatePlayerNameListProperty()
 
     public void SaveRankingData()
     {
+        if(hasSendToGAS) return;
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
@@ -573,11 +575,7 @@ void UpdatePlayerNameListProperty()
                 StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1],now));
             }
        }
-
-
-
        hasSendToGAS = true;
-
     }
 
     private string JudgeAnimal(string playerName)
