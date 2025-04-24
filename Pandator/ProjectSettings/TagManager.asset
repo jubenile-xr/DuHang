@@ -12,42 +12,49 @@ TagManager:
   - RHandTargetAnchor
   - Wall
   - GameManager
+  - Ground
+  - PandaPlayer
+  - Canvas
+  - TrackedCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  -
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  -
   - Bird
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  -
+  -
+  -
+  - FrontUI
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
+  -
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: FrontUI
+    uniqueID: 3272013187
     locked: 0
   m_RenderingLayers:
   - Default

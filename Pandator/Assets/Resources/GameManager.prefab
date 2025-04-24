@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7880947022110878523}
   - component: {fileID: 8341025837816043307}
   - component: {fileID: 5395083701465966290}
+  - component: {fileID: 4115494654258884376}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9e175eb33cf749eda9952113117397c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  playerType: 1
   winner: 0
 --- !u!114 &5395083701465966290
 MonoBehaviour:
@@ -69,3 +70,16 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &4115494654258884376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311808036470301148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e70c61c4667468898e896a7c01f62b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEndTime: 5

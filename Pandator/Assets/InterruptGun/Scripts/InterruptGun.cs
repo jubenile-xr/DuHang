@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Photon.Pun;
 public class InterruptGun : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
