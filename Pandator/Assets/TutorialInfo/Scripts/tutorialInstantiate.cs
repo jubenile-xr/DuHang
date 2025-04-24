@@ -16,6 +16,7 @@ public class tutorialInstantiate : MonoBehaviour
     public GameObject passthrough;
     public GameObject planePrefab;
     public GameObject OVRSceneManager;
+    public GameObject MRWallPrefab;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -63,6 +64,7 @@ public class tutorialInstantiate : MonoBehaviour
                 passthrough.SetActive(true);
                 planePrefab.SetActive(true);
                 OVRSceneManager.SetActive(true);
+                MRWallPrefab.SetActive(true);
                 break;
             case GameCharacter.MOUSE:
                 TutorialMouseMove mouseMoveScript = player.GetComponentInChildren<TutorialMouseMove>();
