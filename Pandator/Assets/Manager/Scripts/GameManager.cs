@@ -124,19 +124,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetupDeadUI();
         }
-
-        if (GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
-        {
-            SaveRankingData();
-            LoadResultScene();
-            // if (winner == Winner.SMALLANIMAL)
-            // {
-            //     SceneManager.LoadScene("AnimalsWin");
-            // }else if (winner == Winner.PANDA)
-            // {
-            //     SceneManager.LoadScene("Scenes/PandaWinGameClear");
-            // }
-        }
+        
+        HandleEndGame();
         
 
         // ここほんまにむずかった
@@ -246,6 +235,15 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(
                 new ExitGames.Client.Photon.Hashtable { ["aliveCount"] = aliveCount }
             );
+        }
+    }
+    
+    private void HandleEndGame()
+    {
+        if (GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
+        {
+            SaveRankingData();
+            LoadResultScene();
         }
     }
 
