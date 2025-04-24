@@ -33,6 +33,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
+    [SerializeField]private GameObject VRModel;
+    [SerializeField] private GameObject MRKabe1;
+    [SerializeField] private GameObject MRKabe2;
+
     void Start()
     {
         loadingTime = 0;
@@ -77,6 +81,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
             {
                 loadingScene.SetActive(false);
+                if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
+                {
+                    MRKabe1.SetActive(true);
+                    MRKabe2.SetActive(true);
+                }else if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                {
+                    VRModel.SetActive(true);
+                }
                 // プレイヤーキャラクターの生成およびカメラの生成
                     switch (character)
                     {

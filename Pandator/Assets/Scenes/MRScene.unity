@@ -188,10 +188,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 726324365931145000, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
       propertyPath: m_Name
       value: GameStartAnimation
@@ -236,28 +232,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9201400995012942497, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 493873241}
-    - target: {fileID: 9201400995012942497, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9201400995012942497, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-      propertyPath: m_PlaneDistance
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
---- !u!20 &493873241 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 536759268502200620, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-  m_PrefabInstance: {fileID: 214498599}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1239429730 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
