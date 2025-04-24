@@ -129,6 +129,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SaveRankingData();
             LoadResultScene();
+            // if (winner == Winner.SMALLANIMAL)
+            // {
+            //     SceneManager.LoadScene("AnimalsWin");
+            // }else if (winner == Winner.PANDA)
+            // {
+            //     SceneManager.LoadScene("Scenes/PandaWinGameClear");
+            // }
         }
 
         // ここほんまにむずかった
@@ -247,6 +254,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             case PlayerType.MR:
                 SceneManager.LoadScene("ResultClearMRScene");
+                ShareData.SetWinner(winner.ToString());
                 break;
             case PlayerType.VR:
                 SceneManager.LoadScene("ResultClearVRScene");
