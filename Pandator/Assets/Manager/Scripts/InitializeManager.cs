@@ -88,7 +88,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     switch (character)
                     {
                         case GameCharacter.BIRD:
-                            player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 1.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 3.0f, 0f),
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
@@ -101,7 +101,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.RABBIT:
-                            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 2.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 3.0f, 0f),
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
@@ -110,7 +110,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.MOUSE:
-                            player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 1.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 3.0f, 0f),
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
@@ -119,7 +119,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.PANDA:
-                            player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, -0.5f, 1.7f),
+                            player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, -0.5f, 0f),
                                 Quaternion.identity);
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
