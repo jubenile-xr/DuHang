@@ -109,11 +109,15 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
-        if (!value)
+        if (GetComponent<PhotonView>().IsMine)
         {
-            DeadLogic();
+            if (!value)
+            {
+                DeadLogic();
+            }
+
+            isAlive = value;
         }
-        isAlive = value;
     }
 
     public bool GetAlive()
