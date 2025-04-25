@@ -23,30 +23,22 @@ public class TimeManager : MonoBehaviour
                 Debug.Log("GameManager found.");
             }
         }
-        // CanvasDispTimeのインスタンスを取得
-        // PandaCanvasの中にある子オブジェクトのTimeからCanvasDispTimeを取得
-
-        canvas = GameObject.FindGameObjectWithTag("Canvas");
-        if (canvas == null)
-        {
-            Debug.LogWarning("Canvasが見つかりません");
-        }
-
-        // CanvasDispTimeのインスタンスを取得
-        canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
-        if (canvasDispTime == null)
-        {
-            Debug.LogWarning("CanvasDispTimeが見つかりません");
-        }
     }
 
     private void Update()
     {
+        if (canvas == null)
+        {
+            canvas = GameObject.FindGameObjectWithTag("Canvas");
+        }
+        if (canvasDispTime == null)
+        {
+            canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+        }
         if (canvasDispTime != null)
         {
             canvasDispTime.SetTimeText(FormatTime(gameTime));
         }
-
         // SmallAnimalはまだ作成していない
         if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
         {
