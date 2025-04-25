@@ -222,6 +222,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -3.39
       objectReference: {fileID: 0}
+    - target: {fileID: 1315227058938505552, guid: a2383a7249df143e19889f36d866384a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2629996166370814203, guid: a2383a7249df143e19889f36d866384a, type: 3}
       propertyPath: m_Name
       value: SelectScene
@@ -262,6 +266,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8106505096167134267, guid: a2383a7249df143e19889f36d866384a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 8157555948985267008, guid: a2383a7249df143e19889f36d866384a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -301,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 8157555948985267008, guid: a2383a7249df143e19889f36d866384a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9028472238188843766, guid: a2383a7249df143e19889f36d866384a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
