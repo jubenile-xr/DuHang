@@ -568,7 +568,8 @@ void UpdatePlayerNameListProperty()
 
     public void SaveRankingData()
     {
-        if(hasSendToGAS) return;
+        // 送信するデータの数が一致しているか確認
+        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;  
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
