@@ -563,8 +563,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_SynchronizeLayers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_SynchronizeParameters.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_SynchronizeParameters.Array.data[0].Name
@@ -619,6 +627,10 @@ PrefabInstance:
       value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4908569433102838794, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908569433102838794, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: sceneViewId
       value: 0
       objectReference: {fileID: 0}
@@ -664,6 +676,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6641051537062756563, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8059135080723870735, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
