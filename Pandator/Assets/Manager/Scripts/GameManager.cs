@@ -124,12 +124,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetupDeadUI();
         }
-
-        if (aliveCount == 0 && GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
-        {
-            SaveRankingData();
-            LoadResultScene();
-        }
+        
+        HandleEndGame();
+        
 
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
@@ -240,6 +237,21 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
+    
+    private void HandleEndGame()
+    {
+        if (GetGameState() == GameState.END && !hasSendToGAS )
+        {
+            if (playerType == PlayerType.GOD) //神が一気にデータ送る
+            {
+                SaveRankingData();
+            }
+            else //神以外は結果画面に遷移する
+            {
+                LoadResultScene();
+            }
+        }
+    }
 
     private void LoadResultScene()
     {
@@ -247,6 +259,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             case PlayerType.MR:
                 SceneManager.LoadScene("ResultClearMRScene");
+                ShareData.SetWinner(winner.ToString());
                 break;
             case PlayerType.VR:
                 SceneManager.LoadScene("ResultClearVRScene");
@@ -555,6 +568,8 @@ void UpdatePlayerNameListProperty()
 
     public void SaveRankingData()
     {
+        // 送信するデータの数が一致しているか確認
+        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;  
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
@@ -565,11 +580,7 @@ void UpdatePlayerNameListProperty()
                 StartCoroutine(PostToGAS("PANDA", (int)localPlayerScores[localPlayerNames.Length - 1],now));
             }
        }
-
-
-
        hasSendToGAS = true;
-
     }
 
     private string JudgeAnimal(string playerName)
