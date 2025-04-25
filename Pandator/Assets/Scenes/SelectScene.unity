@@ -135,6 +135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameStartAnimation
       objectReference: {fileID: 0}
+    - target: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8452629236408347904, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.6
@@ -225,6 +229,10 @@ PrefabInstance:
     - target: {fileID: 4537682328813841144, guid: a2383a7249df143e19889f36d866384a, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4932438177742688076, guid: a2383a7249df143e19889f36d866384a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5996195182848710078, guid: a2383a7249df143e19889f36d866384a, type: 3}
       propertyPath: m_LocalScale.x
