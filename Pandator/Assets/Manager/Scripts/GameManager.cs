@@ -240,10 +240,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     private void HandleEndGame()
     {
-        if (GetGameState() == GameState.END && !hasSendToGAS && playerType == PlayerType.GOD)
+        if (GetGameState() == GameState.END && !hasSendToGAS )
         {
-            SaveRankingData();
-            LoadResultScene();
+            if (playerType == PlayerType.GOD) //神が一気にデータ送る
+            {
+                SaveRankingData();
+            }
+            else //神以外は結果画面に遷移する
+            {
+                LoadResultScene();
+            }
         }
     }
 
