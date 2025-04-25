@@ -5,7 +5,7 @@ public class TimeManager : MonoBehaviour
 {
     [Header("ゲーム中の時間")] private float gameTime;
 
-    [Header("ゲームの終了時間")] [SerializeField] private float gameEndTime = 500;
+    private float gameEndTime = 300f; // ゲーム終了時間
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;

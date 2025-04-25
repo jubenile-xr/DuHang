@@ -58,6 +58,9 @@ public class BirdMoveController : MonoBehaviour
             HandleFlight();
         }
 
+        // 左スティックの入力を0にする
+        Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        leftStick = Vector2.zero; // 強引に0にする
         // //初始化 //initialize
         // if (!isInitialized)
         // {
