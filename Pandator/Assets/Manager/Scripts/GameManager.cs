@@ -255,18 +255,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void LoadResultScene()
     {
-        switch (playerType)
+        if (aliveCount == 0)
         {
-            case PlayerType.MR:
-                SceneManager.LoadScene("ResultClearMRScene");
-                ShareData.SetWinner(winner.ToString());
-                break;
-            case PlayerType.VR:
-                SceneManager.LoadScene("ResultClearVRScene");
-                break;
-            default:
-                Debug.LogError("Unknown PlayerType");
-                break;
+            SceneManager.LoadScene("ResultClearMRScene");
+            // ShareData.SetWinner(winner.ToString());
+        }
+        else
+        {
+            SceneManager.LoadScene("ResultClearVRScene");
         }
     }
 

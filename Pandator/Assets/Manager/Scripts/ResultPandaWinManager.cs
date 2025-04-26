@@ -1,7 +1,7 @@
 using System.Globalization;
 using UnityEngine;
 
-public class ResultManager : MonoBehaviour
+public class ResultPandaWinManager : MonoBehaviour
 {
     [SerializeField] private GameObject resultScene;
     [SerializeField] private GameObject pandaWinScene;
@@ -11,16 +11,16 @@ public class ResultManager : MonoBehaviour
 
     void Start()
     {
-        resultScene.SetActive(false);
-        switch (ShareData.GetWinner())
-        {
-            case "SMALLANIMAL": //TODO: enumとかの方がよき
-                currentScene =Instantiate(smallAnimalWinScene);
-                break;
-            case "PANDA":
-                currentScene =Instantiate(pandaWinScene);
-                break;
-        }
+        // resultScene.SetActive(false);
+       // switch (ShareData.GetWinner())
+        //{
+            // case "SMALLANIMAL": //TODO: enumとかの方がよき
+                //currentScene =Instantiate(smallAnimalWinScene);
+                //break;
+            // case "PANDA":
+        currentScene =Instantiate(pandaWinScene);
+                //break;
+        //}
         currentScene.SetActive(true);
     }
 

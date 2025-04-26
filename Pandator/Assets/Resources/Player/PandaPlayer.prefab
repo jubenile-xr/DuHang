@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 9194075240619985461}
   - component: {fileID: 1178441077383595741}
   - component: {fileID: 4000615125199104777}
+  - component: {fileID: 3561114304483297318}
   m_Layer: 0
   m_Name: PandaPlayer
   m_TagString: MasterPlayer
@@ -137,7 +138,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2208272362337012921}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
@@ -160,7 +161,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2208272362337012921}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
@@ -197,6 +198,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+--- !u!114 &3561114304483297318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2208272362337012921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
 --- !u!1 &3947605294729524816
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1346325719895780728, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_SynchronizeLayers.Array.size
@@ -628,7 +645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4908569433102838794, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4908569433102838794, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: sceneViewId
@@ -680,7 +697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8059135080723870735, guid: bdb5a07bf933d42d2bb51fa8852e59da, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -700,6 +717,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8743466980069388394}
     m_Modifications:
+    - target: {fileID: -8627916277934993141, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3011301066820450563, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -3011301066820450563, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -771,6 +796,10 @@ PrefabInstance:
     - target: {fileID: 4169726114889992014, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.746
+      objectReference: {fileID: 0}
+    - target: {fileID: 4171031704400340053, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8102731167259438974, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
       propertyPath: Tip

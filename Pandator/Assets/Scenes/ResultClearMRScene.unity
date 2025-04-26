@@ -180,11 +180,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: ResultSceneManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6920986947992381029, guid: 662144e6c026f469aae49e7655d74dae, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7543633394323705774, guid: 662144e6c026f469aae49e7655d74dae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3415970848991506889}
   m_SourcePrefab: {fileID: 100100000, guid: 662144e6c026f469aae49e7655d74dae, type: 3}
+--- !u!1 &3415970848991506888 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7543633394323705774, guid: 662144e6c026f469aae49e7655d74dae, type: 3}
+  m_PrefabInstance: {fileID: 3415970848991506887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3415970848991506889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415970848991506888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e12c1edfb8d944592857c152ff944aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resultScene: {fileID: 0}
+  pandaWinScene: {fileID: 1629075679936623504, guid: 0ea8814324ab1f84ab460a00daf1813c, type: 3}
+  smallAnimalWinScene: {fileID: 0}
 --- !u!1001 &6060326139647419742
 PrefabInstance:
   m_ObjectHideFlags: 0
