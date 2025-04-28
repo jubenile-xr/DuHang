@@ -26,13 +26,20 @@ public class StateManager : MonoBehaviour
         MOUSE
     }
     [Header("キャラクターの種類"), SerializeField] private GameCharacter character;
-
+    private FlashEffect flashEffect;
+    private DeadVolumeController deadVolumeController;
     private void Start()
     {
         isInterrupted = false;
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
+        flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
+        if (flashEffect == null)
+        {
+            Debug.LogError("FlashEffect component not found in the canvas!");
+        }
+        deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
         switch (Character.GetSelectedAnimal())
         {
             case Character.GameCharacters.BIRD:
@@ -66,8 +73,6 @@ public class StateManager : MonoBehaviour
                 ResetState();
             }
         }
-
-
     }
 
     private void ResetState()
@@ -131,7 +136,7 @@ public class StateManager : MonoBehaviour
         if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
-
+        deadVolumeController?.RunDeadVolume();
 
         string[] playerNames = gameManager.GetAllPlayerNames();
         Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
@@ -156,6 +161,7 @@ public class StateManager : MonoBehaviour
     private void InterruptLogic()
     {
         playerColorManager?.ChangeColorRed();
+        flashEffect?.TriggerFlash();
         switch (character)
         {
             case GameCharacter.BIRD:
