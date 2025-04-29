@@ -27,6 +27,9 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     // クラウドストレージ用の設定
     private const string CLOUD_ANCHOR_UUID_KEY = "cloudAnchorUUID";
 
+    public delegate void AnchorLoadedCallback();
+    public event AnchorLoadedCallback OnAnchorLoaded;
+
     void Update()
     {
         // デバッグモード
@@ -155,6 +158,138 @@ public class AnchorManager : MonoBehaviourPunCallbacks
                 return;
             }
         });
+    }
+
+    public void OnLoadCloudButtonPressed()
+    {
+        string savedUuid = "";
+
+        // Photonのカスタムプロパティからuuidを取得
+        if (PhotonNetwork.InRoom &&
+            PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(CLOUD_ANCHOR_UUID_KEY) &&
+            PhotonNetwork.CurrentRoom.CustomProperties[CLOUD_ANCHOR_UUID_KEY] != null)
+        {
+            savedUuid = PhotonNetwork.CurrentRoom.CustomProperties[CLOUD_ANCHOR_UUID_KEY].ToString();
+            Debug.Log("Retrieved Anchor UUID from Photon: " + savedUuid);
+        }
+        else
+        {
+            // フォールバックとしてプレイヤープレフから取得
+            savedUuid = PlayerPrefs.GetString(_uniqueKey, "");
+        }
+
+        if (string.IsNullOrEmpty(savedUuid))
+        {
+            _isSaved = false;
+            _message.text = "No stored cloud anchor UUID found.";
+            return;
+        }
+
+        // Load Optionの作成
+        var uuids = new Guid[1] { new Guid(savedUuid) };
+        var loadOptions = new OVRSpatialAnchor.LoadOptions
+        {
+            Timeout = 0,
+            StorageLocation = OVRSpace.StorageLocation.Cloud,
+            Uuids = uuids
+        };
+        LoadAnchors(loadOptions);
+    }
+
+    private void LoadAnchors(OVRSpatialAnchor.LoadOptions options)
+    {
+        // クラウドからアンカーをUUIDを指定して読み込み
+        _message.text = "Loading anchor from cloud...";
+        OVRSpatialAnchor.LoadUnboundAnchors(options, anchors =>
+        {
+            if (anchors.Length != 1)
+            {
+                // アンカーが読めなかった
+                _message.text = "Failed to load anchor from cloud.";
+                return;
+            }
+            if (anchors[0].Localized)
+            {
+                // すでにローカライズが終了していた場合
+                OnLocalized(anchors[0], true);
+            }
+            else if (!anchors[0].Localizing)
+            {
+                // 空間マッピングが不十分などの理由でローカライズに失敗している場合、再度ローカライズ
+                anchors[0].Localize(OnLocalized);
+            }
+        });
+    }
+
+    private void OnLocalized(OVRSpatialAnchor.UnboundAnchor unboundAnchor, bool success)
+    {
+        if (!success)
+        {
+            // アンカーが読めなかった
+            _message.text = "Failed to load anchor.";
+            return;
+        }
+        // アンカーのGame Objectを読み取った位置に移動し、アンバインドのアンカーをコンポーネントにバインドする
+        var pose = unboundAnchor.Pose;
+        transform.SetPositionAndRotation(pose.position, pose.rotation);
+        if (!_spatialAnchor)
+        {
+            _spatialAnchor = gameObject.AddComponent<OVRSpatialAnchor>();
+        }
+        unboundAnchor.BindTo(_spatialAnchor);
+        _message.text = "Successfully loaded anchor from cloud.";
+        isCreated = true;
+
+        // アンカーが正常に読み込まれたことをコールバックで通知
+        OnAnchorLoaded?.Invoke();
+    }
+
+    // ローカルボタン処理（後方互換性のために残しておく）
+    public void OnSaveLocalButtonPressed()
+    {
+        if (!_spatialAnchor) return;
+        _message.text = "Saving locally...";
+
+        // アンカーをローカルに保存
+        var saveOptions = new OVRSpatialAnchor.SaveOptions();
+        saveOptions.Storage = OVRSpace.StorageLocation.Local;
+        _spatialAnchor.Save(saveOptions, (anchor, success) =>
+        {
+            if (success)
+            {
+                _isSaved = true;
+                _message.text = "Successfully saved anchor locally.";
+                // SaveしたアンカーのUUIDを覚えておく
+                PlayerPrefs.SetString(_uniqueKey, anchor.Uuid.ToString());
+            }
+            else
+            {
+                _isSaved = false;
+                _message.text = "Failed to save anchor locally.";
+                return;
+            }
+        });
+    }
+
+    public void OnLoadLocalButtonPressed()
+    {
+        var savedUuid = PlayerPrefs.GetString(_uniqueKey, "");
+        if (savedUuid == "")
+        {
+            _isSaved = false;
+            _message.text = "No stored local data found.";
+            return;
+        }
+
+        // Load Optionの作成
+        var uuids = new Guid[1] { new Guid(savedUuid) };
+        var loadOptions = new OVRSpatialAnchor.LoadOptions
+        {
+            Timeout = 0,
+            StorageLocation = OVRSpace.StorageLocation.Local,
+            Uuids = uuids
+        };
+        LoadAnchors(loadOptions);
     }
 
     public void OnResetRotXButtonPressed()
