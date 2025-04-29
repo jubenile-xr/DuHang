@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 873480161}
+    - target: {fileID: 4280468512058960817, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6884378872439537101, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_Name
       value: MRScene
