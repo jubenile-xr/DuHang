@@ -661,5 +661,12 @@ void UpdatePlayerNameListProperty()
         public string animal;
         public string dateTime;
     }
+
+    [System.Serializable]
+    public class PlayerTransform
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+    }
 }
 

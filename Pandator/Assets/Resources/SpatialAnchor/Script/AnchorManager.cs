@@ -21,7 +21,6 @@ public class AnchorManager : MonoBehaviour
     private bool _isSaved;
     [SerializeField]
     private string _uniqueKey;
-    private bool debugMode;
     public GameObject roomPrefab;
     /*void Awake()
     {
@@ -50,16 +49,8 @@ public class AnchorManager : MonoBehaviour
 
     void Update()
     {
-        // すべてのボタンとトリガーが押された場合の処理
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) && // 右トリガー
-            OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)) // 左トリガー
-        {
-            // すべてのボタンが押された場合の処理
-            debugMode = true;
-            roomPrefab.SetActive(true);
-        }
         // デバッグモード
-        if (debugMode)
+        if (DebugManager.GetDebugMode())
         {
             Vector3 pos = gameObject.transform.position;
             Vector3 rot = gameObject.transform.eulerAngles;
@@ -81,13 +72,6 @@ public class AnchorManager : MonoBehaviour
             if (OVRInput.GetDown(OVRInput.Button.Four))
             {
                 OnLoadLocalButtonPressed();
-            }
-
-            if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger) && // 右グリップ
-            OVRInput.Get(OVRInput.Button.SecondaryHandTrigger)) //左グリップ
-            {
-                debugMode = false;
-                roomPrefab.SetActive(false);
             }
         }
         

@@ -21,6 +21,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameManager gameManager;
     private GameObject player;
     private GameObject camera;
+    [SerializeField]private GameObject spatialAnchor;
+    [SerializeField]private GameObject playerSpawn;
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
@@ -37,6 +39,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        if (DebugManager.GetDebugMode())
+        {
+            spatialAnchor.SetActive(true);
+            loadingScene.SetActive(false);
+            Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"));
+        }
         loadingTime = 0;
         if (character != GameCharacter.GOD)
         {
@@ -60,35 +68,41 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
-        PhotonNetwork.ConnectUsingSettings();
+        if (!DebugManager.GetDebugMode())
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     void Update()
     {
-        if (!isAnimationFinished)
+        if (!DebugManager.GetDebugMode())
         {
-            loadingTime += Time.deltaTime;
-            if (loadingTime > 14f)
+            if (!isAnimationFinished)
             {
-                SetIsAnimationFinished(true);
-            }
-        }
-
-        if (gameManager && isAnimationFinished && !isPlayerCreated)
-        {
-            if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
-            {
-                loadingScene.SetActive(false);
-                eventSystem.SetActive(true);
-                if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                loadingTime += Time.deltaTime;
+                if (loadingTime > 14f)
                 {
-                    VRModel.SetActive(true);
+                    SetIsAnimationFinished(true);
                 }
-                // プレイヤーキャラクターの生成およびカメラの生成
+            }
+
+            if (gameManager && isAnimationFinished && !isPlayerCreated)
+            {
+                if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
+                {
+                    loadingScene.SetActive(false);
+                    eventSystem.SetActive(true);
+                    if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                    {
+                        VRModel.SetActive(true);
+                    }
+
+                    // プレイヤーキャラクターの生成およびカメラの生成
                     switch (character)
                     {
                         case GameCharacter.BIRD:
-                            player = PhotonNetwork.Instantiate("Player/BirdPlayer", new Vector3(0f, 3.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/BirdPlayer", playerSpawn.transform.position,
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
@@ -101,16 +115,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.RABBIT:
-                            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", new Vector3(0f, 3.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/RabbitPlayer", playerSpawn.transform.position,
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
-                                new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                                playerSpawn.transform.position, Quaternion.identity);
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.MOUSE:
-                            player = PhotonNetwork.Instantiate("Player/MousePlayer", new Vector3(0f, 3.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/MousePlayer", playerSpawn.transform.position,
                                 Quaternion.identity);
                             stateManager = player.GetComponentInChildren<StateManager>();
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
@@ -119,11 +133,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             canvas.SetActive(true);
                             break;
                         case GameCharacter.PANDA:
-                            player = PhotonNetwork.Instantiate("Player/PandaPlayer", new Vector3(0f, 1.0f, 0f),
+                            player = PhotonNetwork.Instantiate("Player/PandaPlayer", playerSpawn.transform.position,
                                 Quaternion.identity);
                             scoreManager = player.GetComponentInChildren<ScoreManager>();
                             camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
-                            new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                                playerSpawn.transform.position, Quaternion.identity);
                             canvas.SetActive(true);
                             break;
                     }
@@ -185,8 +199,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             break;
                     }
 
+                }
+
+                SetPlayerCreated(true);
             }
-            SetPlayerCreated(true);
         }
     }
 
