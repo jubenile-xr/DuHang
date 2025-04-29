@@ -73,11 +73,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
         if (DebugManager.GetDebugMode() && spatialAnchor != null)
         {
+            Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"));
             loadingScene.SetActive(false);
             spatialAnchor.SetActive(true);
             debugCanvas.gameObject.SetActive(true);
-
-            Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"));
         }
         loadingTime = 0;
         if (character != GameCharacter.GOD)
