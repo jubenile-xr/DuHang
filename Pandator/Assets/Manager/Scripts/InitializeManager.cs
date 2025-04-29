@@ -40,9 +40,35 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if (spatialAnchor == null)
+        if (spatialAnchor == null && transform.parent != null)
         {
-            spatialAnchor = GameObject.FindWithTag("spatialAnchor");
+            foreach (Transform sibling in transform.parent)
+            {
+                if (sibling.CompareTag("spatialAnchor"))
+                {
+                    spatialAnchor = sibling.gameObject;
+                    break;
+                }
+            }
+            if (spatialAnchor == null)
+            {
+                Debug.LogError("spatialAnchorが見つかりません。タグやシーンの階層を確認してください。");
+            }
+        }
+
+        if (spatialAnchor != null && playerSpawn == null)
+        {
+            Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
+                .FirstOrDefault(child => child.CompareTag("playerSpawn"));
+            if (spawnTransform != null)
+            {
+                playerSpawn = spawnTransform.gameObject;
+                Debug.Log("playerSpawn found: " + playerSpawn.name);
+            }
+            else
+            {
+                Debug.LogError("playerSpawnがspatialAnchorの子オブジェクト内に見つかりません。");
+            }
         }
         if (DebugManager.GetDebugMode() && spatialAnchor != null)
         {
@@ -100,9 +126,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
             if (gameManager && isAnimationFinished && !isPlayerCreated)
             {
-                if (spatialAnchor == null)
+                if (spatialAnchor == null && transform.parent != null)
                 {
-                    spatialAnchor = GameObject.FindWithTag("spatialAnchor");
+                    foreach (Transform sibling in transform.parent)
+                    {
+                        if (sibling.CompareTag("spatialAnchor"))
+                        {
+                            spatialAnchor = sibling.gameObject;
+                            break;
+                        }
+                    }
                 }
                 else
                 {

@@ -168,17 +168,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: playerSpawn
-      value: 
-      objectReference: {fileID: 1014482023}
-    - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1239429730}
-    - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: spatialAnchor
-      value: 
-      objectReference: {fileID: 2739052793911631005, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
     - target: {fileID: 6884378872439537101, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_Name
       value: MRScene
@@ -245,6 +237,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
+<<<<<<< Updated upstream
 --- !u!1001 &1014482022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -315,6 +308,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1354301507421546848, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
   m_PrefabInstance: {fileID: 1014482022}
   m_PrefabAsset: {fileID: 0}
+=======
+>>>>>>> Stashed changes
 --- !u!1 &1239429730 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
@@ -326,4 +321,3 @@ SceneRoots:
   m_Roots:
   - {fileID: 192549035}
   - {fileID: 214498599}
-  - {fileID: 1014482022}
