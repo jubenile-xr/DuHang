@@ -21,6 +21,8 @@ public class AnchorManager : MonoBehaviour
     private bool _isSaved;
     [SerializeField]
     private string _uniqueKey;
+    private bool debugMode;
+    public GameObject roomPrefab;
     /*void Awake()
     {
         _spatialAnchor = GetComponent<OVRSpatialAnchor>();
@@ -48,30 +50,47 @@ public class AnchorManager : MonoBehaviour
 
     void Update()
     {
-        Vector3 pos = gameObject.transform.position;
-        Vector3 rot = gameObject.transform.eulerAngles;
-        _textPosition.text = pos.ToString();
-        _textRotation.text = rot.ToString();
+        // すべてのボタンとトリガーが押された場合の処理
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) && // 右トリガー
+            OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)) // 左トリガー
+        {
+            // すべてのボタンが押された場合の処理
+            debugMode = true;
+            roomPrefab.SetActive(true);
+        }
+        // デバッグモード
+        if (debugMode)
+        {
+            Vector3 pos = gameObject.transform.position;
+            Vector3 rot = gameObject.transform.eulerAngles;
+            _textPosition.text = pos.ToString();
+            _textRotation.text = rot.ToString();
 
+            if (OVRInput.GetDown(OVRInput.Button.One))
+            {
+                OnSaveLocalButtonPressed();
+            }
+            if (OVRInput.GetDown(OVRInput.Button.Two))
+            {
+                CreateAnchor();
+            }
+            if (OVRInput.GetDown(OVRInput.Button.Three))
+            {
+                OnDeleteLocalButtonPressed();
+            }
+            if (OVRInput.GetDown(OVRInput.Button.Four))
+            {
+                OnLoadLocalButtonPressed();
+            }
+
+            if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger) && // 右グリップ
+            OVRInput.Get(OVRInput.Button.SecondaryHandTrigger)) //左グリップ
+            {
+                debugMode = false;
+                roomPrefab.SetActive(false);
+            }
+        }
         
-        if (OVRInput.GetDown(OVRInput.Button.One))
-        {
-            OnSaveLocalButtonPressed();
-        }
-
-        if (OVRInput.GetDown(OVRInput.Button.Two))
-        {
-            CreateAnchor();
-        }
-
-        if (OVRInput.GetDown(OVRInput.Button.Three))
-        {
-            OnDeleteLocalButtonPressed();
-        }
-        if (OVRInput.GetDown(OVRInput.Button.Four))
-        {
-            OnLoadLocalButtonPressed();
-        }
 
     }
 
