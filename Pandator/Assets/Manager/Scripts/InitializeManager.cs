@@ -37,6 +37,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
+    private AnchorManager anchorManager;
 
     void Start()
     {
@@ -48,6 +49,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 if (sibling.CompareTag("spatialAnchor"))
                 {
                     spatialAnchor = sibling.gameObject;
+                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
                     break;
                 }
             }
@@ -131,6 +133,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         if (sibling.CompareTag("spatialAnchor"))
                         {
                             spatialAnchor = sibling.gameObject;
+                            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
                             break;
                         }
                     }
@@ -148,36 +151,34 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     }
                     else
                     {
-
                         if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
                         {
-                            
+                            // MRプレイヤーの場合は、アンカーを作成・保存してUUIDを共有
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
                             {
-                                GameManager.SceneTransform sceneTransform = new GameManager.SceneTransform();
-                                sceneTransform.position = spatialAnchor.transform.position;
-                                sceneTransform.rotation = spatialAnchor.transform.rotation;
-
-                                gameManager.AppendSceneTransform(sceneTransform);
+                                // アンカーがまだ作られていない場合は作成
+                                if (anchorManager != null && !anchorManager.isCreated)
+                                {
+                                    anchorManager.CreateAnchor();
+                                    anchorManager.OnSaveCloudButtonPressed();
+                                }
                             }
-                            if(gameManager.GetAllSceneTransforms() != null){
-                                loadingScene.SetActive(false);
-                                eventSystem.SetActive(true);
 
+                            // アンカーUUIDがPhotonに保存されているか確認し、VRプレイヤーがそれを読み込む
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                             {
-                                GameManager.SceneTransform[] sceneTransforms = gameManager.GetAllSceneTransforms();
-
-                                if (sceneTransforms != null && sceneTransforms.Length > 0)
+                                string anchorUUID = gameManager.GetCloudAnchorUUID();
+                                if (!string.IsNullOrEmpty(anchorUUID) && anchorManager != null)
                                 {
-                                    spatialAnchor.transform.position = sceneTransforms[0].position;
-                                    spatialAnchor.transform.rotation = sceneTransforms[0].rotation;
+                                    // アンカーをロード
+                                    anchorManager.OnLoadCloudButtonPressed();
                                     spatialAnchor.SetActive(true);
                                 }
-
-
-
                             }
+
+                            // ロード完了したらUIを表示
+                            loadingScene.SetActive(false);
+                            eventSystem.SetActive(true);
 
                             // プレイヤーキャラクターの生成およびカメラの生成
                             switch (character)
@@ -286,14 +287,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                                     Debug.LogWarning("未処理のキャラクタータイプです: " + character);
                                     break;
                             }
-
                         }
 
                         SetPlayerCreated(true);
                     }
                 }
             }
-        }
         }
     }
 

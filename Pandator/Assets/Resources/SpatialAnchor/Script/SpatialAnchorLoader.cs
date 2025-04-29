@@ -35,8 +35,8 @@ public class SpatialAnchorLoader : MonoBehaviour
 
         foreach (AnchorManager anchor in _allAnchors)
         {
-            // ロードする関数を呼ぶ
-            anchor.OnLoadLocalButtonPressed();
+            anchor.OnLoadCloudButtonPressed();
+
 
             // 物体を動かすためにコンポーネントを削除
             OVRSpatialAnchor spatialAnchor = anchor.gameObject.GetComponent<OVRSpatialAnchor>();
@@ -61,5 +61,4 @@ public class SpatialAnchorLoader : MonoBehaviour
             }
         }
     }
-
 }

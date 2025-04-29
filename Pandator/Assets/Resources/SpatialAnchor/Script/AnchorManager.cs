@@ -5,8 +5,9 @@ using System.Text;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
 
-public class AnchorManager : MonoBehaviour
+public class AnchorManager : MonoBehaviourPunCallbacks
 {
     private OVRSpatialAnchor _spatialAnchor;
     private System.Guid _uuid;
@@ -22,30 +23,9 @@ public class AnchorManager : MonoBehaviour
     [SerializeField]
     private string _uniqueKey;
     public GameObject roomPrefab;
-    /*void Awake()
-    {
-        _spatialAnchor = GetComponent<OVRSpatialAnchor>();
-    }
 
-    private IEnumerator Start()
-    {
-        while (_spatialAnchor && !_spatialAnchor.Created)
-        {
-            yield return null;
-        }
-
-        if (_spatialAnchor)
-        {
-            _uuid = _spatialAnchor.Uuid;
-            Debug.Log("Success: " + _uuid);
-            _message.text = "seikou";
-        } else
-        {
-            Debug.Log("Failed");
-            _message.text = "sippai";
-            //Destroy(gameObject);
-        }
-    }*/
+    // クラウドストレージ用の設定
+    private const string CLOUD_ANCHOR_UUID_KEY = "cloudAnchorUUID";
 
     void Update()
     {
@@ -59,7 +39,7 @@ public class AnchorManager : MonoBehaviour
 
             if (OVRInput.GetDown(OVRInput.Button.One))
             {
-                OnSaveLocalButtonPressed();
+                OnSaveCloudButtonPressed();
             }
             if (OVRInput.GetDown(OVRInput.Button.Two))
             {
@@ -67,15 +47,13 @@ public class AnchorManager : MonoBehaviour
             }
             if (OVRInput.GetDown(OVRInput.Button.Three))
             {
-                OnDeleteLocalButtonPressed();
+                OnDeleteCloudButtonPressed();
             }
             if (OVRInput.GetDown(OVRInput.Button.Four))
             {
-                OnLoadLocalButtonPressed();
+                OnLoadCloudButtonPressed();
             }
         }
-        
-
     }
 
     public async void CreateAnchor()
@@ -113,10 +91,9 @@ public class AnchorManager : MonoBehaviour
                 isCreated = false;
             }
         }
-
     }
 
-    public void OnDeleteLocalButtonPressed()
+    public void OnDeleteCloudButtonPressed()
     {
         // 作られていない時は削除しない
         if (!_spatialAnchor) return;
@@ -126,6 +103,13 @@ public class AnchorManager : MonoBehaviour
             if (success)
             {
                 _message.text = "Successfully deleted anchor.";
+                // Photonから共有UUIDを削除
+                if (PhotonNetwork.InRoom)
+                {
+                    ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+                    props.Add(CLOUD_ANCHOR_UUID_KEY, null);
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+                }
             }
             else
             {
@@ -135,90 +119,42 @@ public class AnchorManager : MonoBehaviour
         });
     }
 
-    public async void OnSaveLocalButtonPressed()
+    public async void OnSaveCloudButtonPressed()
     {
         if (!_spatialAnchor) return;
-        _message.text = "Saving...";
-        // アンカーを保存
+        _message.text = "Saving to cloud...";
+
+        // アンカーをクラウドに保存
         var saveOptions = new OVRSpatialAnchor.SaveOptions();
-        saveOptions.Storage = OVRSpace.StorageLocation.Local;
+        saveOptions.Storage = OVRSpace.StorageLocation.Cloud;
         _spatialAnchor.Save(saveOptions, (anchor, success) =>
         {
             if (success)
             {
                 _isSaved = true;
-                _message.text = "Successfully saved anchor.";
-                // SaveしたアンカーのUUIDを覚えておく
-                PlayerPrefs.SetString(_uniqueKey, anchor.Uuid.ToString());
+                _message.text = "Successfully saved anchor to cloud.";
+
+                // Photonのカスタムプロパティとしてアンカーのuuidを共有
+                if (PhotonNetwork.InRoom)
+                {
+                    string anchorUUID = anchor.Uuid.ToString();
+                    Debug.Log("Sharing Anchor UUID via Photon: " + anchorUUID);
+
+                    ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+                    props.Add(CLOUD_ANCHOR_UUID_KEY, anchorUUID);
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+
+                    // ローカルにも保存
+                    PlayerPrefs.SetString(_uniqueKey, anchorUUID);
+                }
             }
             else
             {
                 _isSaved = false;
-                _message.text = "Failed to save anchor.";
+                _message.text = "Failed to save anchor to cloud.";
                 return;
             }
         });
-    }
-
-    public void OnLoadLocalButtonPressed()
-    {
-        var savedUuid = PlayerPrefs.GetString(_uniqueKey, "");
-        if (savedUuid == "")
-        {
-            _isSaved = false;
-            _message.text = "No stored data found.";
-            return;
-        }
-        
-        // Load Optionの作成
-        var uuids = new Guid[1] { new Guid(savedUuid) };
-        var loadOptions = new OVRSpatialAnchor.LoadOptions 
-        { Timeout = 0, StorageLocation = OVRSpace.StorageLocation.Local, Uuids = uuids };
-        LoadAnchors(loadOptions);
-    }
-
-    private void LoadAnchors(OVRSpatialAnchor.LoadOptions options)
-    {
-        // SaeしたアンカーをUUIDを指定して読み込み
-        OVRSpatialAnchor.LoadUnboundAnchors(options, anchors =>
-        {
-            if (anchors.Length != 1)
-            {
-                // アンカーが読めなかった
-                _message.text = "Failed to load anchor.";
-                return;
-            }
-            if (anchors[0].Localized)
-            {
-                // すでにローカライズが終了していた場合
-                OnLocalized(anchors[0], true);
-            }
-            else if (!anchors[0].Localizing)
-            {
-                // 空間マッピングが不十分などの理由でローカライズに失敗している場合、再度ローカライズ
-                anchors[0].Localize(OnLocalized);
-            }
-        });
-    }
-
-    private void OnLocalized(OVRSpatialAnchor.UnboundAnchor unboundAnchor, bool success)
-    {
-        if (!success)
-        {
-            // アンカーが読めなかった
-            _message.text = "Failed to load anchor.";
-            return;
-        }
-        // アンカーのGame Objectを読み取った位置に移動し、アンバインドのアンカーをコンポーネントにバインドする
-        var pose = unboundAnchor.Pose;
-        transform.SetPositionAndRotation(pose.position, pose.rotation);
-        if (!_spatialAnchor)
-        {
-            _spatialAnchor = gameObject.AddComponent<OVRSpatialAnchor>();
-        }
-        unboundAnchor.BindTo(_spatialAnchor);
-        _message.text = "Successfully loaded anchor.";
-        isCreated = true;
     }
 
     public void OnResetRotXButtonPressed()
@@ -249,7 +185,4 @@ public class AnchorManager : MonoBehaviour
         float rotZ = gameObject.transform.eulerAngles.z;
         gameObject.transform.rotation = Quaternion.Euler(new Vector3(rotX, rotY+45f, rotZ));
     }
-
-
-
 }

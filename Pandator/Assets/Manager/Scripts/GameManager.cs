@@ -56,7 +56,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
 
-    private SceneTransform[] localSceneTransforms = new SceneTransform[0];
+    // クラウドアンカーUUID用の定数
+    private const string CLOUD_ANCHOR_UUID_KEY = "cloudAnchorUUID";
+    private string localCloudAnchorUUID = "";
 
     private void Start()
     {
@@ -70,6 +72,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // Room に入室済みなら既存の playerScoreList を取ってくる
         FetchPlayerScoreListFromRoom();
+
+        // Room に入室済みなら既存のクラウドアンカーUUIDを取ってくる
+        FetchCloudAnchorUUIDFromRoom();
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
@@ -93,7 +98,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 playerType = PlayerType.GOD;
                 break;
         }
-
     }
 
     private void Update()
@@ -127,9 +131,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetupDeadUI();
         }
-        
+
         HandleEndGame();
-        
+
 
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
@@ -184,8 +188,6 @@ public class GameManager : MonoBehaviourPunCallbacks
                 previousLocalPlayerNameCount = localPlayerNames.Length;
             }
         }
-
-
     }
 
 
@@ -240,7 +242,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-    
+
     private void HandleEndGame()
     {
         if (GetGameState() == GameState.END && !hasSendToGAS )
@@ -515,29 +517,11 @@ void UpdatePlayerNameListProperty()
             Debug.Log("playerScoreList updated from room: " + string.Join(", ", localPlayerScores));
         }
 
-        if (props.ContainsKey("SceneTransform"))
+        // クラウドアンカーUUIDの更新
+        if (props.ContainsKey(CLOUD_ANCHOR_UUID_KEY) && props[CLOUD_ANCHOR_UUID_KEY] != null)
         {
-            object transformProp = props["SceneTransform"];
-            if (transformProp is string[] transforms)
-            {
-                localSceneTransforms = new SceneTransform[transforms.Length];
-                for (int i = 0; i < transforms.Length; i++)
-                {
-                    localSceneTransforms[i] = DeserializeSceneTransform(transforms[i]);
-                }
-
-                Debug.Log("SceneTransform updated from room: count=" + localSceneTransforms.Length);
-            }
-            else if (transformProp is object[] objArray)
-            {
-                localSceneTransforms = new SceneTransform[objArray.Length];
-                for (int i = 0; i < objArray.Length; i++)
-                {
-                    localSceneTransforms[i] = DeserializeSceneTransform(objArray[i].ToString());
-                }
-
-                Debug.Log("SceneTransform updated from room: count=" + localSceneTransforms.Length);
-            }
+            localCloudAnchorUUID = props[CLOUD_ANCHOR_UUID_KEY].ToString();
+            Debug.Log($"Cloud Anchor UUID updated from room: {localCloudAnchorUUID}");
         }
     }
 
@@ -548,7 +532,7 @@ void UpdatePlayerNameListProperty()
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
             UpdatePlayerScoreListProperty();
-            UpdateSceneTransformProperty();
+            UpdateCloudAnchorUUIDProperty();
             yield return new WaitForSeconds(1f);
         }
     }
@@ -595,11 +579,49 @@ void UpdatePlayerNameListProperty()
         }
     }
 
+    // クラウドアンカーUUIDを設定する関数
+    public void SetCloudAnchorUUID(string uuid)
+    {
+        if (string.IsNullOrEmpty(uuid)) return;
+
+        localCloudAnchorUUID = uuid;
+        UpdateCloudAnchorUUIDProperty();
+        Debug.Log($"Set Cloud Anchor UUID: {uuid}");
+    }
+
+    // クラウドアンカーUUIDを取得する関数
+    public string GetCloudAnchorUUID()
+    {
+        return localCloudAnchorUUID;
+    }
+
+    // クラウドアンカーUUIDのカスタムプロパティを更新
+    private void UpdateCloudAnchorUUIDProperty()
+    {
+        if (PhotonNetwork.InRoom && !string.IsNullOrEmpty(localCloudAnchorUUID))
+        {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { [CLOUD_ANCHOR_UUID_KEY] = localCloudAnchorUUID }
+            );
+        }
+    }
+
+    // Roomから既存のクラウドアンカーUUIDを取得
+    private void FetchCloudAnchorUUIDFromRoom()
+    {
+        if (PhotonNetwork.InRoom &&
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CLOUD_ANCHOR_UUID_KEY, out object uuid) &&
+            uuid != null)
+        {
+            localCloudAnchorUUID = uuid.ToString();
+            Debug.Log($"Fetched Cloud Anchor UUID from room: {localCloudAnchorUUID}");
+        }
+    }
 
     public void SaveRankingData()
     {
         // 送信するデータの数が一致しているか確認
-        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;  
+        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
@@ -635,9 +657,6 @@ void UpdatePlayerNameListProperty()
         {
             return null;
         }
-
-
-
     }
 
     private IEnumerator PostToGAS(string name, int score,string dateTime)
@@ -685,100 +704,6 @@ void UpdatePlayerNameListProperty()
 
         Debug.Log("SendToGAS: " + name + " " + score);
     }
-
-    private SceneTransform DeserializeSceneTransform(string serialized)
-{
-    var parts = serialized.Split(';');
-    if (parts.Length != 2) return null;
-
-    string[] posParts = parts[0].Split(',');
-    string[] rotParts = parts[1].Split(',');
-    if (posParts.Length != 3 || rotParts.Length != 4) return null;
-
-    SceneTransform pt = new SceneTransform();
-    pt.position = new Vector3(
-        float.Parse(posParts[0]),
-        float.Parse(posParts[1]),
-        float.Parse(posParts[2])
-    );
-    pt.rotation = new Quaternion(
-        float.Parse(rotParts[0]),
-        float.Parse(rotParts[1]),
-        float.Parse(rotParts[2]),
-        float.Parse(rotParts[3])
-    );
-    return pt;
-}
-
-private void UpdateSceneTransformProperty()
-{
-    if (PhotonNetwork.InRoom)
-    {
-        string[] serializedTransforms = new string[localSceneTransforms.Length];
-        for (int i = 0; i < localSceneTransforms.Length; i++)
-        {
-            serializedTransforms[i] = SerializeSceneTransform(localSceneTransforms[i]);
-        }
-        PhotonNetwork.CurrentRoom.SetCustomProperties(
-            new ExitGames.Client.Photon.Hashtable { ["SceneTransform"] = serializedTransforms }
-        );
-    }
-}
-
-private string SerializeSceneTransform(SceneTransform pt)
-{
-    return pt.position.x + "," + pt.position.y + "," + pt.position.z + ";" +
-           pt.rotation.x + "," + pt.rotation.y + "," + pt.rotation.z + "," + pt.rotation.w;
-}
-
-//
-// Room から transform 配列を取得する
-//
-private void FetchSceneTransformListFromRoom()
-{
-    if (PhotonNetwork.InRoom &&
-        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("SceneTransform", out object obj))
-    {
-        if (obj is string[] transforms)
-        {
-            localSceneTransforms = new SceneTransform[transforms.Length];
-            for (int i = 0; i < transforms.Length; i++)
-            {
-                localSceneTransforms[i] = DeserializeSceneTransform(transforms[i]);
-            }
-            Debug.Log("Fetched SceneTransform from room: count=" + localSceneTransforms.Length);
-        }
-        else if (obj is object[] objArray)
-        {
-            localSceneTransforms = new SceneTransform[objArray.Length];
-            for (int i = 0; i < objArray.Length; i++)
-            {
-                localSceneTransforms[i] = DeserializeSceneTransform(objArray[i].ToString());
-            }
-            Debug.Log("Fetched SceneTransform from room: count=" + localSceneTransforms.Length);
-        }
-    }
-}
-
-//
-// Getter メソッド：ローカルの transform 配列取得
-//
-public SceneTransform[] GetAllSceneTransforms()
-{
-    return localSceneTransforms;
-}
-
-//
-// Append メソッド：新たな transform を追加して同期
-//
-public void AppendSceneTransform(SceneTransform pt)
-{
-    List<SceneTransform> list = new List<SceneTransform>(localSceneTransforms);
-    list.Add(pt);
-    localSceneTransforms = list.ToArray();
-    UpdateSceneTransformProperty();
-}
-
 
     [System.Serializable]
     private class JsonData
