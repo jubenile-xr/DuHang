@@ -151,8 +151,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
                         if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
                         {
-                            loadingScene.SetActive(false);
-                            eventSystem.SetActive(true);
+                            
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
                             {
                                 GameManager.SceneTransform sceneTransform = new GameManager.SceneTransform();
@@ -161,6 +160,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
                                 gameManager.AppendSceneTransform(sceneTransform);
                             }
+                            if(gameManager.GetAllSceneTransforms() != null){
+                                loadingScene.SetActive(false);
+                                eventSystem.SetActive(true);
+
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                             {
                                 GameManager.SceneTransform[] sceneTransforms = gameManager.GetAllSceneTransforms();
@@ -290,6 +293,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     }
                 }
             }
+        }
         }
     }
 
