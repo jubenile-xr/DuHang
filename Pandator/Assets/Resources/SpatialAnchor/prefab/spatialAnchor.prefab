@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 3462572394314064406}
   m_Layer: 0
   m_Name: playerSpawn
-  m_TagString: Untagged
+  m_TagString: playerSpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -382,7 +382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5539051175614148696
 Transform:
   m_ObjectHideFlags: 0
@@ -585,11 +585,11 @@ GameObject:
   - component: {fileID: 8844792784044444829}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5824048889624634857
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1636,7 +1636,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_TagString

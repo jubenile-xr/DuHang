@@ -257,6 +257,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: spatialAnchor
       objectReference: {fileID: 0}
+    - target: {fileID: 2739052793911631005, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5539051175614148696, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.72064644

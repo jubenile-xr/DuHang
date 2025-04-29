@@ -8,6 +8,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
+
+    private SceneTransform[] localSceneTransforms = new SceneTransform[0];
 
     private void Start()
     {
@@ -473,16 +476,19 @@ void UpdatePlayerNameListProperty()
             aliveCount = (int)props["aliveCount"];
             Debug.Log("aliveCount updated: " + aliveCount);
         }
+
         if (props.ContainsKey("gameState"))
         {
             state = (GameState)(int)props["gameState"];
             Debug.Log("GameState updated: " + state);
         }
+
         if (props.ContainsKey("playerDeadStatus"))
         {
             playerDeadStatus = props["playerDeadStatus"] as bool[];
             Debug.Log("playerDeadStatus updated, len=" + (playerDeadStatus?.Length ?? 0));
         }
+
         if (props.ContainsKey("playerNameList"))
         {
             object propValue = props["playerNameList"];
@@ -499,12 +505,39 @@ void UpdatePlayerNameListProperty()
                     localPlayerNames[i] = objArray[i].ToString();
                 }
             }
+
             Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
+
         if (props.ContainsKey("playerScoreList"))
         {
             localPlayerScores = props["playerScoreList"] as float[];
             Debug.Log("playerScoreList updated from room: " + string.Join(", ", localPlayerScores));
+        }
+
+        if (props.ContainsKey("SceneTransform"))
+        {
+            object transformProp = props["SceneTransform"];
+            if (transformProp is string[] transforms)
+            {
+                localSceneTransforms = new SceneTransform[transforms.Length];
+                for (int i = 0; i < transforms.Length; i++)
+                {
+                    localSceneTransforms[i] = DeserializeSceneTransform(transforms[i]);
+                }
+
+                Debug.Log("SceneTransform updated from room: count=" + localSceneTransforms.Length);
+            }
+            else if (transformProp is object[] objArray)
+            {
+                localSceneTransforms = new SceneTransform[objArray.Length];
+                for (int i = 0; i < objArray.Length; i++)
+                {
+                    localSceneTransforms[i] = DeserializeSceneTransform(objArray[i].ToString());
+                }
+
+                Debug.Log("SceneTransform updated from room: count=" + localSceneTransforms.Length);
+            }
         }
     }
 
@@ -515,6 +548,7 @@ void UpdatePlayerNameListProperty()
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
             UpdatePlayerScoreListProperty();
+            UpdateSceneTransformProperty();
             yield return new WaitForSeconds(1f);
         }
     }
@@ -652,6 +686,99 @@ void UpdatePlayerNameListProperty()
         Debug.Log("SendToGAS: " + name + " " + score);
     }
 
+    private SceneTransform DeserializeSceneTransform(string serialized)
+{
+    var parts = serialized.Split(';');
+    if (parts.Length != 2) return null;
+
+    string[] posParts = parts[0].Split(',');
+    string[] rotParts = parts[1].Split(',');
+    if (posParts.Length != 3 || rotParts.Length != 4) return null;
+
+    SceneTransform pt = new SceneTransform();
+    pt.position = new Vector3(
+        float.Parse(posParts[0]),
+        float.Parse(posParts[1]),
+        float.Parse(posParts[2])
+    );
+    pt.rotation = new Quaternion(
+        float.Parse(rotParts[0]),
+        float.Parse(rotParts[1]),
+        float.Parse(rotParts[2]),
+        float.Parse(rotParts[3])
+    );
+    return pt;
+}
+
+private void UpdateSceneTransformProperty()
+{
+    if (PhotonNetwork.InRoom)
+    {
+        string[] serializedTransforms = new string[localSceneTransforms.Length];
+        for (int i = 0; i < localSceneTransforms.Length; i++)
+        {
+            serializedTransforms[i] = SerializeSceneTransform(localSceneTransforms[i]);
+        }
+        PhotonNetwork.CurrentRoom.SetCustomProperties(
+            new ExitGames.Client.Photon.Hashtable { ["SceneTransform"] = serializedTransforms }
+        );
+    }
+}
+
+private string SerializeSceneTransform(SceneTransform pt)
+{
+    return pt.position.x + "," + pt.position.y + "," + pt.position.z + ";" +
+           pt.rotation.x + "," + pt.rotation.y + "," + pt.rotation.z + "," + pt.rotation.w;
+}
+
+//
+// Room から transform 配列を取得する
+//
+private void FetchSceneTransformListFromRoom()
+{
+    if (PhotonNetwork.InRoom &&
+        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("SceneTransform", out object obj))
+    {
+        if (obj is string[] transforms)
+        {
+            localSceneTransforms = new SceneTransform[transforms.Length];
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                localSceneTransforms[i] = DeserializeSceneTransform(transforms[i]);
+            }
+            Debug.Log("Fetched SceneTransform from room: count=" + localSceneTransforms.Length);
+        }
+        else if (obj is object[] objArray)
+        {
+            localSceneTransforms = new SceneTransform[objArray.Length];
+            for (int i = 0; i < objArray.Length; i++)
+            {
+                localSceneTransforms[i] = DeserializeSceneTransform(objArray[i].ToString());
+            }
+            Debug.Log("Fetched SceneTransform from room: count=" + localSceneTransforms.Length);
+        }
+    }
+}
+
+//
+// Getter メソッド：ローカルの transform 配列取得
+//
+public SceneTransform[] GetAllSceneTransforms()
+{
+    return localSceneTransforms;
+}
+
+//
+// Append メソッド：新たな transform を追加して同期
+//
+public void AppendSceneTransform(SceneTransform pt)
+{
+    List<SceneTransform> list = new List<SceneTransform>(localSceneTransforms);
+    list.Add(pt);
+    localSceneTransforms = list.ToArray();
+    UpdateSceneTransformProperty();
+}
+
 
     [System.Serializable]
     private class JsonData
@@ -663,7 +790,7 @@ void UpdatePlayerNameListProperty()
     }
 
     [System.Serializable]
-    public class PlayerTransform
+    public class SceneTransform
     {
         public Vector3 position;
         public Quaternion rotation;
