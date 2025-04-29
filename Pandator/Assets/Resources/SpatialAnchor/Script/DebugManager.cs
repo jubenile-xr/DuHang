@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DebugManager : MonoBehaviour
 {
-    private static bool debugMode = false;
+    private static bool debugMode = true;
 
     public static bool GetDebugMode() => debugMode;
 

@@ -273,6 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 4
+  debugCanvas: {fileID: 3657148172878667262}
   eventSystem: {fileID: 0}
   loadingScene: {fileID: 0}
   canvas: {fileID: 0}
@@ -439,6 +440,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
+--- !u!223 &3657148172878667262 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 150670483499159694, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
+  m_PrefabInstance: {fileID: 3519429941726563696}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8937726959682370856 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5539051175614148696, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}

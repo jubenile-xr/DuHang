@@ -24,6 +24,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject camera;
     private GameObject spatialAnchor;
     private GameObject playerSpawn;
+    [SerializeField]private Canvas debugCanvas;
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
@@ -36,7 +37,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
-    [SerializeField]private GameObject VRModel;
 
     void Start()
     {
@@ -75,12 +75,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         {
             loadingScene.SetActive(false);
             spatialAnchor.SetActive(true);
-            Canvas debugCanvas = spatialAnchor.GetComponentsInChildren<Canvas>()
-                .FirstOrDefault(child => child.CompareTag("Canvas"));
-            if (debugCanvas != null)
-            {
-                debugCanvas.gameObject.SetActive(true);
-            }
+            debugCanvas.gameObject.SetActive(true);
+
             Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"));
         }
         loadingTime = 0;

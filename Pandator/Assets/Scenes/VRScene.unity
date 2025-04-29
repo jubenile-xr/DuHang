@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &597934996 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 442333737079542751, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-  m_PrefabInstance: {fileID: 1353542805}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1095328260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -194,14 +189,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 442333737079542751, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+    - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+      propertyPath: VRModel
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: eventSystem
+      propertyPath: debugCanvas
       value: 
-      objectReference: {fileID: 597934996}
+      objectReference: {fileID: 1353542806}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: loadingScene
       value: 
@@ -255,6 +250,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+--- !u!223 &1353542806 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 3028188494596824148, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+  m_PrefabInstance: {fileID: 1353542805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

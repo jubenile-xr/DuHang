@@ -806,6 +806,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PhotonFailureObject: {fileID: 6130612233481120696, guid: ec407ab17a0194471814213f46afa494, type: 3}
   character: 3
+  debugCanvas: {fileID: 8389496141311893776}
   eventSystem: {fileID: 2398792433572911778}
   loadingScene: {fileID: 0}
   canvas: {fileID: 1815615267537046740}
@@ -1482,5 +1483,10 @@ PrefabInstance:
 --- !u!4 &4225671646570971590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5539051175614148696, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
+  m_PrefabInstance: {fileID: 8537189142927077790}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &8389496141311893776 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 150670483499159694, guid: de371326ff7064dc88d9cb60c74fbfbd, type: 3}
   m_PrefabInstance: {fileID: 8537189142927077790}
   m_PrefabAsset: {fileID: 0}
