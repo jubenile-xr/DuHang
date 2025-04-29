@@ -8,6 +8,7 @@ public class DebugManager : MonoBehaviour
 
     public static void SetDebugMode(bool mode)
     {
+        Debug.Log("Debug mode: " + mode);
         debugMode = mode;
     }
 }

@@ -40,6 +40,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        Debug.Log("debug mode" + DebugManager.GetDebugMode());
         if (spatialAnchor == null && transform.parent != null)
         {
             foreach (Transform sibling in transform.parent)

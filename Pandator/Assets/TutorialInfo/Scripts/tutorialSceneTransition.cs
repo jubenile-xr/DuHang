@@ -29,7 +29,8 @@ public class tutorialSceneTransition : MonoBehaviour
         }
         else if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) && // 右トリガー
                  OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger)&& // 左トリガー
-                 Character.GetSelectedAnimal() == Character.GameCharacters.PANDA) // パンダだったら
+                 Character.GetSelectedAnimal() == Character.GameCharacters.PANDA || // パンダだったら
+                 Input.GetKey(KeyCode.LeftShift)) // 実験用
         {
             DebugManager.SetDebugMode(true);
             changeScene();
