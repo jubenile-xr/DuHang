@@ -19,7 +19,7 @@ public class ChargeTime : MonoBehaviour
         }
         slider.value = 1; // 初期状態をマックスに設定
 
-        // gameManagerの取得
+        //gameManagerの取得
         if (gameManager == null)
         {
             gameManager = GameObject.Find("GameManager(Clone)").GetComponent<GameManager>();
