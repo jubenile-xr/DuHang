@@ -471,6 +471,7 @@ private IEnumerator WaitForGameManager()
 
                 if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
                 {
+                    CreatePlayerName();
                     hasPlayerNameCreated = true;
                 }
 
