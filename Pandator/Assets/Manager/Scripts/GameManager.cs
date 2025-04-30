@@ -56,9 +56,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
 
-    // クラウドアンカーUUID用の定数
-    private const string CLOUD_ANCHOR_UUID_KEY = "cloudAnchorUUID";
-    private string localCloudAnchorUUID = "";
+    // ローカルアンカーUUID用の定数
+    private const string LOCAL_ANCHOR_UUID_KEY = "localAnchorUUID";
+    private string localAnchorUUID = "";
 
     private void Start()
     {
@@ -73,8 +73,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         // Room に入室済みなら既存の playerScoreList を取ってくる
         FetchPlayerScoreListFromRoom();
 
-        // Room に入室済みなら既存のクラウドアンカーUUIDを取ってくる
-        FetchCloudAnchorUUIDFromRoom();
+        // Room に入室済みなら既存のローカルアンカーUUIDを取ってくる
+        FetchLocalAnchorUUIDFromRoom();
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
@@ -517,11 +517,11 @@ void UpdatePlayerNameListProperty()
             Debug.Log("playerScoreList updated from room: " + string.Join(", ", localPlayerScores));
         }
 
-        // クラウドアンカーUUIDの更新
-        if (props.ContainsKey(CLOUD_ANCHOR_UUID_KEY) && props[CLOUD_ANCHOR_UUID_KEY] != null)
+        // ローカルアンカーUUIDの更新
+        if (props.ContainsKey(LOCAL_ANCHOR_UUID_KEY) && props[LOCAL_ANCHOR_UUID_KEY] != null)
         {
-            localCloudAnchorUUID = props[CLOUD_ANCHOR_UUID_KEY].ToString();
-            Debug.Log($"Cloud Anchor UUID updated from room: {localCloudAnchorUUID}");
+            localAnchorUUID = props[LOCAL_ANCHOR_UUID_KEY].ToString();
+            Debug.Log($"Local Anchor UUID updated from room: {localAnchorUUID}");
         }
     }
 
@@ -532,7 +532,7 @@ void UpdatePlayerNameListProperty()
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
             UpdatePlayerScoreListProperty();
-            UpdateCloudAnchorUUIDProperty();
+            UpdateLocalAnchorUUIDProperty();
             yield return new WaitForSeconds(1f);
         }
     }
@@ -579,42 +579,42 @@ void UpdatePlayerNameListProperty()
         }
     }
 
-    // クラウドアンカーUUIDを設定する関数
-    public void SetCloudAnchorUUID(string uuid)
+    // ローカルアンカーUUIDを設定する関数
+    public void SetLocalAnchorUUID(string uuid)
     {
         if (string.IsNullOrEmpty(uuid)) return;
 
-        localCloudAnchorUUID = uuid;
-        UpdateCloudAnchorUUIDProperty();
-        Debug.Log($"Set Cloud Anchor UUID: {uuid}");
+        localAnchorUUID = uuid;
+        UpdateLocalAnchorUUIDProperty();
+        Debug.Log($"Set Local Anchor UUID: {uuid}");
     }
 
-    // クラウドアンカーUUIDを取得する関数
-    public string GetCloudAnchorUUID()
+    // ローカルアンカーUUIDを取得する関数
+    public string GetLocalAnchorUUID()
     {
-        return localCloudAnchorUUID;
+        return localAnchorUUID;
     }
 
-    // クラウドアンカーUUIDのカスタムプロパティを更新
-    private void UpdateCloudAnchorUUIDProperty()
+    // ローカルアンカーUUIDのカスタムプロパティを更新
+    private void UpdateLocalAnchorUUIDProperty()
     {
-        if (PhotonNetwork.InRoom && !string.IsNullOrEmpty(localCloudAnchorUUID))
+        if (PhotonNetwork.InRoom && !string.IsNullOrEmpty(localAnchorUUID))
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(
-                new ExitGames.Client.Photon.Hashtable { [CLOUD_ANCHOR_UUID_KEY] = localCloudAnchorUUID }
+                new ExitGames.Client.Photon.Hashtable { [LOCAL_ANCHOR_UUID_KEY] = localAnchorUUID }
             );
         }
     }
 
-    // Roomから既存のクラウドアンカーUUIDを取得
-    private void FetchCloudAnchorUUIDFromRoom()
+    // Roomから既存のローカルアンカーUUIDを取得
+    private void FetchLocalAnchorUUIDFromRoom()
     {
         if (PhotonNetwork.InRoom &&
-            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CLOUD_ANCHOR_UUID_KEY, out object uuid) &&
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(LOCAL_ANCHOR_UUID_KEY, out object uuid) &&
             uuid != null)
         {
-            localCloudAnchorUUID = uuid.ToString();
-            Debug.Log($"Fetched Cloud Anchor UUID from room: {localCloudAnchorUUID}");
+            localAnchorUUID = uuid.ToString();
+            Debug.Log($"Fetched Local Anchor UUID from room: {localAnchorUUID}");
         }
     }
 

@@ -201,6 +201,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4639367931515619612, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
       propertyPath: m_Name
       value: GameStartAnimation

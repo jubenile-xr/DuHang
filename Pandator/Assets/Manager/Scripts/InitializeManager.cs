@@ -160,31 +160,40 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                                 // アンカーがまだ作られていない場合は作成
                                 if (anchorManager != null && !anchorManager.isCreated)
                                 {
+                                    Debug.Log("MR Player: Creating new anchor");
                                     anchorManager.CreateAnchor();
-                                    anchorManager.OnSaveCloudButtonPressed();
-                                }
 
-                                // アンカーが作成されたらフラグを立てる
-                                if (anchorManager != null && anchorManager.isCreated && !isAnchorLoaded)
+                                    // 作成完了を少し待つ
+                                    StartCoroutine(SaveAnchorAfterCreation(anchorManager));
+                                }
+                                else if (anchorManager != null && anchorManager.isCreated)
                                 {
+                                    Debug.Log("MR Player: Anchor already created, saving");
+                                    // すでに作成されているが念のため保存
+                                    anchorManager.OnSaveLocalButtonPressed();
                                     isAnchorLoaded = true;
-                                    Debug.Log("MR: Anchor created and saved successfully");
                                 }
                             }
 
                             // アンカーUUIDがPhotonに保存されているか確認し、VRプレイヤーがそれを読み込む
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                             {
-                                string anchorUUID = gameManager.GetCloudAnchorUUID();
+                                string anchorUUID = gameManager.GetLocalAnchorUUID();
                                 if (!string.IsNullOrEmpty(anchorUUID) && anchorManager != null && !isAnchorLoaded)
                                 {
+                                    Debug.Log("VR Player: Loading anchor with UUID: " + anchorUUID);
                                     // アンカーをロード
-                                    anchorManager.OnLoadCloudButtonPressed();
+                                    anchorManager.OnLoadLocalButtonPressed();
                                     spatialAnchor.SetActive(true);
 
                                     // ここでアンカーの読み込み完了を待つ
-                                    // アンカーが正しく読み込まれたことを確認
                                     StartCoroutine(CheckAnchorLoaded());
+                                }
+                                else if (anchorManager != null && !isAnchorLoaded)
+                                {
+                                    Debug.LogWarning("VR Player: No anchor UUID found. Waiting for MR player to create one...");
+                                    // 5秒ごとにUUID情報をチェック（MRプレイヤーがまだ作成していない場合）
+                                    StartCoroutine(WaitForAnchorUUID(anchorManager));
                                 }
                             }
 
@@ -502,5 +511,53 @@ private IEnumerator WaitForGameManager()
     private void SetPlayerCreated(bool isCreated)
     {
         isPlayerCreated = isCreated;
+    }
+
+    // MRプレイヤーがアンカーを作成した後、保存するコルーチン
+    private IEnumerator SaveAnchorAfterCreation(AnchorManager anchorManager)
+    {
+        // アンカー作成完了を待つ
+        yield return new WaitForSeconds(2.0f);
+
+        if (anchorManager.isCreated)
+        {
+            Debug.Log("MR Player: Anchor creation successful, saving");
+            anchorManager.OnSaveLocalButtonPressed();
+            isAnchorLoaded = true;
+        }
+        else
+        {
+            Debug.LogError("MR Player: Failed to create anchor within timeout");
+        }
+    }
+
+    // VRプレイヤーがMRプレイヤーからのアンカーUUIDを待つコルーチン
+    private IEnumerator WaitForAnchorUUID(AnchorManager anchorManager)
+    {
+        int attempts = 0;
+        const int maxAttempts = 10;  // 最大50秒待機
+
+        while (!isAnchorLoaded && attempts < maxAttempts)
+        {
+            yield return new WaitForSeconds(5.0f);
+            attempts++;
+
+            string anchorUUID = gameManager.GetLocalAnchorUUID();
+            if (!string.IsNullOrEmpty(anchorUUID))
+            {
+                Debug.Log($"VR Player: Anchor UUID received after {attempts} attempts: {anchorUUID}");
+                anchorManager.OnLoadLocalButtonPressed();
+                spatialAnchor.SetActive(true);
+                StartCoroutine(CheckAnchorLoaded());
+                break;
+            }
+
+            Debug.Log($"VR Player: Still waiting for anchor UUID... Attempt {attempts}/{maxAttempts}");
+        }
+
+        if (attempts >= maxAttempts)
+        {
+            Debug.LogError("VR Player: Timed out waiting for anchor UUID");
+        }
     }
 }
