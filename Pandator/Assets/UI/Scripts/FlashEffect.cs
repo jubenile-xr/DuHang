@@ -7,6 +7,14 @@ public class FlashEffect : MonoBehaviour
 	public Image flashImage; // UI Image
 	public float flashDuration = 0.3f;
 
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			TriggerFlash();
+		}
+	}
+
 	public void TriggerFlash()
 	{
 		StartCoroutine(FlashRoutine());

@@ -193,6 +193,10 @@ PrefabInstance:
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1095328261}
+    - target: {fileID: 4750997238653893854, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 054fc392946454ed3b57d0a6a40df0ca, type: 2}
     - target: {fileID: 8716894927445767245, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
