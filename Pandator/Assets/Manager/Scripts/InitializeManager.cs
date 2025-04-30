@@ -43,46 +43,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Debug.Log("debug mode" + DebugManager.GetDebugMode());
-        if (spatialAnchor == null && transform.parent != null)
-        {
-            foreach (Transform sibling in transform.parent)
-            {
-                if (sibling.CompareTag("spatialAnchor"))
-                {
-                    spatialAnchor = sibling.gameObject;
-                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                    break;
-                }
-            }
-            if (spatialAnchor == null)
-            {
-                Debug.LogError("spatialAnchorが見つかりません。タグやシーンの階層を確認してください。");
-            }
-        }
 
-        if (spatialAnchor != null && playerSpawn == null)
-        {
-            Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
-                .FirstOrDefault(child => child.CompareTag("playerSpawn"));
-            if (spawnTransform != null)
-            {
-                playerSpawn = spawnTransform.gameObject;
-                Debug.Log("playerSpawn found: " + playerSpawn.name);
-            }
-            else
-            {
-                Debug.LogError("playerSpawnがspatialAnchorの子オブジェクト内に見つかりません。");
-            }
-        }
-        if (DebugManager.GetDebugMode() && spatialAnchor != null)
-        {
-            loadingScene.SetActive(false);
-            spatialAnchor.SetActive(true);
-            Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
-            CanvasCameraSetter.Instance.SetCanvasCamera();
-            CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-            debugCanvas.gameObject.SetActive(true);
-        }
+        // Resourcesからspatialアンカーのprefabを読み込む
+        LoadSpatialAnchorFromResources();
+
         loadingTime = 0;
         if (character != GameCharacter.GOD)
         {
@@ -112,6 +76,50 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // Resourcesからspatialアンカーのprefabを読み込み、インスタンス化する
+    private void LoadSpatialAnchorFromResources()
+    {
+        GameObject spatialAnchorPrefab = Resources.Load<GameObject>("SpatialAnchor/Prefab/spatialAnchor");
+        if (spatialAnchorPrefab != null)
+        {
+            spatialAnchor = Instantiate(spatialAnchorPrefab, Vector3.zero, Quaternion.identity);
+            spatialAnchor.transform.parent = transform.parent;
+            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+
+            if (DebugManager.GetDebugMode() && spatialAnchor != null)
+            {
+                loadingScene.SetActive(false);
+                spatialAnchor.SetActive(true);
+                Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
+                CanvasCameraSetter.Instance.SetCanvasCamera();
+                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                debugCanvas.gameObject.SetActive(true);
+            }
+            else
+            {
+                // デバッグモードではない場合、初期状態では非アクティブにする
+                spatialAnchor.SetActive(false);
+            }
+
+            // PlayerSpawnポイントを取得
+            Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
+                .FirstOrDefault(child => child.CompareTag("playerSpawn"));
+            if (spawnTransform != null)
+            {
+                playerSpawn = spawnTransform.gameObject;
+                Debug.Log("playerSpawn found: " + playerSpawn.name);
+            }
+            else
+            {
+                Debug.LogError("playerSpawnがspatialAnchorの子オブジェクト内に見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogError("Resources/SpatialAnchor/Prefab/spatialAnchor.prefabが見つかりません。");
+        }
+    }
+
     void Update()
     {
         if (!DebugManager.GetDebugMode())
@@ -127,17 +135,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
             if (gameManager && isAnimationFinished && !isPlayerCreated)
             {
-                if (spatialAnchor == null && transform.parent != null)
+                if (spatialAnchor == null)
                 {
-                    foreach (Transform sibling in transform.parent)
-                    {
-                        if (sibling.CompareTag("spatialAnchor"))
-                        {
-                            spatialAnchor = sibling.gameObject;
-                            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                            break;
-                        }
-                    }
+                    // アンカーがなければ再度読み込み
+                    LoadSpatialAnchorFromResources();
                 }
                 else
                 {
@@ -154,7 +155,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     {
                         if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
                         {
-                            // MRプレイヤーの場合は、アンカーを作成・保存してUUIDを共有
+                            // MRプレイヤーの場合は、アンカーを作成・保存
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
                             {
                                 // アンカーがまだ作られていない場合は作成
@@ -175,25 +176,18 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                                 }
                             }
 
-                            // アンカーUUIDがPhotonに保存されているか確認し、VRプレイヤーがそれを読み込む
+                            // VRプレイヤーの場合はローカルに保存されているアンカーを読み込む
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
                             {
-                                string anchorUUID = gameManager.GetLocalAnchorUUID();
-                                if (!string.IsNullOrEmpty(anchorUUID) && anchorManager != null && !isAnchorLoaded)
+                                if (anchorManager != null && !isAnchorLoaded)
                                 {
-                                    Debug.Log("VR Player: Loading anchor with UUID: " + anchorUUID);
+                                    Debug.Log("VR Player: Trying to load local anchor");
                                     // アンカーをロード
                                     anchorManager.OnLoadLocalButtonPressed();
                                     spatialAnchor.SetActive(true);
 
                                     // ここでアンカーの読み込み完了を待つ
                                     StartCoroutine(CheckAnchorLoaded());
-                                }
-                                else if (anchorManager != null && !isAnchorLoaded)
-                                {
-                                    Debug.LogWarning("VR Player: No anchor UUID found. Waiting for MR player to create one...");
-                                    // 5秒ごとにUUID情報をチェック（MRプレイヤーがまだ作成していない場合）
-                                    StartCoroutine(WaitForAnchorUUID(anchorManager));
                                 }
                             }
 
@@ -528,36 +522,6 @@ private IEnumerator WaitForGameManager()
         else
         {
             Debug.LogError("MR Player: Failed to create anchor within timeout");
-        }
-    }
-
-    // VRプレイヤーがMRプレイヤーからのアンカーUUIDを待つコルーチン
-    private IEnumerator WaitForAnchorUUID(AnchorManager anchorManager)
-    {
-        int attempts = 0;
-        const int maxAttempts = 10;  // 最大50秒待機
-
-        while (!isAnchorLoaded && attempts < maxAttempts)
-        {
-            yield return new WaitForSeconds(5.0f);
-            attempts++;
-
-            string anchorUUID = gameManager.GetLocalAnchorUUID();
-            if (!string.IsNullOrEmpty(anchorUUID))
-            {
-                Debug.Log($"VR Player: Anchor UUID received after {attempts} attempts: {anchorUUID}");
-                anchorManager.OnLoadLocalButtonPressed();
-                spatialAnchor.SetActive(true);
-                StartCoroutine(CheckAnchorLoaded());
-                break;
-            }
-
-            Debug.Log($"VR Player: Still waiting for anchor UUID... Attempt {attempts}/{maxAttempts}");
-        }
-
-        if (attempts >= maxAttempts)
-        {
-            Debug.LogError("VR Player: Timed out waiting for anchor UUID");
         }
     }
 }

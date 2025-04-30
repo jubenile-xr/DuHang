@@ -24,9 +24,6 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     private string _uniqueKey;
     public GameObject roomPrefab;
 
-    // ローカルストレージ用の設定
-    private const string LOCAL_ANCHOR_UUID_KEY = "localAnchorUUID";
-
     public delegate void AnchorLoadedCallback();
     public event AnchorLoadedCallback OnAnchorLoaded;
 
@@ -55,6 +52,16 @@ public class AnchorManager : MonoBehaviourPunCallbacks
             if (OVRInput.GetDown(OVRInput.Button.Four))
             {
                 OnLoadLocalButtonPressed();
+            }
+            // エディットモード切り替え
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick))
+            {
+                ToggleEditMode();
+            }
+            // 最終確定
+            if (OVRInput.GetDown(OVRInput.Button.SecondaryThumbstick))
+            {
+                FinalizeAnchor();
             }
         }
     }
@@ -106,13 +113,8 @@ public class AnchorManager : MonoBehaviourPunCallbacks
             if (success)
             {
                 _message.text = "Successfully deleted anchor.";
-                // Photonから共有UUIDを削除
-                if (PhotonNetwork.InRoom)
-                {
-                    ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-                    props.Add(LOCAL_ANCHOR_UUID_KEY, null);
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-                }
+                // PlayerPrefsからも削除
+                PlayerPrefs.DeleteKey(_uniqueKey);
             }
             else
             {
@@ -137,19 +139,11 @@ public class AnchorManager : MonoBehaviourPunCallbacks
                 _isSaved = true;
                 _message.text = "Successfully saved anchor to local.";
 
-                // Photonのカスタムプロパティとしてアンカーのuuidを共有
-                if (PhotonNetwork.InRoom)
-                {
-                    string anchorUUID = anchor.Uuid.ToString();
-                    Debug.Log("Sharing Anchor UUID via Photon: " + anchorUUID);
-
-                    ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-                    props.Add(LOCAL_ANCHOR_UUID_KEY, anchorUUID);
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-
-                    // ローカルにも保存
-                    PlayerPrefs.SetString(_uniqueKey, anchorUUID);
-                }
+                // ローカルにUUIDを保存
+                string anchorUUID = anchor.Uuid.ToString();
+                Debug.Log("Saving Anchor UUID to PlayerPrefs: " + anchorUUID);
+                PlayerPrefs.SetString(_uniqueKey, anchorUUID);
+                PlayerPrefs.Save();
             }
             else
             {
@@ -164,20 +158,9 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     {
         string savedUuid = "";
 
-        // Photonのカスタムプロパティからuuidを取得
-        if (PhotonNetwork.InRoom &&
-            PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(LOCAL_ANCHOR_UUID_KEY) &&
-            PhotonNetwork.CurrentRoom.CustomProperties[LOCAL_ANCHOR_UUID_KEY] != null)
-        {
-            savedUuid = PhotonNetwork.CurrentRoom.CustomProperties[LOCAL_ANCHOR_UUID_KEY].ToString();
-            Debug.Log("Retrieved Anchor UUID from Photon: " + savedUuid);
-        }
-        else
-        {
-            // フォールバックとしてプレイヤープレフから取得
-            savedUuid = PlayerPrefs.GetString(_uniqueKey, "");
-            Debug.Log("Trying to load from PlayerPrefs with key " + _uniqueKey + ": " + savedUuid);
-        }
+        // PlayerPrefsからUUIDを取得
+        savedUuid = PlayerPrefs.GetString(_uniqueKey, "");
+        Debug.Log("Trying to load from PlayerPrefs with key " + _uniqueKey + ": " + savedUuid);
 
         if (string.IsNullOrEmpty(savedUuid))
         {
@@ -255,6 +238,36 @@ public class AnchorManager : MonoBehaviourPunCallbacks
 
         // アンカーが正常に読み込まれたことをコールバックで通知
         OnAnchorLoaded?.Invoke();
+    }
+
+    public void ToggleEditMode()
+    {
+        if (!_spatialAnchor) return;
+
+        if (_spatialAnchor.enabled)
+        {
+            // 編集モードにする
+            _spatialAnchor.enabled = false;
+            _message.text = "Edit mode: Object can be moved";
+        }
+        else
+        {
+            // 再度固定する
+            _spatialAnchor.enabled = true;
+            _message.text = "Fixed mode: Object is anchored";
+        }
+    }
+
+    public void FinalizeAnchor()
+    {
+        if (!_spatialAnchor) return;
+
+        // まず現在位置にアンカーを再作成
+        Destroy(_spatialAnchor);
+        CreateAnchor();
+
+        // 作成後保存
+        OnSaveLocalButtonPressed();
     }
 
     public void OnResetRotXButtonPressed()

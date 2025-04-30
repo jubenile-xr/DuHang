@@ -170,15 +170,11 @@ PrefabInstance:
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: debugCanvas
       value: 
-      objectReference: {fileID: 772400042}
+      objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 873480161}
-    - target: {fileID: 4280468512058960817, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6884378872439537101, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_Name
       value: MRScene
@@ -188,11 +184,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
---- !u!223 &772400042 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 8389496141311893776, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-  m_PrefabInstance: {fileID: 772400041}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &873480160
 PrefabInstance:
   m_ObjectHideFlags: 0

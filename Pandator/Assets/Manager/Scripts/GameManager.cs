@@ -56,10 +56,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
 
-    // ローカルアンカーUUID用の定数
-    private const string LOCAL_ANCHOR_UUID_KEY = "localAnchorUUID";
-    private string localAnchorUUID = "";
-
     private void Start()
     {
         state = GameState.START;
@@ -72,9 +68,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         // Room に入室済みなら既存の playerScoreList を取ってくる
         FetchPlayerScoreListFromRoom();
-
-        // Room に入室済みなら既存のローカルアンカーUUIDを取ってくる
-        FetchLocalAnchorUUIDFromRoom();
 
         // 定期的にローカル → Room へ同期
         StartCoroutine(SyncCustomPropertiesCoroutine());
@@ -134,7 +127,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         HandleEndGame();
 
-
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
         if (GetPlayerType() == PlayerType.GOD)
@@ -190,7 +182,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
     public GameState GetGameState()
     {
         if (PhotonNetwork.InRoom
@@ -214,7 +205,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public PlayerType GetPlayerType() => playerType;
     public void SetPlayerType(PlayerType type) => playerType = type;
-
 
     public void SetAliveCount(int count)
     {
@@ -347,7 +337,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         winnerAnimalNameList.Add(animalName);
     }
 
-
     private void InitializePlayerDeadStatusArray()
     {
         var names = GetAllPlayerNames();
@@ -416,7 +405,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-void UpdatePlayerNameListProperty()
+    void UpdatePlayerNameListProperty()
     {
         if (PhotonNetwork.InRoom)
         {
@@ -447,7 +436,6 @@ void UpdatePlayerNameListProperty()
         }
     }
 
-
     public string[] GetAllPlayerNames()
     {
         if (PhotonNetwork.InRoom
@@ -469,7 +457,6 @@ void UpdatePlayerNameListProperty()
         }
         return localPlayerNames;
     }
-
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable props)
     {
@@ -516,13 +503,6 @@ void UpdatePlayerNameListProperty()
             localPlayerScores = props["playerScoreList"] as float[];
             Debug.Log("playerScoreList updated from room: " + string.Join(", ", localPlayerScores));
         }
-
-        // ローカルアンカーUUIDの更新
-        if (props.ContainsKey(LOCAL_ANCHOR_UUID_KEY) && props[LOCAL_ANCHOR_UUID_KEY] != null)
-        {
-            localAnchorUUID = props[LOCAL_ANCHOR_UUID_KEY].ToString();
-            Debug.Log($"Local Anchor UUID updated from room: {localAnchorUUID}");
-        }
     }
 
     private IEnumerator SyncCustomPropertiesCoroutine()
@@ -532,7 +512,6 @@ void UpdatePlayerNameListProperty()
             UpdatePlayerNameListProperty();
             UpdatePlayerDeadStatusProperty();
             UpdatePlayerScoreListProperty();
-            UpdateLocalAnchorUUIDProperty();
             yield return new WaitForSeconds(1f);
         }
     }
@@ -576,45 +555,6 @@ void UpdatePlayerNameListProperty()
             PhotonNetwork.CurrentRoom.SetCustomProperties(
                 new ExitGames.Client.Photon.Hashtable { ["playerScoreList"] = localPlayerScores }
             );
-        }
-    }
-
-    // ローカルアンカーUUIDを設定する関数
-    public void SetLocalAnchorUUID(string uuid)
-    {
-        if (string.IsNullOrEmpty(uuid)) return;
-
-        localAnchorUUID = uuid;
-        UpdateLocalAnchorUUIDProperty();
-        Debug.Log($"Set Local Anchor UUID: {uuid}");
-    }
-
-    // ローカルアンカーUUIDを取得する関数
-    public string GetLocalAnchorUUID()
-    {
-        return localAnchorUUID;
-    }
-
-    // ローカルアンカーUUIDのカスタムプロパティを更新
-    private void UpdateLocalAnchorUUIDProperty()
-    {
-        if (PhotonNetwork.InRoom && !string.IsNullOrEmpty(localAnchorUUID))
-        {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(
-                new ExitGames.Client.Photon.Hashtable { [LOCAL_ANCHOR_UUID_KEY] = localAnchorUUID }
-            );
-        }
-    }
-
-    // Roomから既存のローカルアンカーUUIDを取得
-    private void FetchLocalAnchorUUIDFromRoom()
-    {
-        if (PhotonNetwork.InRoom &&
-            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(LOCAL_ANCHOR_UUID_KEY, out object uuid) &&
-            uuid != null)
-        {
-            localAnchorUUID = uuid.ToString();
-            Debug.Log($"Fetched Local Anchor UUID from room: {localAnchorUUID}");
         }
     }
 
