@@ -18,7 +18,7 @@ public class TutorialNetGun : MonoBehaviour
     void Update()
     {
         // 実験用
-        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.G))
         {
             if (shotable)
             {
