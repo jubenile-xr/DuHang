@@ -82,26 +82,90 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         GameObject spatialAnchorPrefab = Resources.Load<GameObject>("SpatialAnchor/Prefab/spatialAnchor");
         if (spatialAnchorPrefab != null)
         {
-            spatialAnchor = Instantiate(spatialAnchorPrefab, Vector3.zero, Quaternion.identity);
-            spatialAnchor.transform.parent = transform.parent;
-            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-
-            if (DebugManager.GetDebugMode() && spatialAnchor != null)
+            // デバッグモードの場合のみ直接Instantiate
+            if (DebugManager.GetDebugMode())
             {
+                spatialAnchor = Instantiate(spatialAnchorPrefab, Vector3.zero, Quaternion.identity);
+                spatialAnchor.transform.parent = transform.parent;
+                anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+
                 loadingScene.SetActive(false);
                 spatialAnchor.SetActive(true);
                 Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
                 CanvasCameraSetter.Instance.SetCanvasCamera();
                 CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 debugCanvas.gameObject.SetActive(true);
+
+                // PlayerSpawnポイントを取得
+                SetupPlayerSpawn();
             }
-            else
+            else if (PhotonNetwork.IsConnected)
             {
-                // デバッグモードではない場合、初期状態では非アクティブにする
-                spatialAnchor.SetActive(false);
+                // パンダ(MR)の場合はPhotonNetwork.Instantiate
+                if (character == GameCharacter.PANDA)
+                {
+                    // PhotonNetwork経由でインスタンス化
+                    spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
+                    spatialAnchor.transform.parent = transform.parent;
+                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+
+                    // パンダの場合はロード画面を非表示にする
+                    loadingScene.SetActive(false);
+                    spatialAnchor.SetActive(true);
+
+                    // PlayerSpawnポイントを取得
+                    SetupPlayerSpawn();
+                }
+                // パンダ以外のキャラクターは、spatialAnchorが見つかるまで待機
+                else
+                {
+                    StartCoroutine(WaitForSpatialAnchor());
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Resources/SpatialAnchor/Prefab/spatialAnchor.prefabが見つかりません。");
+        }
+    }
+
+    // spatialAnchorが出現するまで待機するコルーチン
+    private IEnumerator WaitForSpatialAnchor()
+    {
+        float timeoutSeconds = 30.0f;
+        float elapsedTime = 0.0f;
+
+        while (spatialAnchor == null && elapsedTime < timeoutSeconds)
+        {
+            // シーン内のspatialAnchorタグを持つオブジェクトを検索
+            GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
+            if (anchors.Length > 0)
+            {
+                spatialAnchor = anchors[0];
+                anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+                Debug.Log("Found spatialAnchor in scene");
+
+                // PlayerSpawnポイントを取得
+                SetupPlayerSpawn();
+                break;
             }
 
-            // PlayerSpawnポイントを取得
+            yield return new WaitForSeconds(0.5f);
+            elapsedTime += 0.5f;
+            Debug.Log($"Waiting for spatialAnchor... {elapsedTime}/{timeoutSeconds} seconds");
+        }
+
+        if (spatialAnchor == null)
+        {
+            Debug.LogError("spatialAnchorが見つかりませんでした。タイムアウト。");
+        }
+    }
+
+    // PlayerSpawnの設定
+    private void SetupPlayerSpawn()
+    {
+        if (spatialAnchor != null)
+        {
             Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
                 .FirstOrDefault(child => child.CompareTag("playerSpawn"));
             if (spawnTransform != null)
@@ -113,10 +177,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 Debug.LogError("playerSpawnがspatialAnchorの子オブジェクト内に見つかりません。");
             }
-        }
-        else
-        {
-            Debug.LogError("Resources/SpatialAnchor/Prefab/spatialAnchor.prefabが見つかりません。");
         }
     }
 
@@ -137,25 +197,35 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 if (spatialAnchor == null)
                 {
-                    // アンカーがなければ再度読み込み
-                    LoadSpatialAnchorFromResources();
+                    // アンカーがなければ再度検索または作成
+                    if (character == GameCharacter.PANDA)
+                    {
+                        // パンダの場合は作成
+                        LoadSpatialAnchorFromResources();
+                    }
+                    else
+                    {
+                        // パンダ以外は既存のものを検索
+                        GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
+                        if (anchors.Length > 0)
+                        {
+                            spatialAnchor = anchors[0];
+                            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+                            SetupPlayerSpawn();
+                        }
+                    }
                 }
                 else
                 {
                     if (playerSpawn == null)
                     {
-                        Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
-                            .FirstOrDefault(child => child.CompareTag("playerSpawn"));
-                        if (spawnTransform != null)
-                        {
-                            playerSpawn = spawnTransform.gameObject;
-                        }
+                        SetupPlayerSpawn();
                     }
                     else
                     {
                         if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
                         {
-                            // MRプレイヤーの場合は、アンカーを作成・保存
+                            // MRプレイヤー(パンダ)の場合は、アンカーを作成・保存
                             if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
                             {
                                 // アンカーがまだ作られていない場合は作成
