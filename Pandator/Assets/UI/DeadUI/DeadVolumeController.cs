@@ -11,6 +11,20 @@ public class DeadVolumeController : MonoBehaviour
     private bool isRunning = false;
     private bool isDead = false;
 
+    void Start()
+    {
+        // VolumeコンポーネントからColorAdjustmentsを取得
+        if (volume.profile.TryGet(out colorAdjustments))
+        {
+            this.colorAdjustments.colorFilter.overrideState = false;
+            colorAdjustments.saturation.overrideState = false;
+        }
+        else
+        {
+            Debug.LogError("ColorAdjustments not found in the volume profile.");
+        }
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.D)  && !isRunning)

@@ -7,7 +7,7 @@ public class StateManager : MonoBehaviour
 {
     private bool isInterrupted;
     private bool isAlive;
-    [Header("妨害の継続時間")]private const float interruptedTime = 3.0f;
+    [Header("妨害の継続時間")] private const float interruptedTime = 3.0f;
     private float time;
     [SerializeField] private PlayerColorManager playerColorManager;
     [Header("ゲームマネージャー")] private GameManager gameManager;
@@ -34,12 +34,24 @@ public class StateManager : MonoBehaviour
         isAlive = true;
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         Debug.Log("GameManager: " + gameManager);
-        flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
-        if (flashEffect == null)
+        if (!GameObject.FindWithTag("Canvas"))
         {
-            Debug.LogError("FlashEffect component not found in the canvas!");
+            Debug.Log("FlashEffect component not found in the canvas!");
         }
-        deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
+        else
+        {
+            flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
+            Debug.Log("FlashEffect component found in the canvas.");
+        }
+        if (!GameObject.FindWithTag("DeadVolume"))
+        {
+            Debug.Log("DeadVolumeController component found in the DeadVolume.");
+        }
+        else
+        {
+            Debug.Log("DeadVolumeController component not found in the DeadVolume.");
+            deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
+        }
         switch (Character.GetSelectedAnimal())
         {
             case Character.GameCharacters.BIRD:
