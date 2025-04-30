@@ -106,7 +106,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 {
                     StartCoroutine(WaitForSpatialAnchor());
                 }
-                // パンダの場合は、OnJoinedRoomでインスタンス化
             }
         }
         else
@@ -118,10 +117,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     // spatialAnchorが出現するまで待機するコルーチン
     private IEnumerator WaitForSpatialAnchor()
     {
-        float timeoutSeconds = 30.0f;
-        float elapsedTime = 0.0f;
 
-        while (spatialAnchor == null && elapsedTime < timeoutSeconds)
+        while (spatialAnchor == null)
         {
             // シーン内のspatialAnchorタグを持つオブジェクトを検索
             GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
@@ -137,8 +134,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
 
             yield return new WaitForSeconds(0.5f);
-            elapsedTime += 0.5f;
-            Debug.Log($"Waiting for spatialAnchor... {elapsedTime}/{timeoutSeconds} seconds");
         }
 
         if (spatialAnchor == null)
@@ -158,6 +153,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 playerSpawn = spawnTransform.gameObject;
                 Debug.Log("playerSpawn found: " + playerSpawn.name);
+                isAnchorLoaded = true;
             }
             else
             {
@@ -250,11 +246,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                             // アンカーの読み込みが完了してからプレイヤーとカメラを生成
                             if (isAnchorLoaded)
                             {
+                                CreatePlayerAndCamera();
+
                                 // ロード完了したらUIを表示
                                 loadingScene.SetActive(false);
                                 eventSystem.SetActive(true);
 
-                                CreatePlayerAndCamera();
                                 SetPlayerCreated(true);
                             }
                         }
@@ -270,12 +267,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         float timeout = 30f; // 最大30秒待つ
         float elapsedTime = 0f;
 
-        // アンカーの読み込み完了イベントをサブスクライブ
-        if (anchorManager != null)
-        {
-            anchorManager.OnAnchorLoaded += OnAnchorLoadedHandler;
-        }
-
         // タイムアウトまで待機
         while (!isAnchorLoaded && elapsedTime < timeout)
         {
@@ -283,31 +274,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             elapsedTime += 0.5f;
             Debug.Log($"Waiting for anchor to be loaded... {elapsedTime}s");
 
-            // アンカーが作成されていたら手動でフラグを立てる（コールバックが呼ばれなかった場合の保険）
-            if (anchorManager != null && anchorManager.isCreated)
+
+            if (!isAnchorLoaded)
             {
-                OnAnchorLoadedHandler();
-                break;
+                Debug.LogError("Failed to load anchor within timeout period");
+                // エラー処理 - 再試行するか、ユーザーに通知するなど
             }
-        }
-
-        if (!isAnchorLoaded)
-        {
-            Debug.LogError("Failed to load anchor within timeout period");
-            // エラー処理 - 再試行するか、ユーザーに通知するなど
-        }
-    }
-
-    // アンカーが読み込まれたときのコールバック
-    private void OnAnchorLoadedHandler()
-    {
-        Debug.Log("Anchor loaded successfully");
-        isAnchorLoaded = true;
-
-        // コールバックを解除
-        if (anchorManager != null)
-        {
-            anchorManager.OnAnchorLoaded -= OnAnchorLoadedHandler;
         }
     }
 
