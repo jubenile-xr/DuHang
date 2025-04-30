@@ -8,6 +8,7 @@ public class NetGun : MonoBehaviourPun
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     [SerializeField] private float spanTime = 0f;
+    [SerializeField] private GameObject shootSE;
     private bool shotable = true;
     private Animator animator;
     public GameManager gameManager;
@@ -57,5 +58,7 @@ public class NetGun : MonoBehaviourPun
 
         GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
+        
+        shootSE?.GetComponent<SoundPlayer>().Play();
     }
 }
