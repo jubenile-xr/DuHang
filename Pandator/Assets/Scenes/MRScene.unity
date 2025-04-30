@@ -168,10 +168,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: debugCanvas
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 873480161}

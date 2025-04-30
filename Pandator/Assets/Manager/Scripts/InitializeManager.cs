@@ -101,26 +101,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             else if (PhotonNetwork.IsConnected)
             {
-                // パンダ(MR)の場合はPhotonNetwork.Instantiate
-                if (character == GameCharacter.PANDA)
-                {
-                    // PhotonNetwork経由でインスタンス化
-                    spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
-                    spatialAnchor.transform.parent = transform.parent;
-                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-
-                    // パンダの場合はロード画面を非表示にする
-                    loadingScene.SetActive(false);
-                    spatialAnchor.SetActive(true);
-
-                    // PlayerSpawnポイントを取得
-                    SetupPlayerSpawn();
-                }
                 // パンダ以外のキャラクターは、spatialAnchorが見つかるまで待機
-                else
+                if (character != GameCharacter.PANDA)
                 {
                     StartCoroutine(WaitForSpatialAnchor());
                 }
+                // パンダの場合は、OnJoinedRoomでインスタンス化
             }
         }
         else
@@ -197,22 +183,22 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 if (spatialAnchor == null)
                 {
-                    // アンカーがなければ再度検索または作成
-                    if (character == GameCharacter.PANDA)
+                    // アンカーがなければ再度検索
+                    GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
+                    if (anchors.Length > 0)
                     {
-                        // パンダの場合は作成
-                        LoadSpatialAnchorFromResources();
+                        spatialAnchor = anchors[0];
+                        anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+                        SetupPlayerSpawn();
                     }
-                    else
+                    else if (character == GameCharacter.PANDA && PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
                     {
-                        // パンダ以外は既存のものを検索
-                        GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
-                        if (anchors.Length > 0)
-                        {
-                            spatialAnchor = anchors[0];
-                            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                            SetupPlayerSpawn();
-                        }
+                        // ルーム参加済みでパンダの場合、何らかの理由でアンカーが見つからなければ再作成
+                        Debug.LogWarning("Panda: spatialAnchor not found, recreating");
+                        spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
+                        spatialAnchor.transform.parent = transform.parent;
+                        anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+                        SetupPlayerSpawn();
                     }
                 }
                 else
@@ -461,6 +447,22 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         if (GetGameCharacter() == GameCharacter.GOD)
         {
             PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        }
+
+        // パンダ(MR)の場合はspatialAnchorをルーム参加後にインスタンス化
+        if (GetGameCharacter() == GameCharacter.PANDA && !DebugManager.GetDebugMode())
+        {
+            Debug.Log("Panda: Instantiating spatialAnchor via PhotonNetwork");
+            spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
+            spatialAnchor.transform.parent = transform.parent;
+            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+
+            // パンダの場合はロード画面を非表示にしてアンカーを表示
+            loadingScene.SetActive(false);
+            spatialAnchor.SetActive(true);
+
+            // PlayerSpawnポイントを取得
+            SetupPlayerSpawn();
         }
     }
 
