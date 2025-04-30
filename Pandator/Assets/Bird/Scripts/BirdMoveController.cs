@@ -12,7 +12,7 @@ public class BirdMoveController : MonoBehaviour
     private CharacterController CharacterController;
 
     public float flightSpeed = 1.0f; //Flight speed // 飛行速度
-    private const float moveSpeedSlow = 0.5f; // Slow flight speed // スローフライト速度
+    private const float moveSpeedSlow = 0.8f; // Slow flight speed // スローフライト速度
     private const float moveSpeedNormal = 1.0f; // Normal flight speed // 通常の飛行速度
     public float moveSpeed = 1.0f; //Walking speed // 歩行速度
 
@@ -126,7 +126,7 @@ public class BirdMoveController : MonoBehaviour
         }
         else
         {
-            
+
             isWalking = false;
         }
 
@@ -179,7 +179,7 @@ public class BirdMoveController : MonoBehaviour
         movement.y += verticalVelocity;
 
         CharacterController.Move(flyForce *movement * Time.deltaTime);
-        
+
     }
 
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
