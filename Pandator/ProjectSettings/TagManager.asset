@@ -16,6 +16,9 @@ TagManager:
   - PandaPlayer
   - Canvas
   - TrackedCamera
+  - BGM
+  - InterruptItem
+  - Net
   layers:
   - Default
   - TransparentFX

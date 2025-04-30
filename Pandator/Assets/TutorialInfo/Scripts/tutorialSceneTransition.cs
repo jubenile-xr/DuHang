@@ -23,7 +23,7 @@ public class tutorialSceneTransition : MonoBehaviour
             OVRInput.Get(OVRInput.Button.Two) && // Bボタン
             OVRInput.Get(OVRInput.Button.Three) && // Xボタン
             OVRInput.Get(OVRInput.Button.Four) || // Yボタン
-            Input.GetKey(KeyCode.Space)) // 実験用
+            Input.GetKey(KeyCode.Return)) // 実験用
         {
             changeScene();
         }
