@@ -37,7 +37,8 @@ public class TimeManager : MonoBehaviour
         }
         if (canvasDispTime != null)
         {
-            canvasDispTime.SetTimeText(FormatTime(gameTime));
+
+            canvasDispTime.SetTimeText(FormatTime(gameEndTime - gameTime));
         }
         // SmallAnimalはまだ作成していない
         if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
