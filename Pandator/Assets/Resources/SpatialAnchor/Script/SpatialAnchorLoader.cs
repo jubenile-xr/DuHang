@@ -42,7 +42,7 @@ public class SpatialAnchorLoader : MonoBehaviour
             StartCoroutine(CheckAndCreateAnchorIfNeeded(anchor));
 
             // デバッグ時は再調整のために以下を実行しない
-            if (_debugMode) return;
+            if (DebugManager.GetDebugMode()) return;
 
             // Anchor位置調整用のコライダを削除
             BoxCollider collider = anchor.gameObject.GetComponent<BoxCollider>();
@@ -54,23 +54,6 @@ public class SpatialAnchorLoader : MonoBehaviour
     {
         // アンカーの読み込みを待機
         yield return new WaitForSeconds(1.0f);
-
-        // アンカーが作成されていなければ新規作成して保存
-        if (!anchor.isCreated)
-        {
-            Debug.Log("No anchor found. Creating a new one...");
-            anchor.CreateAnchor();
-
-            // アンカー作成完了を待機
-            yield return new WaitForSeconds(1.0f);
-
-            // 作成されたアンカーを保存
-            if (anchor.isCreated)
-            {
-                Debug.Log("New anchor created. Saving...");
-                anchor.OnSaveLocalButtonPressed();
-            }
-        }
 
         // 物体を動かすためにコンポーネントを削除
         if (anchor.isCreated)
