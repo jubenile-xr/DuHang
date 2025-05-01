@@ -27,6 +27,7 @@ public class SpatialAnchorLoader : MonoBehaviour
         {
             // まずアンカーの読み込みを試みる
             anchor.OnLoadLocalButtonPressed();
+            Debug.Log("Anchor Load: " + anchor.gameObject.name);
 
             // アンカーが読み込めたかチェック（0.5秒待ってから）
             StartCoroutine(CheckAndCreateAnchorIfNeeded(anchor));

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -40,7 +41,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private bool isSpatialAnchorCreated = false;
     private Transform playerSpawnPoint;
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
-    private bool isAnchorLoaded = false;
 
     void Start()
     {
@@ -54,18 +54,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             if (spatialAnchorLoader)
             {
-                spatialAnchorLoader.AnchorLoad();
-
-                // PANDAとGODで処理を分ける
-                if (character == GameCharacter.PANDA)
-                {
-                    StartCoroutine(WaitForAnchorLoadAndSetupDebugForPanda());
-                }
-                else
-                {
-                    // GODの場合はデバッグ環境をセットアップ
-                    SetupDebugEnvironment();
-                }
+                SetupDebugEnvironment();
             }
             else
             {
@@ -105,18 +94,18 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     }
 
 
-    private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
-    {
-        // spatialAnchorLoaderのisLoadedがtrueになるまで待機
-        while (!spatialAnchorLoader.isLoaded)
-        {
-            yield return null;
-        }
+    // private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
+    // {
+    //     // spatialAnchorLoaderのisLoadedがtrueになるまで待機
+    //     while (!spatialAnchorLoader.isLoaded)
+    //     {
+    //         yield return null;
+    //     }
 
-        isAnchorLoaded = true;
-        Debug.Log("Anchor loaded successfully in debug mode for PANDA");
-        SetupDebugEnvironment();
-    }
+    //     isAnchorLoaded = true;
+    //     Debug.Log("Anchor loaded successfully in debug mode for PANDA");
+    //     SetupDebugEnvironment();
+    // }
 
     private void SetupDebugEnvironment()
     {
@@ -370,9 +359,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         if (GetGameCharacter() == GameCharacter.PANDA)
         {
             spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            if (spatialAnchor != null)
+            {
+                SetIsSpatialAnchorCreated(true);
+            }
         }
         // PANDAでない場合、SpatialAnchorを探す（フォールバック）
-        else if (GetGameCharacter() != GameCharacter.GOD)
+        else if (GetGameCharacter() != GameCharacter.PANDA)
         {
             StartCoroutine(WaitForSpatialAnchor());
         }
@@ -387,7 +380,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
 
         Debug.Log("Anchor loaded successfully for PANDA. Creating SpatialAnchor via PhotonNetwork.");
-        PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        SetIsSpatialAnchorCreated(true);
+        
     }
 
     private IEnumerator WaitForSpatialAnchor()

@@ -196,23 +196,27 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     {
         // ローカルからアンカーをUUIDを指定して読み込み
         _message.text = "Loading anchor from local...";
+        Debug.Log("Loading anchor from local...");
         OVRSpatialAnchor.LoadUnboundAnchors(options, anchors =>
         {
             if (anchors.Length != 1)
             {
                 // アンカーが読めなかった
                 _message.text = "Failed to load anchor from local.";
+                Debug.LogError("Failed to load anchor from local.");
                 return;
             }
             if (anchors[0].Localized)
             {
                 // すでにローカライズが終了していた場合
                 OnLocalized(anchors[0], true);
+                Debug.Log("Anchor is already localized.");
             }
             else if (!anchors[0].Localizing)
             {
                 // 空間マッピングが不十分などの理由でローカライズに失敗している場合、再度ローカライズ
                 anchors[0].Localize(OnLocalized);
+                Debug.Log("Localizing anchor...");
             }
         });
     }
@@ -234,6 +238,7 @@ public class AnchorManager : MonoBehaviourPunCallbacks
         }
         unboundAnchor.BindTo(_spatialAnchor);
         _message.text = "Successfully loaded anchor from local.";
+        Debug.Log("Successfully loaded anchor from local.");
         isCreated = true;
 
         // アンカーが正常に読み込まれたことをコールバックで通知
