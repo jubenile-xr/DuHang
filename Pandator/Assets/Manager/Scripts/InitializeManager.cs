@@ -160,7 +160,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                     VRModel.SetActive(true);
                 }
 
-                // プレイヤースポーン位置を取得
+                // playerSpawnのtransform.positionを取得
                 Vector3 spawnPosition = Vector3.zero;
                 Vector3 cameraPosition = Vector3.zero;
 
@@ -177,6 +177,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 }
 
                 // プレイヤーキャラクターの生成およびカメラの生成
+                // プレイヤーキャラクターやカメラの位置は全てspatialAnchorの子オブジェクトの"playerSpawn"の位置に配置されるようにしました
+                // IMO: spatialAnchorの位置がちゃんと合っていないとまずいですが，全てMR側に合うようになっているのでMRとVRとのズレは解消できると思う
                 switch (character)
                 {
                     case GameCharacter.BIRD:
