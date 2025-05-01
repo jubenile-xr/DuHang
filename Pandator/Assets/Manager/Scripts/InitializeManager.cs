@@ -35,7 +35,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
-    [SerializeField]private GameObject VRModel;
     private GameObject debugCanvas;
     private GameObject spatialAnchor;
     private bool isSpatialAnchorCreated = false;
@@ -153,10 +152,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 loadingScene.SetActive(false);
                 eventSystem.SetActive(true);
-                if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-                {
-                    VRModel.SetActive(true);
-                }
 
                 // playerSpawnのtransform.positionを取得
                 Vector3 spawnPosition = Vector3.zero;
@@ -331,43 +326,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             SetIsSpatialAnchorCreated(true);
         }
         // PANDAでない場合、SpatialAnchorを探す
-        else if (GetGameCharacter() != GameCharacter.GOD)
+        else
         {
             spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             playerSpawnPoint = spatialAnchor
-                .GetComponentsInChildren<Transform>()
-                .FirstOrDefault(t => t.CompareTag("playerSpawn"));
-
-            SetIsSpatialAnchorCreated(true);
-            Debug.Log("SpatialAnchor and PlayerSpawn found.");
-        }
-
-        else
-        {
-            Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
-            HandleSpatialAnchorFallback();
-        }
-    }
-
-    private void HandleSpatialAnchorFallback()
-    {
-        // PANDAの場合、SpatialAnchorをインスタンス化（フォールバック）
-        if (GetGameCharacter() == GameCharacter.PANDA)
-        {
-            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                new Vector3(0f, 0f, 0f), Quaternion.identity);
-            if (spatialAnchor != null)
-            {
-                SetIsSpatialAnchorCreated(true);
-            }
-        }
-        // PANDAでない場合、SpatialAnchorを探す（フォールバック）
-        else if (GetGameCharacter() != GameCharacter.PANDA)
-        {
-            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                new Vector3(0f, 0f, 0f), Quaternion.identity);
-             playerSpawnPoint = spatialAnchor
                 .GetComponentsInChildren<Transform>()
                 .FirstOrDefault(t => t.CompareTag("playerSpawn"));
 

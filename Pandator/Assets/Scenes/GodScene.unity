@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!223 &1100395464 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 3657148172878667262, guid: 9327cdda3726647378a85ee590489dfb, type: 3}
-  m_PrefabInstance: {fileID: 2009333319}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2009333319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 1085382579734581275, guid: 9327cdda3726647378a85ee590489dfb, type: 3}
       propertyPath: debugCanvas
       value: 
-      objectReference: {fileID: 1100395464}
+      objectReference: {fileID: 0}
     - target: {fileID: 8716894927445767245, guid: 9327cdda3726647378a85ee590489dfb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -181,7 +176,8 @@ PrefabInstance:
       value: GodScene
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1645103469299274221, guid: 9327cdda3726647378a85ee590489dfb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9327cdda3726647378a85ee590489dfb, type: 3}

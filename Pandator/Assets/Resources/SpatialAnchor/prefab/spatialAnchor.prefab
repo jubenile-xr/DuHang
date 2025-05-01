@@ -1806,11 +1806,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1600878665314177793, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6646922185898639333, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7334412039015161803, guid: f015ad9d636514714a3da96f6aa5ad2d, type: 3}
       propertyPath: m_Name
