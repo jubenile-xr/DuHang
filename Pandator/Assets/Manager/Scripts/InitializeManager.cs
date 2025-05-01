@@ -321,34 +321,24 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
-        // SpatialAnchorLoaderを探して取得
-        GameObject spatialAnchorLoaderObj = GameObject.FindWithTag("SpatialAnchorLoader");
-        if (spatialAnchorLoaderObj)
+        if (spatialAnchorLoader)
         {
-            if (spatialAnchorLoader)
-            {
-                spatialAnchorLoader.AnchorLoad();
+            // spatialAnchorLoader.AnchorLoad();
 
-                // PANDAの場合、アンカーロード後にSpatialAnchorをインスタンス化
-                if (GetGameCharacter() == GameCharacter.PANDA)
-                {
-                    StartCoroutine(WaitForAnchorLoadAndCreateSpatialAnchorForPanda());
-                }
-                // PANDAでない場合、SpatialAnchorを探す
-                else if (GetGameCharacter() != GameCharacter.GOD)
-                {
-                    StartCoroutine(WaitForSpatialAnchor());
-                }
-            }
-            else
+            // PANDAの場合、アンカーロード後にSpatialAnchorをインスタンス化
+            if (GetGameCharacter() == GameCharacter.PANDA)
             {
-                Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
-                HandleSpatialAnchorFallback();
+                StartCoroutine(WaitForAnchorLoadAndCreateSpatialAnchorForPanda());
+            }
+            // PANDAでない場合、SpatialAnchorを探す
+            else if (GetGameCharacter() != GameCharacter.GOD)
+            {
+                StartCoroutine(WaitForSpatialAnchor());
             }
         }
         else
         {
-            Debug.LogError("SpatialAnchorLoader object not found!");
+            Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
             HandleSpatialAnchorFallback();
         }
     }
