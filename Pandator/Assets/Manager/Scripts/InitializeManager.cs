@@ -364,15 +364,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private IEnumerator WaitForAnchorLoadAndCreateSpatialAnchorForPanda()
     {
         // spatialAnchorLoaderのisLoadedがtrueになるまで待機
-        while (!spatialAnchorLoader.isLoaded)
-        {
-            yield return null;
-        }
+        //while (!spatialAnchorLoader.isLoaded)
+        //{
+        //    yield return null;
+        //}
 
         Debug.Log("Anchor loaded successfully for PANDA. Creating SpatialAnchor via PhotonNetwork.");
         spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
         SetIsSpatialAnchorCreated(true);
-        
+        yield return null;
+
     }
 
     private IEnumerator WaitForSpatialAnchor()
