@@ -40,6 +40,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private bool isSpatialAnchorCreated = false;
     private Transform playerSpawnPoint;
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
+    public GameObject roomWall1;
+    public GameObject roomWall2;
 
     // SpatialAnchorのロード状態を管理
     private bool isSpatialAnchorLoaded = false;
@@ -148,7 +150,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
 
         // PANDAプレイヤーの場合、キーボードの "Y" キーを検出 (MetaQuestのYボタンのシミュレート)
-        if (character == GameCharacter.PANDA && spatialAnchor != null && !yKeyPressed && (Input.GetKeyDown(KeyCode.Y) || OVRInput.GetDown(OVRInput.Button.Two)))
+        if (character == GameCharacter.PANDA && spatialAnchor != null && !yKeyPressed && (Input.GetKeyDown(KeyCode.Y) || OVRInput.GetDown(OVRInput.Button.Four)))
         {
             yKeyPressed = true;
             AnchorManager anchorManager = spatialAnchor.GetComponent<AnchorManager>();
