@@ -33,9 +33,13 @@ public class SpatialAnchorLoader : MonoBehaviour
             // デバッグ時は再調整のために以下を実行しない
             if (DebugManager.GetDebugMode()) return;
 
-            // Anchor位置調整用のコライダを削除
-            BoxCollider collider = anchor.gameObject.GetComponent<BoxCollider>();
-            Destroy(collider);
+            // Grabbable関連のコンポーネントを削除
+            Grabbable grabbable = anchor.gameObject.GetComponent<Grabbable>();
+            if (grabbable != null)
+            {
+                Destroy(grabbable);
+            }
+
         }
     }
 
