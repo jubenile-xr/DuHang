@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MouseGaol : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI instructionUI;
     private void Start()
     {
-        HideObject(); // 毎フレーム呼び出す
+        instructionUI.text = "RED BALL";
+        HideObject();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -13,7 +16,7 @@ public class MouseGaol : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                transform.position += new Vector3(0, 10f, 0);
+                instructionUI.text = "PLAY FREE";
             }
         }
     }
