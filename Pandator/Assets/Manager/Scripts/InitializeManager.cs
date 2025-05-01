@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -34,12 +35,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
     [SerializeField]private GameObject VRModel;
-    [SerializeField]private GameObject debugCanvas;
+    private GameObject debugCanvas;
     private GameObject spatialAnchor;
-    private AnchorManager anchorManager;
     private bool isSpatialAnchorCreated = false;
     private Transform playerSpawnPoint;
-    private SpatialAnchorLoader spatialAnchorLoader;
+    [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
     private bool isAnchorLoaded = false;
 
     void Start()
@@ -50,38 +50,33 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         if (DebugManager.GetDebugMode())
         {
             // SpatialAnchorLoaderを探して取得
-            GameObject spatialAnchorLoaderObj = GameObject.FindWithTag("SpatialAnchorLoader");
-            if (spatialAnchorLoaderObj)
+            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                new Vector3(0f, 0f, 0f), Quaternion.identity);
+            if (spatialAnchorLoader)
             {
-                spatialAnchorLoader = spatialAnchorLoaderObj.GetComponent<SpatialAnchorLoader>();
-                if (spatialAnchorLoader)
-                {
-                    spatialAnchorLoader.AnchorLoad();
+                spatialAnchorLoader.AnchorLoad();
 
-                    // PANDAとGODで処理を分ける
-                    if (character == GameCharacter.PANDA)
-                    {
-                        StartCoroutine(WaitForAnchorLoadAndSetupDebugForPanda());
-                    }
-                    else
-                    {
-                        // GODの場合はデバッグ環境をセットアップ
-                        SetupDebugEnvironment();
-                    }
+                // PANDAとGODで処理を分ける
+                if (character == GameCharacter.PANDA)
+                {
+                    StartCoroutine(WaitForAnchorLoadAndSetupDebugForPanda());
                 }
                 else
                 {
-                    Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
+                    // GODの場合はデバッグ環境をセットアップ
                     SetupDebugEnvironment();
                 }
             }
             else
             {
-                Debug.LogError("SpatialAnchorLoader object not found!");
+                Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
                 SetupDebugEnvironment();
             }
+
             return;
         }
+
+
 
         // デバッグモードでない場合は通常処理
         if (character != GameCharacter.GOD)
@@ -109,6 +104,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+
     private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
     {
         // spatialAnchorLoaderのisLoadedがtrueになるまで待機
@@ -126,6 +122,19 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     {
         loadingScene.SetActive(false);
         Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
+        Transform canvasTransform = spatialAnchor.transform
+            .GetComponentsInChildren<Transform>()
+            .FirstOrDefault(t => t.CompareTag("Canvas"));
+
+        if (canvasTransform != null)
+        {
+            debugCanvas = canvasTransform.gameObject;
+            Debug.Log("Canvasタグのオブジェクトが見つかりました: " + debugCanvas.name);
+        }
+        else
+        {
+            Debug.LogError("Canvasタグのオブジェクトが見つかりません。");
+        }
         CanvasCameraSetter.Instance.SetCanvasCamera();
         CanvasCameraSetter.Instance.SetCanvasSortingLayer();
         debugCanvas.gameObject.SetActive(true);
@@ -327,7 +336,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         GameObject spatialAnchorLoaderObj = GameObject.FindWithTag("SpatialAnchorLoader");
         if (spatialAnchorLoaderObj)
         {
-            spatialAnchorLoader = spatialAnchorLoaderObj.GetComponent<SpatialAnchorLoader>();
             if (spatialAnchorLoader)
             {
                 spatialAnchorLoader.AnchorLoad();
@@ -361,7 +369,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         // PANDAの場合、SpatialAnchorをインスタンス化（フォールバック）
         if (GetGameCharacter() == GameCharacter.PANDA)
         {
-            PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
         // PANDAでない場合、SpatialAnchorを探す（フォールバック）
         else if (GetGameCharacter() != GameCharacter.GOD)
@@ -386,18 +394,23 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     {
         while (spatialAnchor == null)
         {
-            GameObject saObj = GameObject.FindWithTag("SpatialAnchor");
-            if (saObj)
+            if (transform.parent != null && transform.parent.parent != null)
             {
-                spatialAnchor = saObj;
-                // PlayerSpawnポイントを探す
-                Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
-                if (playerSpawnTransform != null)
+                foreach (Transform sibling in transform.parent.parent)
                 {
-                    playerSpawnPoint = playerSpawnTransform;
-                    SetIsSpatialAnchorCreated(true);
-                    Debug.Log("SpatialAnchor and PlayerSpawn found.");
-                    yield break;
+                    if (sibling == transform.parent) continue;
+                    if (sibling.CompareTag("SpatialAnchor"))
+                    {
+                        spatialAnchor = sibling.gameObject;
+                        Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
+                        if (playerSpawnTransform != null)
+                        {
+                            playerSpawnPoint = playerSpawnTransform;
+                            SetIsSpatialAnchorCreated(true);
+                            Debug.Log("SpatialAnchor and PlayerSpawn found.");
+                            yield break;
+                        }
+                    }
                 }
             }
             yield return null;
