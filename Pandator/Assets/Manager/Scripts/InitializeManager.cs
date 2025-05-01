@@ -333,7 +333,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         // PANDAでない場合、SpatialAnchorを探す
         else if (GetGameCharacter() != GameCharacter.GOD)
         {
-            StartCoroutine(WaitForSpatialAnchor());
+            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                new Vector3(0f, 0f, 0f), Quaternion.identity);
+            playerSpawnPoint = spatialAnchor
+                .GetComponentsInChildren<Transform>()
+                .FirstOrDefault(t => t.CompareTag("playerSpawn"));
+
+            SetIsSpatialAnchorCreated(true);
+            Debug.Log("SpatialAnchor and PlayerSpawn found.");
         }
 
         else
@@ -358,7 +365,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         // PANDAでない場合、SpatialAnchorを探す（フォールバック）
         else if (GetGameCharacter() != GameCharacter.PANDA)
         {
-            StartCoroutine(WaitForSpatialAnchor());
+            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                new Vector3(0f, 0f, 0f), Quaternion.identity);
+             playerSpawnPoint = spatialAnchor
+                .GetComponentsInChildren<Transform>()
+                .FirstOrDefault(t => t.CompareTag("playerSpawn"));
+
+            SetIsSpatialAnchorCreated(true);
+            Debug.Log("SpatialAnchor and PlayerSpawn found.");
         }
     }
 
@@ -375,21 +389,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         SetIsSpatialAnchorCreated(true);
         yield return null;
 
-    }
-
-    private IEnumerator WaitForSpatialAnchor()
-    {
-        spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-            new Vector3(0f, 0f, 0f), Quaternion.identity);
-            Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
-            if (playerSpawnTransform != null)
-            {
-                playerSpawnPoint = playerSpawnTransform;
-                SetIsSpatialAnchorCreated(true);
-                Debug.Log("SpatialAnchor and PlayerSpawn found.");
-                yield break;
-            }
-            yield return null;
     }
 
     private Transform FindPlayerSpawnPointInAnchor(GameObject anchor)
