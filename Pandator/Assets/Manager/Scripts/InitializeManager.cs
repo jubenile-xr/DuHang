@@ -41,6 +41,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private Transform playerSpawnPoint;
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
 
+    // SpatialAnchorのロード状態を管理
+    private bool isSpatialAnchorLoaded = false;
+    // キーボード入力検出用フラグ
+    private bool yKeyPressed = false;
+
     void Start()
     {
         loadingTime = 0;
@@ -63,8 +68,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
             return;
         }
-
-
 
         // デバッグモードでない場合は通常処理
         if (character != GameCharacter.GOD)
@@ -91,7 +94,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.ConnectUsingSettings();
     }
-
 
     // private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
     // {
@@ -142,6 +144,18 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             if (loadingTime > 14f)
             {
                 SetIsAnimationFinished(true);
+            }
+        }
+
+        // PANDAプレイヤーの場合、キーボードの "Y" キーを検出 (MetaQuestのYボタンのシミュレート)
+        if (character == GameCharacter.PANDA && spatialAnchor != null && !yKeyPressed && (Input.GetKeyDown(KeyCode.Y) || OVRInput.GetDown(OVRInput.Button.Two)))
+        {
+            yKeyPressed = true;
+            AnchorManager anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+            if (anchorManager != null)
+            {
+                anchorManager.LoadAnchorFromExternal();
+                StartCoroutine(CheckAnchorLoadedAndSetProperty(anchorManager));
             }
         }
 
@@ -316,20 +330,32 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
         }
 
-            // spatialAnchorLoader.AnchorLoad();
-
-        // PANDAの場合、アンカーロード後にSpatialAnchorをインスタンス化
+        // PANDAの場合、spatialAnchorを生成
         if (GetGameCharacter() == GameCharacter.PANDA)
         {
             spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             SetIsSpatialAnchorCreated(true);
         }
-        // PANDAでない場合、SpatialAnchorを探す
-        else
+        // PANDAでもGODでもない場合（小動物）、カスタムプロパティからSpatialAnchorの位置情報を取得
+        else if (GetGameCharacter() != GameCharacter.GOD)
         {
-            spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                new Vector3(0f, 0f, 0f), Quaternion.identity);
+            Vector3 anchorPosition;
+            Quaternion anchorRotation;
+
+            if (TryGetSpatialAnchorTransform(out anchorPosition, out anchorRotation))
+            {
+                Debug.Log("Using SpatialAnchor position from custom property: " + anchorPosition);
+                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                    anchorPosition, anchorRotation);
+            }
+            else
+            {
+                Debug.Log("No stored SpatialAnchor position found. Using default position.");
+                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                    new Vector3(0f, 0f, 0f), Quaternion.identity);
+            }
+
             playerSpawnPoint = spatialAnchor
                 .GetComponentsInChildren<Transform>()
                 .FirstOrDefault(t => t.CompareTag("playerSpawn"));
@@ -510,5 +536,100 @@ private IEnumerator WaitForGameManager()
     private void SetIsSpatialAnchorCreated(bool isCreated)
     {
         isSpatialAnchorCreated = isCreated;
+    }
+
+    // アンカーがロードされたかチェックし、ロードされたらカスタムプロパティに位置情報を設定
+    private IEnumerator CheckAnchorLoadedAndSetProperty(AnchorManager anchorManager)
+    {
+        // アンカーのロードを待つ（EventベースなのでちょっとしたDelay）
+        yield return new WaitForSeconds(1.0f);
+
+        Transform anchorTransform = anchorManager.GetAnchorTransform();
+        if (anchorTransform != null)
+        {
+            Debug.Log("SpatialAnchor loaded successfully. Setting custom property.");
+            SetSpatialAnchorTransformProperty(anchorTransform.position, anchorTransform.rotation);
+            isSpatialAnchorLoaded = true;
+        }
+        else
+        {
+            Debug.LogWarning("SpatialAnchor failed to load or not created yet.");
+        }
+    }
+
+    // SpatialAnchorの位置情報をカスタムプロパティとして設定
+    private void SetSpatialAnchorTransformProperty(Vector3 position, Quaternion rotation)
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            GameManager.SceneTransform anchorTransform = new GameManager.SceneTransform
+            {
+                position = position,
+                rotation = rotation
+            };
+
+            string transformJson = JsonUtility.ToJson(anchorTransform);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(
+                new ExitGames.Client.Photon.Hashtable { ["spatialAnchorTransform"] = transformJson }
+            );
+
+            Debug.Log("Set SpatialAnchor transform to custom property: " + transformJson);
+        }
+    }
+
+    // カスタムプロパティからSpatialAnchorの位置情報を取得
+    private bool TryGetSpatialAnchorTransform(out Vector3 position, out Quaternion rotation)
+    {
+        position = Vector3.zero;
+        rotation = Quaternion.identity;
+
+        if (PhotonNetwork.InRoom &&
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("spatialAnchorTransform", out object transformObj))
+        {
+            if (transformObj is string transformJson)
+            {
+                try
+                {
+                    GameManager.SceneTransform anchorTransform = JsonUtility.FromJson<GameManager.SceneTransform>(transformJson);
+                    position = anchorTransform.position;
+                    rotation = anchorTransform.rotation;
+                    return true;
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError("Failed to parse spatialAnchorTransform: " + e.Message);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // カスタムプロパティの更新通知を受け取る
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        base.OnRoomPropertiesUpdate(propertiesThatChanged);
+
+        // spatialAnchorTransformプロパティが更新された場合
+        if (propertiesThatChanged.ContainsKey("spatialAnchorTransform") &&
+            GetGameCharacter() != GameCharacter.PANDA && GetGameCharacter() != GameCharacter.GOD &&
+            !isSpatialAnchorCreated)
+        {
+            Vector3 anchorPosition;
+            Quaternion anchorRotation;
+
+            if (TryGetSpatialAnchorTransform(out anchorPosition, out anchorRotation) && !spatialAnchor)
+            {
+                Debug.Log("SpatialAnchor transform updated from room. Creating new anchor.");
+                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+                    anchorPosition, anchorRotation);
+
+                playerSpawnPoint = spatialAnchor
+                    .GetComponentsInChildren<Transform>()
+                    .FirstOrDefault(t => t.CompareTag("playerSpawn"));
+
+                SetIsSpatialAnchorCreated(true);
+            }
+        }
     }
 }

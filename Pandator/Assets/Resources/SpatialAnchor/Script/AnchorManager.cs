@@ -30,8 +30,8 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     void Update()
     {
         // デバッグモード
-        //if (DebugManager.GetDebugMode())
-        //{
+        if (DebugManager.GetDebugMode())
+        {
             Vector3 pos = gameObject.transform.position;
             Vector3 rot = gameObject.transform.eulerAngles;
             _textPosition.text = pos.ToString();
@@ -63,7 +63,7 @@ public class AnchorManager : MonoBehaviourPunCallbacks
             {
                 FinalizeAnchor();
             }
-       // }
+       }
     }
 
     public async void CreateAnchor()
@@ -302,5 +302,21 @@ public class AnchorManager : MonoBehaviourPunCallbacks
         float rotY = gameObject.transform.eulerAngles.y;
         float rotZ = gameObject.transform.eulerAngles.z;
         gameObject.transform.rotation = Quaternion.Euler(new Vector3(rotX, rotY+45f, rotZ));
+    }
+
+    // 外部からアンカーロード処理を呼び出せるようにパブリックメソッドを追加
+    public void LoadAnchorFromExternal()
+    {
+        OnLoadLocalButtonPressed();
+    }
+
+    // アンカーの位置と回転を取得するメソッド
+    public Transform GetAnchorTransform()
+    {
+        if (_spatialAnchor && isCreated)
+        {
+            return transform;
+        }
+        return null;
     }
 }
