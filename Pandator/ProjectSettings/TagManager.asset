@@ -18,6 +18,8 @@ TagManager:
   - TrackedCamera
   - spatialAnchor
   - playerSpawn
+  - VRModel
+  - SpatialAnchorLoader
   layers:
   - Default
   - TransparentFX

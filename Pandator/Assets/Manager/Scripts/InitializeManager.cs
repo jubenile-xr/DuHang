@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
@@ -23,9 +21,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameManager gameManager;
     private GameObject player;
     private GameObject camera;
-    private GameObject spatialAnchor;
-    private GameObject playerSpawn;
-    [SerializeField]private Canvas debugCanvas;
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
@@ -34,19 +29,61 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField]private GameObject eventSystem;
     private bool isAnimationFinished = false;
     private bool isPlayerCreated = false;
-    private bool isAnchorLoaded = false;
     [Header("ローディング中の時間")] private float loadingTime;
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
+    [SerializeField]private GameObject VRModel;
+    [SerializeField]private GameObject debugCanvas;
+    private GameObject spatialAnchor;
     private AnchorManager anchorManager;
-    private bool hasSpatialAnchorInstantiated = false;
+    private bool isSpatialAnchorCreated = false;
+    private Transform playerSpawnPoint;
+    private SpatialAnchorLoader spatialAnchorLoader;
+    private bool isAnchorLoaded = false;
 
     void Start()
     {
-        Debug.Log("debug mode" + DebugManager.GetDebugMode());
-
         loadingTime = 0;
+
+        // デバッグモードの場合
+        if (DebugManager.GetDebugMode())
+        {
+            // SpatialAnchorLoaderを探して取得
+            GameObject spatialAnchorLoaderObj = GameObject.FindWithTag("SpatialAnchorLoader");
+            if (spatialAnchorLoaderObj)
+            {
+                spatialAnchorLoader = spatialAnchorLoaderObj.GetComponent<SpatialAnchorLoader>();
+                if (spatialAnchorLoader)
+                {
+                    spatialAnchorLoader.AnchorLoad();
+
+                    // PANDAとGODで処理を分ける
+                    if (character == GameCharacter.PANDA)
+                    {
+                        StartCoroutine(WaitForAnchorLoadAndSetupDebugForPanda());
+                    }
+                    else
+                    {
+                        // GODの場合はデバッグ環境をセットアップ
+                        SetupDebugEnvironment();
+                    }
+                }
+                else
+                {
+                    Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
+                    SetupDebugEnvironment();
+                }
+            }
+            else
+            {
+                Debug.LogError("SpatialAnchorLoader object not found!");
+                SetupDebugEnvironment();
+            }
+            return;
+        }
+
+        // デバッグモードでない場合は通常処理
         if (character != GameCharacter.GOD)
         {
             switch (Character.GetSelectedAnimal())
@@ -69,218 +106,394 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
-        // デバッグモードの場合のみ、ローカルでspatialAnchorを生成
-        if (DebugManager.GetDebugMode())
-        {
-            GameObject spatialAnchorPrefab = Resources.Load<GameObject>("SpatialAnchor/Prefab/spatialAnchor");
-            if (spatialAnchorPrefab != null)
-            {
-                spatialAnchor = Instantiate(spatialAnchorPrefab, Vector3.zero, Quaternion.identity);
-                spatialAnchor.transform.parent = transform.parent;
-                anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                loadingScene.SetActive(false);
-                spatialAnchor.SetActive(true);
-                Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                debugCanvas.gameObject.SetActive(true);
-                SetupPlayerSpawn();
-            }
-        }
-        else
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
+        PhotonNetwork.ConnectUsingSettings();
     }
 
-    // PlayerSpawnの設定
-    private void SetupPlayerSpawn()
+    private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
     {
-        if (spatialAnchor != null)
+        // spatialAnchorLoaderのisLoadedがtrueになるまで待機
+        while (!spatialAnchorLoader.isLoaded)
         {
-            Transform spawnTransform = spatialAnchor.GetComponentsInChildren<Transform>()
-                .FirstOrDefault(child => child.CompareTag("playerSpawn"));
-            if (spawnTransform != null)
-            {
-                playerSpawn = spawnTransform.gameObject;
-                Debug.Log("playerSpawn found: " + playerSpawn.name);
-                isAnchorLoaded = true;
-            }
-            else
-            {
-                Debug.LogError("playerSpawnがspatialAnchorの子オブジェクト内に見つかりません。");
-            }
+            yield return null;
         }
+
+        isAnchorLoaded = true;
+        Debug.Log("Anchor loaded successfully in debug mode for PANDA");
+        SetupDebugEnvironment();
+    }
+
+    private void SetupDebugEnvironment()
+    {
+        loadingScene.SetActive(false);
+        Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
+        CanvasCameraSetter.Instance.SetCanvasCamera();
+        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+        debugCanvas.gameObject.SetActive(true);
     }
 
     void Update()
     {
-        if (!DebugManager.GetDebugMode())
+        // デバッグモードの場合は以降の処理をスキップ
+        if (DebugManager.GetDebugMode())
         {
-            if (!isAnimationFinished)
-            {
-                loadingTime += Time.deltaTime;
-                if (loadingTime > 14f)
-                {
-                    SetIsAnimationFinished(true);
-                }
-            }
+            return;
+        }
 
-            if (gameManager && isAnimationFinished && !isPlayerCreated && spatialAnchor != null)
+        if (!isAnimationFinished)
+        {
+            loadingTime += Time.deltaTime;
+            if (loadingTime > 14f)
             {
-                // プレイヤーとカメラを生成する準備ができているかチェック
-                if (playerSpawn == null)
-                {
-                    SetupPlayerSpawn();
-                }
-                else if (isAnchorLoaded)
-                {
-                    // ロード完了したらUIを表示
-                    loadingScene.SetActive(false);
-                    eventSystem.SetActive(true);
-                    CreatePlayerAndCamera();
-                    SetPlayerCreated(true);
-                }
+                SetIsAnimationFinished(true);
             }
         }
+
+        // ゲームマネージャーが存在し、アニメーションが終了し、プレイヤーが生成されていない場合
+        if (gameManager && (isAnimationFinished || character == GameCharacter.GOD) && !isPlayerCreated && (isSpatialAnchorCreated || character == GameCharacter.GOD))
+        {
+            if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
+            {
+                loadingScene.SetActive(false);
+                eventSystem.SetActive(true);
+                if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
+                {
+                    VRModel.SetActive(true);
+                }
+
+                // プレイヤースポーン位置を取得
+                Vector3 spawnPosition = Vector3.zero;
+                Vector3 cameraPosition = Vector3.zero;
+
+                if (playerSpawnPoint != null)
+                {
+                    spawnPosition = playerSpawnPoint.position;
+                    cameraPosition = playerSpawnPoint.position;
+                }
+                else
+                {
+                    // デフォルトのスポーン位置
+                    spawnPosition = new Vector3(0f, 3.0f, 0f);
+                    cameraPosition = new Vector3(0f, 1.0f, 0f);
+                }
+
+                // プレイヤーキャラクターの生成およびカメラの生成
+                switch (character)
+                {
+                    case GameCharacter.BIRD:
+                        player = PhotonNetwork.Instantiate("Player/BirdPlayer", spawnPosition, Quaternion.identity);
+                        stateManager = player.GetComponentInChildren<StateManager>();
+                        scoreManager = player.GetComponentInChildren<ScoreManager>();
+                        GameObject eyePos = player.transform.Find("eyePos").gameObject;
+                        camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"),
+                            eyePos.transform.position, Quaternion.identity);
+                        player.GetComponent<BirdMoveController>()
+                            .SetCenterEyeAnchor(
+                                camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
+                        canvas.SetActive(true);
+                        break;
+                    case GameCharacter.RABBIT:
+                        player = PhotonNetwork.Instantiate("Player/RabbitPlayer", spawnPosition, Quaternion.identity);
+                        stateManager = player.GetComponentInChildren<StateManager>();
+                        scoreManager = player.GetComponentInChildren<ScoreManager>();
+                        camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
+                            cameraPosition, Quaternion.identity);
+                        canvas.SetActive(true);
+                        break;
+                    case GameCharacter.MOUSE:
+                        player = PhotonNetwork.Instantiate("Player/MousePlayer", spawnPosition, Quaternion.identity);
+                        stateManager = player.GetComponentInChildren<StateManager>();
+                        scoreManager = player.GetComponentInChildren<ScoreManager>();
+                        camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
+                            cameraPosition, Quaternion.identity);
+                        canvas.SetActive(true);
+                        break;
+                    case GameCharacter.PANDA:
+                        player = PhotonNetwork.Instantiate("Player/PandaPlayer", spawnPosition, Quaternion.identity);
+                        scoreManager = player.GetComponentInChildren<ScoreManager>();
+                        camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
+                        cameraPosition, Quaternion.identity);
+                        canvas.SetActive(true);
+                        break;
+                }
+
+                //カメラ生成の確認
+                if (camera == null)
+                {
+                    Debug.LogError("CameraRig is missing in the inspector.");
+                }
+
+                //カメラの親子関係を設定
+                camera.transform.SetParent(player.transform);
+
+                //CreatePhotonAvatarのOnCreate()を実行
+                CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
+                if (avatarScript == null)
+                {
+                    Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
+                }
+
+                avatarScript.ExecuteCreatePhotonAvatar();
+
+                switch (character)
+                {
+                    case GameCharacter.PANDA:
+                        CanvasCameraSetter.Instance.SetCanvasCamera();
+                        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                        MRUI.SetActive(true);
+                        break;
+                    case GameCharacter.MOUSE:
+                        MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
+                        if (mouseMoveScript == null)
+                        {
+                            Debug.LogError("MouseMove script is missing on the instantiated player object!");
+                        }
+
+                        mouseMoveScript.SetMouseOVRCameraRig();
+                        CanvasCameraSetter.Instance.SetCanvasCamera();
+                        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                        break;
+                    case GameCharacter.RABBIT:
+                        RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
+                        if (rabbitMoveScript == null)
+                        {
+                            Debug.LogError("RabbitMove script is missing on the instantiated player object!");
+                        }
+
+                        rabbitMoveScript.SetRabbitOVRCameraRig();
+                        CanvasCameraSetter.Instance.SetCanvasCamera();
+                        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                        break;
+                    case GameCharacter.BIRD:
+                        // BIRD用の処理があれば追加
+                        CanvasCameraSetter.Instance.SetCanvasCamera();
+                        CanvasCameraSetter.Instance.SetCanvasSortingLayer();
+                        break;
+                    default:
+                        Debug.LogWarning("未処理のキャラクタータイプです: " + character);
+                        break;
+                }
+            }
+            SetPlayerCreated(true);
+        }
+    }
+
+    // ルームに参加する処理
+    public override void OnConnectedToMaster()
+    {
+        // デバッグモードの場合は以降の処理をスキップ
+        if (DebugManager.GetDebugMode())
+        {
+            return;
+        }
+
+        // 固定ルーム "SampleRoomName" に参加
+        PhotonNetwork.JoinRoom("SampleRoomName");
+    }
+
+    // ルーム参加に失敗した場合(通常，指定したルーム名が存在しなかった場合)の処理
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        // デバッグモードの場合は以降の処理をスキップ
+        if (DebugManager.GetDebugMode())
+        {
+            return;
+        }
+
+        // ルーム参加に失敗した場合はルームを新規作成（最大8人まで）
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 8;
+        PhotonNetwork.CreateRoom("SampleRoomName", roomOptions);
     }
 
     // ルーム参加に成功した時の処理
     public override void OnJoinedRoom()
     {
-        Debug.LogWarning("OnJoinedRoom");
-
-        // GameManagerの生成を待つ
-        StartCoroutine(WaitForGameManager());
-
-        // GameManagerを生成（GODプレイヤーのみ）
-        if (GetGameCharacter() == GameCharacter.GOD)
+        // デバッグモードの場合は以降の処理をスキップ
+        if (DebugManager.GetDebugMode())
         {
-            PhotonNetwork.Instantiate("GameManager", Vector3.zero, Quaternion.identity);
+            return;
         }
 
-        // パンダ(MR)の場合はspatialAnchorを生成
-        if (GetGameCharacter() == GameCharacter.PANDA && !hasSpatialAnchorInstantiated)
+        Debug.LogWarning("OnJoinedRoom");
+        StartCoroutine(WaitForGameManager());
+        if (GetGameCharacter() == GameCharacter.GOD)
         {
-            Debug.Log("Panda: Instantiating spatialAnchor via PhotonNetwork");
-            try
+            PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        }
+
+        // SpatialAnchorLoaderを探して取得
+        GameObject spatialAnchorLoaderObj = GameObject.FindWithTag("SpatialAnchorLoader");
+        if (spatialAnchorLoaderObj)
+        {
+            spatialAnchorLoader = spatialAnchorLoaderObj.GetComponent<SpatialAnchorLoader>();
+            if (spatialAnchorLoader)
             {
-                // spatialAnchorを生成
-                spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
-                if (spatialAnchor != null)
+                spatialAnchorLoader.AnchorLoad();
+
+                // PANDAの場合、アンカーロード後にSpatialAnchorをインスタンス化
+                if (GetGameCharacter() == GameCharacter.PANDA)
                 {
-                    hasSpatialAnchorInstantiated = true;
-
-                    // *** PhotonNetwork.Instantiate後の処理 ***
-
-                    // 1. 必要なコンポーネントの取得と設定
-                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                    if (anchorManager == null)
-                    {
-                        Debug.LogError("AnchorManager component not found on instantiated spatialAnchor");
-                    }
-
-                    // 2. 親子関係の設定（必要に応じて）
-                    if (transform.parent != null)
-                    {
-                        spatialAnchor.transform.SetParent(transform.parent, false);
-                    }
-
-                    // 3. 位置と回転の調整（必要に応じて）
-                    Vector3 cameraPosition = Camera.main != null ? Camera.main.transform.position : Vector3.zero;
-                    Vector3 forward = Camera.main != null ? Camera.main.transform.forward : Vector3.forward;
-                    // カメラの前方1.5mにアンカーを配置
-                    Vector3 position = cameraPosition + forward * 1.5f;
-                    position.y = cameraPosition.y - 0.5f;  // カメラより少し下に配置
-                    spatialAnchor.transform.position = position;
-
-                    // 4. アンカーの有効化
-                    spatialAnchor.SetActive(true);
-
-                    // 5. PlayerSpawnポイントの初期化
-                    SetupPlayerSpawn();
-
-                    // 6. ロード画面を非表示
-                    if (loadingScene != null)
-                    {
-                        loadingScene.SetActive(false);
-                    }
-
-                    // 7. その他の初期化（必要に応じて）
-                    Debug.Log($"SpatialAnchor successfully instantiated: ID={spatialAnchor.GetPhotonView().ViewID}, Position={spatialAnchor.transform.position}");
-
-                    // 8. 他のプレイヤーへの通知（オプション）
-                    if (PhotonNetwork.InRoom)
-                    {
-                        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
-                        props.Add("spatialAnchorCreated", true);
-                        props.Add("spatialAnchorViewID", spatialAnchor.GetPhotonView().ViewID);
-                        props.Add("spatialAnchorPosition", spatialAnchor.transform.position);
-                        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
-                    }
+                    StartCoroutine(WaitForAnchorLoadAndCreateSpatialAnchorForPanda());
                 }
-                else
+                // PANDAでない場合、SpatialAnchorを探す
+                else if (GetGameCharacter() != GameCharacter.GOD)
                 {
-                    Debug.LogError("Failed to instantiate spatialAnchor: result is null");
+                    StartCoroutine(WaitForSpatialAnchor());
                 }
             }
-            catch (System.Exception e)
+            else
             {
-                Debug.LogError("Failed to instantiate spatialAnchor: " + e.Message);
+                Debug.LogError("SpatialAnchorLoader component is missing on the tagged object!");
+                HandleSpatialAnchorFallback();
             }
+        }
+        else
+        {
+            Debug.LogError("SpatialAnchorLoader object not found!");
+            HandleSpatialAnchorFallback();
         }
     }
 
-    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
-    //GameManagerの取得
-    private IEnumerator WaitForGameManager()
+    private void HandleSpatialAnchorFallback()
     {
-        while (!gameManager)
+        // PANDAの場合、SpatialAnchorをインスタンス化（フォールバック）
+        if (GetGameCharacter() == GameCharacter.PANDA)
         {
-            GameObject gmObj = GameObject.FindWithTag("GameManager");
-            if (gmObj)
+            PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+        }
+        // PANDAでない場合、SpatialAnchorを探す（フォールバック）
+        else if (GetGameCharacter() != GameCharacter.GOD)
+        {
+            StartCoroutine(WaitForSpatialAnchor());
+        }
+    }
+
+    private IEnumerator WaitForAnchorLoadAndCreateSpatialAnchorForPanda()
+    {
+        // spatialAnchorLoaderのisLoadedがtrueになるまで待機
+        while (!spatialAnchorLoader.isLoaded)
+        {
+            yield return null;
+        }
+
+        Debug.Log("Anchor loaded successfully for PANDA. Creating SpatialAnchor via PhotonNetwork.");
+        PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
+    }
+
+    private IEnumerator WaitForSpatialAnchor()
+    {
+        while (spatialAnchor == null)
+        {
+            GameObject saObj = GameObject.FindWithTag("SpatialAnchor");
+            if (saObj)
             {
-                gameManager = gmObj.GetComponent<GameManager>();
-                if (gameManager)
+                spatialAnchor = saObj;
+                // PlayerSpawnポイントを探す
+                Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
+                if (playerSpawnTransform != null)
                 {
-                    Debug.Log("GameManager found.");
-                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
-                        GetGameCharacter() == GameCharacter.RABBIT)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.VR);
-                    }
-                    else if (GetGameCharacter() == GameCharacter.PANDA)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.MR);
-                    }
-                    else if (GetGameCharacter() == GameCharacter.GOD)
-                    {
-                        gameManager.SetPlayerType(GameManager.PlayerType.GOD);
-                    }
-                    else
-                    {
-                        Debug.LogError("Unknown player type");
-                    }
-
-                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-                    {
-                        hasPlayerNameCreated = true;
-                    }
-
+                    playerSpawnPoint = playerSpawnTransform;
+                    SetIsSpatialAnchorCreated(true);
+                    Debug.Log("SpatialAnchor and PlayerSpawn found.");
                     yield break;
-                }
-                else
-                {
-                    Debug.LogError("GameManager object found, but component is missing.");
                 }
             }
             yield return null;
         }
     }
 
+    private Transform FindPlayerSpawnPointInAnchor(GameObject anchor)
+    {
+        // 子オブジェクトから"playerSpawn"タグを持つオブジェクトを検索
+        Transform[] allChildren = anchor.GetComponentsInChildren<Transform>();
+        foreach (Transform child in allChildren)
+        {
+            if (child.CompareTag("playerSpawn"))
+            {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
+    //GameManagerの取得とaliveCountのインクリメントを行う
+private IEnumerator WaitForGameManager()
+{
+    while (!gameManager)
+    {
+        GameObject gmObj = GameObject.FindWithTag("GameManager");
+        if (gmObj)
+        {
+            gameManager = gmObj.GetComponent<GameManager>();
+            if (gameManager)
+            {
+                Debug.Log("GameManager found.");
+                if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
+                    GetGameCharacter() == GameCharacter.RABBIT)
+                {
+                    gameManager.SetPlayerType(GameManager.PlayerType.VR);
+                }
+                else if (GetGameCharacter() == GameCharacter.PANDA)
+                {
+                    gameManager.SetPlayerType(GameManager.PlayerType.MR);
+                }
+                else if (GetGameCharacter() == GameCharacter.GOD)
+                {
+                    gameManager.SetPlayerType(GameManager.PlayerType.GOD);
+                }
+                else
+                {
+                    Debug.LogError("Unknown player type");
+                }
+
+                if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                {
+                    hasPlayerNameCreated = true;
+                }
+
+                // player が生成され、stateManager と scoreManager が取得できるまで待機
+                if (GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+                {
+                    while (stateManager == null || scoreManager == null)
+                    {
+                        Debug.Log("Waiting for player instantiation...");
+                        yield return null;
+                    }
+                }
+
+                Debug.Log("状態確認: hasPlayerNameCreated=" + hasPlayerNameCreated +
+                          ", stateManager=" + stateManager +
+                          ", scoreManager=" + scoreManager +
+                          ", GameManager.PlayerType=" + gameManager.GetPlayerType());
+
+                if (!hasPlayerNameCreated && stateManager != null && scoreManager != null &&
+                    GetGameCharacter() != GameCharacter.GOD && GetGameCharacter() != GameCharacter.PANDA)
+                {
+                    CreatePlayerName();
+                    hasPlayerNameCreated = true;
+                }
+
+                yield break;
+            }
+            else
+            {
+                Debug.LogError("GameManager object found, but component is missing.");
+            }
+        }
+        yield return null;
+    }
+}
+
     // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
     public override void OnDisconnected(DisconnectCause cause)
     {
+        // デバッグモードの場合は以降の処理をスキップ
+        if (DebugManager.GetDebugMode())
+        {
+            return;
+        }
+
         base.OnDisconnected(cause);
         Debug.LogError("Disconnected from Photon: " + cause.ToString());
 
@@ -293,140 +506,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         else
         {
             Debug.LogError("PhotonFailureObject is not set in the inspector.");
-        }
-    }
-
-    // ルームに参加する処理
-    public override void OnConnectedToMaster()
-    {
-        // 固定ルーム "SampleRoomName" に参加
-        PhotonNetwork.JoinRoom("SampleRoomName");
-    }
-
-    // ルーム参加に失敗した場合(通常，指定したルーム名が存在しなかった場合)の処理
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        // ルーム参加に失敗した場合はルームを新規作成（最大8人まで）
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 8;
-        PhotonNetwork.CreateRoom("SampleRoomName", roomOptions);
-    }
-
-    // プレイヤーとカメラを生成するメソッド
-    private void CreatePlayerAndCamera()
-    {
-        // プレイヤーキャラクターの生成およびカメラの生成
-        switch (character)
-        {
-            case GameCharacter.BIRD:
-                player = PhotonNetwork.Instantiate("Player/BirdPlayer",
-                    playerSpawn.transform.position,
-                    Quaternion.identity);
-                stateManager = player.GetComponentInChildren<StateManager>();
-                scoreManager = player.GetComponentInChildren<ScoreManager>();
-                GameObject eyePos = player.transform.Find("eyePos").gameObject;
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/BirdCameraRig"),
-                    eyePos.transform.position, Quaternion.identity);
-                player.GetComponent<BirdMoveController>()
-                    .SetCenterEyeAnchor(
-                        camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
-                canvas.SetActive(true);
-                break;
-            case GameCharacter.RABBIT:
-                player = PhotonNetwork.Instantiate("Player/RabbitPlayer",
-                    playerSpawn.transform.position,
-                    Quaternion.identity);
-                stateManager = player.GetComponentInChildren<StateManager>();
-                scoreManager = player.GetComponentInChildren<ScoreManager>();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
-                    playerSpawn.transform.position, Quaternion.identity);
-                canvas.SetActive(true);
-                break;
-            case GameCharacter.MOUSE:
-                player = PhotonNetwork.Instantiate("Player/MousePlayer",
-                    playerSpawn.transform.position,
-                    Quaternion.identity);
-                stateManager = player.GetComponentInChildren<StateManager>();
-                scoreManager = player.GetComponentInChildren<ScoreManager>();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
-                    new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                canvas.SetActive(true);
-                break;
-            case GameCharacter.PANDA:
-                player = PhotonNetwork.Instantiate("Player/PandaPlayer",
-                    playerSpawn.transform.position,
-                    Quaternion.identity);
-                scoreManager = player.GetComponentInChildren<ScoreManager>();
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
-                    playerSpawn.transform.position, Quaternion.identity);
-                canvas.SetActive(true);
-                break;
-        }
-
-        //カメラ生成の確認
-        if (camera == null)
-        {
-            Debug.LogError("CameraRig is missing in the inspector.");
-        }
-
-        //カメラの親子関係を設定
-        camera.transform.SetParent(player.transform);
-
-        //CreatePhotonAvatarのOnCreate()を実行
-        CreatePhotonAvatar avatarScript = player.GetComponent<CreatePhotonAvatar>();
-        if (avatarScript == null)
-        {
-            Debug.LogError(
-                "CreatePhotonAvatar script is missing on the instantiated player object!");
-        }
-
-        avatarScript.ExecuteCreatePhotonAvatar();
-
-        switch (character)
-        {
-            case GameCharacter.PANDA:
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                MRUI.SetActive(true);
-                break;
-            case GameCharacter.MOUSE:
-                MouseMove mouseMoveScript = player.GetComponentInChildren<MouseMove>();
-                if (mouseMoveScript == null)
-                {
-                    Debug.LogError(
-                        "MouseMove script is missing on the instantiated player object!");
-                }
-
-                mouseMoveScript.SetMouseOVRCameraRig();
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            case GameCharacter.RABBIT:
-                RabbitMove rabbitMoveScript = player.GetComponentInChildren<RabbitMove>();
-                if (rabbitMoveScript == null)
-                {
-                    Debug.LogError(
-                        "RabbitMove script is missing on the instantiated player object!");
-                }
-
-                rabbitMoveScript.SetRabbitOVRCameraRig();
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            case GameCharacter.BIRD:
-                // BIRD用の処理があれば追加
-                CanvasCameraSetter.Instance.SetCanvasCamera();
-                CanvasCameraSetter.Instance.SetCanvasSortingLayer();
-                break;
-            default:
-                Debug.LogWarning("未処理のキャラクタータイプです: " + character);
-                break;
-        }
-
-        // VR以外のプレイヤー名を生成
-        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-        {
-            CreatePlayerName();
         }
     }
 
@@ -472,9 +551,12 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     {
         isAnimationFinished = isFinished;
     }
-
     private void SetPlayerCreated(bool isCreated)
     {
         isPlayerCreated = isCreated;
+    }
+    private void SetIsSpatialAnchorCreated(bool isCreated)
+    {
+        isSpatialAnchorCreated = isCreated;
     }
 }

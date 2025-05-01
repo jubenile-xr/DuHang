@@ -8,16 +8,9 @@ using UnityEngine;
 public class SpatialAnchorLoader : MonoBehaviour
 {
     private AnchorManager[] _allAnchors;
-    [SerializeField]
-    private bool _debugMode;
     public bool isLoaded { get; private set; } = false;
 
-    void Awake()
-    {
-        Load();
-    }
-
-    void Start()
+    public void AnchorLoad()
     {
         this.UpdateAsObservable()
             .Where(_ => _allAnchors != null && _allAnchors.Length > 0 && _allAnchors.All(anchor => anchor.isCreated))
@@ -26,10 +19,6 @@ public class SpatialAnchorLoader : MonoBehaviour
             {
                 isLoaded = true;
             }).AddTo(this);
-    }
-
-    private void Load()
-    {
         // Anchorのコンポーネントを持つすべてのGameObjectを取得
         _allAnchors = FindObjectsOfType<AnchorManager>();
 
