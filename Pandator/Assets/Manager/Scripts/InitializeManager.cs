@@ -4,6 +4,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
@@ -39,13 +40,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject canvas;
     public GameObject MRUI;
     private AnchorManager anchorManager;
+    private bool hasSpatialAnchorInstantiated = false;
 
     void Start()
     {
         Debug.Log("debug mode" + DebugManager.GetDebugMode());
-
-        // Resourcesからspatialアンカーのprefabを読み込む
-        LoadSpatialAnchorFromResources();
 
         loadingTime = 0;
         if (character != GameCharacter.GOD)
@@ -70,75 +69,27 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (!DebugManager.GetDebugMode())
+        // デバッグモードの場合のみ、ローカルでspatialAnchorを生成
+        if (DebugManager.GetDebugMode())
         {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-    }
-
-    // Resourcesからspatialアンカーのprefabを読み込み、インスタンス化する
-    private void LoadSpatialAnchorFromResources()
-    {
-        GameObject spatialAnchorPrefab = Resources.Load<GameObject>("SpatialAnchor/Prefab/spatialAnchor");
-        if (spatialAnchorPrefab != null)
-        {
-            // デバッグモードの場合のみ直接Instantiate
-            if (DebugManager.GetDebugMode())
+            GameObject spatialAnchorPrefab = Resources.Load<GameObject>("SpatialAnchor/Prefab/spatialAnchor");
+            if (spatialAnchorPrefab != null)
             {
                 spatialAnchor = Instantiate(spatialAnchorPrefab, Vector3.zero, Quaternion.identity);
                 spatialAnchor.transform.parent = transform.parent;
                 anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-
                 loadingScene.SetActive(false);
                 spatialAnchor.SetActive(true);
                 Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
                 CanvasCameraSetter.Instance.SetCanvasCamera();
                 CanvasCameraSetter.Instance.SetCanvasSortingLayer();
                 debugCanvas.gameObject.SetActive(true);
-
-                // PlayerSpawnポイントを取得
                 SetupPlayerSpawn();
-            }
-            else if (PhotonNetwork.IsConnected)
-            {
-                // パンダ以外のキャラクターは、spatialAnchorが見つかるまで待機
-                if (character != GameCharacter.PANDA)
-                {
-                    StartCoroutine(WaitForSpatialAnchor());
-                }
             }
         }
         else
         {
-            Debug.LogError("Resources/SpatialAnchor/Prefab/spatialAnchor.prefabが見つかりません。");
-        }
-    }
-
-    // spatialAnchorが出現するまで待機するコルーチン
-    private IEnumerator WaitForSpatialAnchor()
-    {
-
-        while (spatialAnchor == null)
-        {
-            // シーン内のspatialAnchorタグを持つオブジェクトを検索
-            GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
-            if (anchors.Length > 0)
-            {
-                spatialAnchor = anchors[0];
-                anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                Debug.Log("Found spatialAnchor in scene");
-
-                // PlayerSpawnポイントを取得
-                SetupPlayerSpawn();
-                break;
-            }
-
-            yield return new WaitForSeconds(0.5f);
-        }
-
-        if (spatialAnchor == null)
-        {
-            Debug.LogError("spatialAnchorが見つかりませんでした。タイムアウト。");
+            PhotonNetwork.ConnectUsingSettings();
         }
     }
 
@@ -175,112 +126,190 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 }
             }
 
-            if (gameManager && isAnimationFinished && !isPlayerCreated)
+            if (gameManager && isAnimationFinished && !isPlayerCreated && spatialAnchor != null)
             {
-                if (spatialAnchor == null)
+                // プレイヤーとカメラを生成する準備ができているかチェック
+                if (playerSpawn == null)
                 {
-                    // アンカーがなければ再度検索
-                    GameObject[] anchors = GameObject.FindGameObjectsWithTag("spatialAnchor");
-                    if (anchors.Length > 0)
-                    {
-                        spatialAnchor = anchors[0];
-                        anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                        SetupPlayerSpawn();
-                    }
-                    else if (character == GameCharacter.PANDA && PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
-                    {
-                        // ルーム参加済みでパンダの場合、何らかの理由でアンカーが見つからなければ再作成
-                        Debug.LogWarning("Panda: spatialAnchor not found, recreating");
-                        spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
-                        spatialAnchor.transform.parent = transform.parent;
-                        anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-                        SetupPlayerSpawn();
-                    }
+                    SetupPlayerSpawn();
                 }
-                else
+                else if (isAnchorLoaded)
                 {
-                    if (playerSpawn == null)
-                    {
-                        SetupPlayerSpawn();
-                    }
-                    else
-                    {
-                        if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
-                        {
-                            // MRプレイヤー(パンダ)の場合は、アンカーを作成・保存
-                            if (gameManager.GetPlayerType() == GameManager.PlayerType.MR)
-                            {
-                                // アンカーがまだ作られていない場合は作成
-                                if (anchorManager != null && !anchorManager.isCreated)
-                                {
-                                    Debug.Log("MR Player: Creating new anchor");
-                                    anchorManager.CreateAnchor();
-
-                                    // 作成完了を少し待つ
-                                    StartCoroutine(SaveAnchorAfterCreation(anchorManager));
-                                }
-                                else if (anchorManager != null && anchorManager.isCreated)
-                                {
-                                    Debug.Log("MR Player: Anchor already created, saving");
-                                    // すでに作成されているが念のため保存
-                                    anchorManager.OnSaveLocalButtonPressed();
-                                    isAnchorLoaded = true;
-                                }
-                            }
-
-                            // VRプレイヤーの場合はローカルに保存されているアンカーを読み込む
-                            if (gameManager.GetPlayerType() == GameManager.PlayerType.VR)
-                            {
-                                if (anchorManager != null && !isAnchorLoaded)
-                                {
-                                    Debug.Log("VR Player: Trying to load local anchor");
-                                    // アンカーをロード
-                                    anchorManager.OnLoadLocalButtonPressed();
-                                    spatialAnchor.SetActive(true);
-
-                                    // ここでアンカーの読み込み完了を待つ
-                                    StartCoroutine(CheckAnchorLoaded());
-                                }
-                            }
-
-                            // アンカーの読み込みが完了してからプレイヤーとカメラを生成
-                            if (isAnchorLoaded)
-                            {
-                                CreatePlayerAndCamera();
-
-                                // ロード完了したらUIを表示
-                                loadingScene.SetActive(false);
-                                eventSystem.SetActive(true);
-
-                                SetPlayerCreated(true);
-                            }
-                        }
-                    }
+                    // ロード完了したらUIを表示
+                    loadingScene.SetActive(false);
+                    eventSystem.SetActive(true);
+                    CreatePlayerAndCamera();
+                    SetPlayerCreated(true);
                 }
             }
         }
     }
 
-    // アンカーの読み込み完了を確認するコルーチン
-    private IEnumerator CheckAnchorLoaded()
+    // ルーム参加に成功した時の処理
+    public override void OnJoinedRoom()
     {
-        float timeout = 30f; // 最大30秒待つ
-        float elapsedTime = 0f;
+        Debug.LogWarning("OnJoinedRoom");
 
-        // タイムアウトまで待機
-        while (!isAnchorLoaded && elapsedTime < timeout)
+        // GameManagerの生成を待つ
+        StartCoroutine(WaitForGameManager());
+
+        // GameManagerを生成（GODプレイヤーのみ）
+        if (GetGameCharacter() == GameCharacter.GOD)
         {
-            yield return new WaitForSeconds(0.5f);
-            elapsedTime += 0.5f;
-            Debug.Log($"Waiting for anchor to be loaded... {elapsedTime}s");
+            PhotonNetwork.Instantiate("GameManager", Vector3.zero, Quaternion.identity);
+        }
 
-
-            if (!isAnchorLoaded)
+        // パンダ(MR)の場合はspatialAnchorを生成
+        if (GetGameCharacter() == GameCharacter.PANDA && !hasSpatialAnchorInstantiated)
+        {
+            Debug.Log("Panda: Instantiating spatialAnchor via PhotonNetwork");
+            try
             {
-                Debug.LogError("Failed to load anchor within timeout period");
-                // エラー処理 - 再試行するか、ユーザーに通知するなど
+                // spatialAnchorを生成
+                spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
+                if (spatialAnchor != null)
+                {
+                    hasSpatialAnchorInstantiated = true;
+
+                    // *** PhotonNetwork.Instantiate後の処理 ***
+
+                    // 1. 必要なコンポーネントの取得と設定
+                    anchorManager = spatialAnchor.GetComponent<AnchorManager>();
+                    if (anchorManager == null)
+                    {
+                        Debug.LogError("AnchorManager component not found on instantiated spatialAnchor");
+                    }
+
+                    // 2. 親子関係の設定（必要に応じて）
+                    if (transform.parent != null)
+                    {
+                        spatialAnchor.transform.SetParent(transform.parent, false);
+                    }
+
+                    // 3. 位置と回転の調整（必要に応じて）
+                    Vector3 cameraPosition = Camera.main != null ? Camera.main.transform.position : Vector3.zero;
+                    Vector3 forward = Camera.main != null ? Camera.main.transform.forward : Vector3.forward;
+                    // カメラの前方1.5mにアンカーを配置
+                    Vector3 position = cameraPosition + forward * 1.5f;
+                    position.y = cameraPosition.y - 0.5f;  // カメラより少し下に配置
+                    spatialAnchor.transform.position = position;
+
+                    // 4. アンカーの有効化
+                    spatialAnchor.SetActive(true);
+
+                    // 5. PlayerSpawnポイントの初期化
+                    SetupPlayerSpawn();
+
+                    // 6. ロード画面を非表示
+                    if (loadingScene != null)
+                    {
+                        loadingScene.SetActive(false);
+                    }
+
+                    // 7. その他の初期化（必要に応じて）
+                    Debug.Log($"SpatialAnchor successfully instantiated: ID={spatialAnchor.GetPhotonView().ViewID}, Position={spatialAnchor.transform.position}");
+
+                    // 8. 他のプレイヤーへの通知（オプション）
+                    if (PhotonNetwork.InRoom)
+                    {
+                        ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+                        props.Add("spatialAnchorCreated", true);
+                        props.Add("spatialAnchorViewID", spatialAnchor.GetPhotonView().ViewID);
+                        props.Add("spatialAnchorPosition", spatialAnchor.transform.position);
+                        PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Failed to instantiate spatialAnchor: result is null");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to instantiate spatialAnchor: " + e.Message);
             }
         }
+    }
+
+    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
+    //GameManagerの取得
+    private IEnumerator WaitForGameManager()
+    {
+        while (!gameManager)
+        {
+            GameObject gmObj = GameObject.FindWithTag("GameManager");
+            if (gmObj)
+            {
+                gameManager = gmObj.GetComponent<GameManager>();
+                if (gameManager)
+                {
+                    Debug.Log("GameManager found.");
+                    if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
+                        GetGameCharacter() == GameCharacter.RABBIT)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.VR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.PANDA)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.MR);
+                    }
+                    else if (GetGameCharacter() == GameCharacter.GOD)
+                    {
+                        gameManager.SetPlayerType(GameManager.PlayerType.GOD);
+                    }
+                    else
+                    {
+                        Debug.LogError("Unknown player type");
+                    }
+
+                    if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
+                    {
+                        hasPlayerNameCreated = true;
+                    }
+
+                    yield break;
+                }
+                else
+                {
+                    Debug.LogError("GameManager object found, but component is missing.");
+                }
+            }
+            yield return null;
+        }
+    }
+
+    // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        base.OnDisconnected(cause);
+        Debug.LogError("Disconnected from Photon: " + cause.ToString());
+
+        // 接続に失敗した場合、PhotonFailureObject(本記事ではCube) を表示する
+        if (PhotonFailureObject != null)
+        {
+            // ローカルにオブジェクトを Instantiate する例（PhotonNetwork.Instantiate は使用できないため）
+            Instantiate(PhotonFailureObject, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("PhotonFailureObject is not set in the inspector.");
+        }
+    }
+
+    // ルームに参加する処理
+    public override void OnConnectedToMaster()
+    {
+        // 固定ルーム "SampleRoomName" に参加
+        PhotonNetwork.JoinRoom("SampleRoomName");
+    }
+
+    // ルーム参加に失敗した場合(通常，指定したルーム名が存在しなかった場合)の処理
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        // ルーム参加に失敗した場合はルームを新規作成（最大8人まで）
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 8;
+        PhotonNetwork.CreateRoom("SampleRoomName", roomOptions);
     }
 
     // プレイヤーとカメラを生成するメソッド
@@ -393,115 +422,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 Debug.LogWarning("未処理のキャラクタータイプです: " + character);
                 break;
         }
-    }
 
-    // ルームに参加する処理
-    public override void OnConnectedToMaster()
-    {
-        // 固定ルーム "SampleRoomName" に参加
-        PhotonNetwork.JoinRoom("SampleRoomName");
-    }
-
-    // ルーム参加に失敗した場合(通常，指定したルーム名が存在しなかった場合)の処理
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        // ルーム参加に失敗した場合はルームを新規作成（最大8人まで）
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 8;
-        PhotonNetwork.CreateRoom("SampleRoomName", roomOptions);
-    }
-
-    // ルーム参加に成功した時の処理
-    public override void OnJoinedRoom()
-    {
-        Debug.LogWarning("OnJoinedRoom");
-        StartCoroutine(WaitForGameManager());
-        if (GetGameCharacter() == GameCharacter.GOD)
+        // VR以外のプレイヤー名を生成
+        if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
         {
-            PhotonNetwork.Instantiate("GameManager", new Vector3(0f, 0f, 0f), Quaternion.identity);
-        }
-
-        // パンダ(MR)の場合はspatialAnchorをルーム参加後にインスタンス化
-        if (GetGameCharacter() == GameCharacter.PANDA && !DebugManager.GetDebugMode())
-        {
-            Debug.Log("Panda: Instantiating spatialAnchor via PhotonNetwork");
-            spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/Prefab/spatialAnchor", Vector3.zero, Quaternion.identity);
-            spatialAnchor.transform.parent = transform.parent;
-            anchorManager = spatialAnchor.GetComponent<AnchorManager>();
-
-            // パンダの場合はロード画面を非表示にしてアンカーを表示
-            loadingScene.SetActive(false);
-            spatialAnchor.SetActive(true);
-
-            // PlayerSpawnポイントを取得
-            SetupPlayerSpawn();
-        }
-    }
-
-    //コルーチンでOnJoinedRoom内でリトライ機構ができるように
-    //GameManagerの取得とaliveCountのインクリメントを行う
-private IEnumerator WaitForGameManager()
-{
-    while (!gameManager)
-    {
-        GameObject gmObj = GameObject.FindWithTag("GameManager");
-        if (gmObj)
-        {
-            gameManager = gmObj.GetComponent<GameManager>();
-            if (gameManager)
-            {
-                Debug.Log("GameManager found.");
-                if (GetGameCharacter() == GameCharacter.BIRD || GetGameCharacter() == GameCharacter.MOUSE ||
-                    GetGameCharacter() == GameCharacter.RABBIT)
-                {
-                    gameManager.SetPlayerType(GameManager.PlayerType.VR);
-                }
-                else if (GetGameCharacter() == GameCharacter.PANDA)
-                {
-                    gameManager.SetPlayerType(GameManager.PlayerType.MR);
-                }
-                else if (GetGameCharacter() == GameCharacter.GOD)
-                {
-                    gameManager.SetPlayerType(GameManager.PlayerType.GOD);
-                }
-                else
-                {
-                    Debug.LogError("Unknown player type");
-                }
-
-                if (gameManager.GetPlayerType() != GameManager.PlayerType.VR)
-                {
-                    CreatePlayerName();
-                    hasPlayerNameCreated = true;
-                }
-
-                // アンカーが読み込まれるまでは待機
-                yield break;
-            }
-            else
-            {
-                Debug.LogError("GameManager object found, but component is missing.");
-            }
-        }
-        yield return null;
-    }
-}
-
-    // OnDisconnectedという名前だがルーム切断時のみではなく接続失敗時にも実行する処理
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        base.OnDisconnected(cause);
-        Debug.LogError("Disconnected from Photon: " + cause.ToString());
-
-        // 接続に失敗した場合、PhotonFailureObject(本記事ではCube) を表示する
-        if (PhotonFailureObject != null)
-        {
-            // ローカルにオブジェクトを Instantiate する例（PhotonNetwork.Instantiate は使用できないため）
-            Instantiate(PhotonFailureObject, new Vector3(0f, 0f, 0f), Quaternion.identity);
-        }
-        else
-        {
-            Debug.LogError("PhotonFailureObject is not set in the inspector.");
+            CreatePlayerName();
         }
     }
 
@@ -547,26 +472,9 @@ private IEnumerator WaitForGameManager()
     {
         isAnimationFinished = isFinished;
     }
+
     private void SetPlayerCreated(bool isCreated)
     {
         isPlayerCreated = isCreated;
-    }
-
-    // MRプレイヤーがアンカーを作成した後、保存するコルーチン
-    private IEnumerator SaveAnchorAfterCreation(AnchorManager anchorManager)
-    {
-        // アンカー作成完了を待つ
-        yield return new WaitForSeconds(2.0f);
-
-        if (anchorManager.isCreated)
-        {
-            Debug.Log("MR Player: Anchor creation successful, saving");
-            anchorManager.OnSaveLocalButtonPressed();
-            isAnchorLoaded = true;
-        }
-        else
-        {
-            Debug.LogError("MR Player: Failed to create anchor within timeout");
-        }
     }
 }
