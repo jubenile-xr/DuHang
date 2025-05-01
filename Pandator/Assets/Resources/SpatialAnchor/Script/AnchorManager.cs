@@ -30,8 +30,8 @@ public class AnchorManager : MonoBehaviourPunCallbacks
     void Update()
     {
         // デバッグモード
-        if (DebugManager.GetDebugMode())
-        {
+        //if (DebugManager.GetDebugMode())
+        //{
             Vector3 pos = gameObject.transform.position;
             Vector3 rot = gameObject.transform.eulerAngles;
             _textPosition.text = pos.ToString();
@@ -63,7 +63,7 @@ public class AnchorManager : MonoBehaviourPunCallbacks
             {
                 FinalizeAnchor();
             }
-        }
+       // }
     }
 
     public async void CreateAnchor()

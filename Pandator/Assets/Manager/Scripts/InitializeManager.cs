@@ -379,29 +379,17 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     private IEnumerator WaitForSpatialAnchor()
     {
-        while (spatialAnchor == null)
-        {
-            if (transform.parent != null && transform.parent.parent != null)
+        spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
+            new Vector3(0f, 0f, 0f), Quaternion.identity);
+            Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
+            if (playerSpawnTransform != null)
             {
-                foreach (Transform sibling in transform.parent.parent)
-                {
-                    if (sibling == transform.parent) continue;
-                    if (sibling.CompareTag("SpatialAnchor"))
-                    {
-                        spatialAnchor = sibling.gameObject;
-                        Transform playerSpawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
-                        if (playerSpawnTransform != null)
-                        {
-                            playerSpawnPoint = playerSpawnTransform;
-                            SetIsSpatialAnchorCreated(true);
-                            Debug.Log("SpatialAnchor and PlayerSpawn found.");
-                            yield break;
-                        }
-                    }
-                }
+                playerSpawnPoint = playerSpawnTransform;
+                SetIsSpatialAnchorCreated(true);
+                Debug.Log("SpatialAnchor and PlayerSpawn found.");
+                yield break;
             }
             yield return null;
-        }
     }
 
     private Transform FindPlayerSpawnPointInAnchor(GameObject anchor)
