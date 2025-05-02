@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MouseGaol : MonoBehaviour
+public class BirdGaol : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI instructionUI;
     private void Start()
@@ -12,7 +12,7 @@ public class MouseGaol : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (Character.GetSelectedAnimal() == Character.GameCharacters.MOUSE)
+        if (Character.GetSelectedAnimal() == Character.GameCharacters.BIRD)
         {
             if (other.CompareTag("Player"))
             {
@@ -23,7 +23,7 @@ public class MouseGaol : MonoBehaviour
     }
     private void HideObject()
     {
-        if (Character.GetSelectedAnimal() != Character.GameCharacters.MOUSE)
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.BIRD)
         {
             gameObject.SetActive(false);
         }
