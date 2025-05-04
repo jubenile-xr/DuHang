@@ -58,6 +58,27 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             // SpatialAnchorLoaderを探して取得
             spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
+            // SpatialAnchorの子オブジェクトを検索してroom_completeの子供のroomとroom.001を非アクティブに設定
+            Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete");
+            if (roomCompleteTransform != null)
+            {
+                Transform room = roomCompleteTransform.Find("room");
+                if (room != null)
+                {
+                    room.gameObject.SetActive(false);
+                }
+
+                Transform room001 = roomCompleteTransform.Find("room.001");
+                if (room001 != null)
+                {
+                    room001.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("room_complete object not found under SpatialAnchor.");
+            }
+
             if (spatialAnchorLoader)
             {
                 SetupDebugEnvironment();
