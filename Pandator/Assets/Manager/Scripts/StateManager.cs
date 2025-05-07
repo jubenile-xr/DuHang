@@ -28,6 +28,8 @@ public class StateManager : MonoBehaviour
     [Header("キャラクターの種類"), SerializeField] private GameCharacter character;
     private FlashEffect flashEffect;
     private DeadVolumeController deadVolumeController;
+    private bool isGetFlashEffect = false;
+    private bool isGetDeadVolumeController = false;
     private void Start()
     {
         isInterrupted = false;
@@ -84,6 +86,14 @@ public class StateManager : MonoBehaviour
             {
                 ResetState();
             }
+        }
+        if(!isGetDeadVolumeController){
+            deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
+            isGetDeadVolumeController = true;
+        }
+        if(!isGetFlashEffect){
+            flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
+            isGetFlashEffect = true;
         }
     }
 
