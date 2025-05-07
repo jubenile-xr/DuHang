@@ -17,6 +17,9 @@ TagManager:
   - Canvas
   - TrackedCamera
   - DeadVolume
+  - BGM
+  - InterruptItem
+  - Net
   layers:
   - Default
   - TransparentFX
