@@ -359,6 +359,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             SetIsSpatialAnchorCreated(true);
+            // SpatialAnchorの子オブジェクトを検索してroom_completeの子供のroomとroom.001を非アクティブに設定
+            Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete");
+            roomCompleteTransform.gameObject.SetActive(false);
         }
         // PANDAでもGODでもない場合（小動物）、カスタムプロパティからSpatialAnchorの位置情報を取得
         else if (GetGameCharacter() != GameCharacter.GOD)
