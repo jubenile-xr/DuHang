@@ -28,6 +28,11 @@ public class ChargeTime : MonoBehaviour
                 Debug.LogError("GameManager not found");
             }
         }
+        if(Character.GetSelectedAnimal() == Character.GameCharacters.PANDA){
+            duration = Durations.NET_GUN_DURATION;
+        }else{
+            duration = Durations.INTERRUPT_GUN_DURATION;
+        }
     }
 
     void Update()
