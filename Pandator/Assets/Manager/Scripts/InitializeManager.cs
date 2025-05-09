@@ -191,18 +191,21 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 eventSystem.SetActive(true);
 
                 // playerSpawnのtransform.positionを取得
-                Vector3 spawnPosition = Vector3.zero;
+                Vector3 spawnPositionAnimal = Vector3.zero;
+                Vector3 spawnPositionPanda = Vector3.zero;
                 Vector3 cameraPosition = Vector3.zero;
 
                 if (playerSpawnPoint != null)
                 {
-                    spawnPosition = playerSpawnPoint.position;
+                    spawnPositionAnimal = playerSpawnPoint.position;
+                    spawnPositionPanda = playerSpawnPoint.position;
                     cameraPosition = playerSpawnPoint.position;
                 }
                 else
                 {
                     // デフォルトのスポーン位置
-                    spawnPosition = new Vector3(0f, 3.0f, 0f);
+                    spawnPositionAnimal = new Vector3(0f, 3.0f, 0f);
+                    spawnPositionPanda = new Vector3(0f, 2.0f, 0f);
                     cameraPosition = new Vector3(0f, 1.0f, 0f);
                 }
 
@@ -212,7 +215,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 switch (character)
                 {
                     case GameCharacter.BIRD:
-                        player = PhotonNetwork.Instantiate("Player/BirdPlayer", spawnPosition, Quaternion.identity);
+                        player = PhotonNetwork.Instantiate("Player/BirdPlayer", spawnPositionAnimal, Quaternion.identity);
                         stateManager = player.GetComponentInChildren<StateManager>();
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         GameObject eyePos = player.transform.Find("eyePos").gameObject;
@@ -224,7 +227,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.RABBIT:
-                        player = PhotonNetwork.Instantiate("Player/RabbitPlayer", spawnPosition, Quaternion.identity);
+                        player = PhotonNetwork.Instantiate("Player/RabbitPlayer", spawnPositionAnimal, Quaternion.identity);
                         stateManager = player.GetComponentInChildren<StateManager>();
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
@@ -232,7 +235,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.MOUSE:
-                        player = PhotonNetwork.Instantiate("Player/MousePlayer", spawnPosition, Quaternion.identity);
+                        player = PhotonNetwork.Instantiate("Player/MousePlayer", spawnPositionAnimal, Quaternion.identity);
                         stateManager = player.GetComponentInChildren<StateManager>();
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
@@ -240,7 +243,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.PANDA:
-                        player = PhotonNetwork.Instantiate("Player/PandaPlayer", spawnPosition, Quaternion.identity);
+                        player = PhotonNetwork.Instantiate("Player/PandaPlayer", spawnPositionPanda, Quaternion.identity);
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"),
                         cameraPosition, Quaternion.identity);
