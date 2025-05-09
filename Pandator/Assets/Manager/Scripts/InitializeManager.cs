@@ -171,7 +171,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
 
         // PANDAプレイヤーの場合、キーボードの "Y" キーを検出 (MetaQuestのYボタンのシミュレート)
-        if (character == GameCharacter.PANDA && spatialAnchor != null)
+        if (character == GameCharacter.PANDA && spatialAnchor != null && !yKeyPressed && (Input.GetKeyDown(KeyCode.Y) || OVRInput.GetDown(OVRInput.Button.Four)))
         {
             yKeyPressed = true;
             AnchorManager anchorManager = spatialAnchor.GetComponent<AnchorManager>();
