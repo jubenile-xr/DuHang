@@ -189,54 +189,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 206180143184000810, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 593820835888786030, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: loadingScene
       value: 
       objectReference: {fileID: 1095328261}
-    - target: {fileID: 1153814349686528505, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2333512703950756540, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2792162026505756175, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2868734359083265525, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3534568670885312736, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4568707597392253435, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4750997238653893854, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: sharedProfile
-      value: 
-      objectReference: {fileID: 11400000, guid: 054fc392946454ed3b57d0a6a40df0ca, type: 2}
-    - target: {fileID: 5414304628063635839, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7749234205811686587, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8716894927445767245, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
