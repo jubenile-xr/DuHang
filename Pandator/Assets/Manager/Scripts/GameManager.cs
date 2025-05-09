@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 playerType = PlayerType.MR;
                 break;
             default:
-                Debug.LogError("GOD PlayerType");
+                Debug.LogWarning("GOD PlayerType");
                 playerType = PlayerType.GOD;
                 break;
         }
