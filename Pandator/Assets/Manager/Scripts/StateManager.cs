@@ -87,12 +87,16 @@ public class StateManager : MonoBehaviour
                 ResetState();
             }
         }
-        if(!isGetDeadVolumeController){
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetDeadVolumeController)
+        {
             deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
+            Debug.Log("DeadVolumeController component found in the DeadVolume.");
             isGetDeadVolumeController = true;
         }
-        if(!isGetFlashEffect){
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetFlashEffect)
+        {
             flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
+            Debug.Log("FlashEffect component found in the canvas.");
             isGetFlashEffect = true;
         }
     }
