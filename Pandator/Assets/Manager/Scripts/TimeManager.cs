@@ -27,6 +27,10 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
+        if(Character.GetSelectedAnimal() == Character.GameCharacters.GOD)
+        {
+            return;
+        }
         if (canvas == null)
         {
             canvas = GameObject.FindGameObjectWithTag("Canvas");
