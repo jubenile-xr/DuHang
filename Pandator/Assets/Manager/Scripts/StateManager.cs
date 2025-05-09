@@ -95,6 +95,7 @@ public class StateManager : MonoBehaviour
 
     public void SetInterrupted(bool value)
     {
+        
         if (value)
         {
             InterruptLogic();
@@ -196,5 +197,10 @@ public class StateManager : MonoBehaviour
     public void SetPlayerName(string name)
     {
         playerName = name;
+    }
+
+    public string GetPlayerName()
+    {
+        return playerName;
     }
 }

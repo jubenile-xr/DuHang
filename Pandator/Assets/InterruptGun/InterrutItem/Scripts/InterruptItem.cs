@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
 public class InterrupteItem : MonoBehaviour
@@ -7,7 +8,7 @@ public class InterrupteItem : MonoBehaviour
     [SerializeField] private float collisionDeleteTime = 0.1f;
     private float collisionTime = 0.0f;
     private bool isCollision = false;
-    [SerializeField]private GameObject hitSE;
+    [SerializeField] private GameObject hitSE;
 
     private void Update()
     {
@@ -17,6 +18,7 @@ public class InterrupteItem : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         if (isCollision)
         {
             collisionTime += Time.deltaTime;
@@ -32,11 +34,14 @@ public class InterrupteItem : MonoBehaviour
         GameObject player = collision.gameObject;
         if (player.CompareTag("Player"))
         {
-            isCollision = true;
-            // プレイヤーの状態を Interrupted に設定する
-            player.GetComponent<StateManager>()?.SetInterrupted(true);
-            Debug.Log("hit!");
-            hitSE?.GetComponent<SoundPlayer>().Play();
+            if (player.GetComponent<PhotonView>().IsMine != GetComponent<PhotonView>().IsMine)
+            {
+                isCollision = true;
+                // プレイヤーの状態を Interrupted に設定する
+                player.GetComponent<StateManager>()?.SetInterrupted(true);
+                Debug.Log("hit!");
+                hitSE?.GetComponent<SoundPlayer>().Play();
+            }
         }
     }
 }

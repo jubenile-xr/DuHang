@@ -331,6 +331,7 @@ private IEnumerator WaitForGameManager()
                 gameManager.AddLocalPlayerName(candidateName);
                 stateManager.SetPlayerName(candidateName);
                 scoreManager.SetPlayerName(candidateName);
+                Character.SetMyName(candidateName);
                 break;
             }
             i++;
