@@ -26,6 +26,10 @@ public class RabbitMove : MonoBehaviour
         //IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
+            // 左スティックの入力を0にする
+            Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+            leftStick = Vector2.zero; // 強引に0にする
+            
             // 右手と左手の速度を取得
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
