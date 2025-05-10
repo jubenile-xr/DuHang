@@ -16,6 +16,7 @@ TagManager:
   - PandaPlayer
   - Canvas
   - TrackedCamera
+  - DeadVolume
   - BGM
   - InterruptItem
   - Net

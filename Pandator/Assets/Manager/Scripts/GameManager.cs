@@ -316,7 +316,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
-        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
+        // Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
 
         for (int i = 0; i < GetPlayerDeadStatus().Length; i++)
         {

@@ -45,7 +45,7 @@ public class TimeManager : MonoBehaviour
         {
             canvas = GameObject.FindGameObjectWithTag("Canvas");
         }
-        if (canvasDispTime == null)
+        if (canvasDispTime == null && canvas != null)
         {
             canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
         }

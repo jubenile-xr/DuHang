@@ -143,6 +143,8 @@ public class KilledImagedAttach : MonoBehaviour
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
             setFrame.anchoredPosition = new Vector2(350f, 200f); // 位置
         }
+        // レンダラーの順番を設定
+        FirstImageObject.transform.SetAsFirstSibling();
     }
     public void setSecondPosition()
     {
@@ -160,6 +162,9 @@ public class KilledImagedAttach : MonoBehaviour
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
             setFrame.anchoredPosition = new Vector2(210f, 200f); // 位置
         }
+
+        // レンダラーの順番を設定
+        SecondImageObject.transform.SetAsFirstSibling();
     }
     public void setThirdPosition()
     {
@@ -177,6 +182,8 @@ public class KilledImagedAttach : MonoBehaviour
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
             setFrame.anchoredPosition = new Vector2(70f, 200f); // 位置
         }
+        // レンダラーの順番を設定
+        ThirdImageObject.transform.SetAsFirstSibling();
     }
 
     public static void SetFirstCharacter(string character, bool isMine)
