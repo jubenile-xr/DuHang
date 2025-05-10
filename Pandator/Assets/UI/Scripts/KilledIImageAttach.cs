@@ -29,6 +29,11 @@ public class KilledImagedAttach : MonoBehaviour
     RawImage ThirdImage;
 
     private int characterNum = 0;
+    [SerializeField] private GameObject FrameImage;
+
+    private static bool isFirstCharacterIsMe = false;
+    private static bool isSecondCharacterIsMe = false;
+    private static bool isThirdCharacterIsMe = false;
 
 
     private void Start()
@@ -131,6 +136,13 @@ public class KilledImagedAttach : MonoBehaviour
         RectTransform setimage = FirstImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(350f, 200f); // 位置
+        // FrameImageの設定
+        if (isFirstCharacterIsMe)
+        {
+            FrameImage.SetActive(true);
+            RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
+            setFrame.anchoredPosition = new Vector2(350f, 200f); // 位置
+        }
     }
     public void setSecondPosition()
     {
@@ -141,6 +153,13 @@ public class KilledImagedAttach : MonoBehaviour
         RectTransform setimage = SecondImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(210f, 200f); // 位置
+        // FrameImageの設定
+        if (isSecondCharacterIsMe)
+        {
+            FrameImage.SetActive(true);
+            RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
+            setFrame.anchoredPosition = new Vector2(210f, 200f); // 位置
+        }
     }
     public void setThirdPosition()
     {
@@ -151,19 +170,29 @@ public class KilledImagedAttach : MonoBehaviour
         RectTransform setimage = ThirdImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
         setimage.anchoredPosition = new Vector2(70f, 200f); // 位置
+        // FrameImageの設定
+        if (isThirdCharacterIsMe)
+        {
+            FrameImage.SetActive(true);
+            RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
+            setFrame.anchoredPosition = new Vector2(70f, 200f); // 位置
+        }
     }
 
-    public static void SetFirstCharacter(string character)
+    public static void SetFirstCharacter(string character, bool isMine)
     {
         firstCharacter = character;
+        isFirstCharacterIsMe = isMine;
     }
-    public static void SetSecondCharacter(string character)
+    public static void SetSecondCharacter(string character, bool isMine)
     {
         secondCharacter = character;
+        isSecondCharacterIsMe = isMine;
     }
-    public static void SetThirdCharacter(string character)
+    public static void SetThirdCharacter(string character, bool isMine)
     {
         thirdCharacter = character;
+        isThirdCharacterIsMe = isMine;
     }
 
     public void SetFirstPlayerDead()

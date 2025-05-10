@@ -19,4 +19,14 @@ public static class Character
     {
         selectedAnimal = animal;
     }
+
+    private static string myName = "initial";
+    public static string GetMyName()
+    {
+        return myName;
+    }
+    public static void SetMyName(string name)
+    {
+        myName = name;
+    }
 }
