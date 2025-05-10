@@ -99,6 +99,11 @@ public class StateManager : MonoBehaviour
             Debug.Log("FlashEffect component found in the canvas.");
             isGetFlashEffect = true;
         }
+        // // TEST: Qを押したら死ぬ
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     SetAlive(false);
+        // }
     }
 
     private void ResetState()

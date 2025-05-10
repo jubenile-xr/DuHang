@@ -25,12 +25,12 @@ public class DeadVolumeController : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D)  && !isRunning)
-        {
-            StartCoroutine(HandleColorAdjustmentSequence());
-        }
+        // if (Input.GetKeyDown(KeyCode.D)  && !isRunning)
+        // {
+        //     StartCoroutine(HandleColorAdjustmentSequence());
+        // }
     }
 
     private IEnumerator HandleColorAdjustmentSequence()

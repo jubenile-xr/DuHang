@@ -124,9 +124,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetupDeadUI();
         }
-        
+
         HandleEndGame();
-        
+
 
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-    
+
     private void HandleEndGame()
     {
         if (GetGameState() == GameState.END && !hasSendToGAS )
@@ -314,7 +314,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
-        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
+        // Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
 
         for (int i = 0; i < GetPlayerDeadStatus().Length; i++)
         {
@@ -565,7 +565,7 @@ void UpdatePlayerNameListProperty()
     public void SaveRankingData()
     {
         // 送信するデータの数が一致しているか確認
-        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;  
+        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
