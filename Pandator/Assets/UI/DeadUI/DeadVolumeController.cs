@@ -10,6 +10,7 @@ public class DeadVolumeController : MonoBehaviour
 
     private bool isRunning = false;
     private bool isDead = false;
+    [SerializeField] private SoundPlayer deadSE;
 
     void Start()
     {
@@ -36,6 +37,7 @@ public class DeadVolumeController : MonoBehaviour
     private IEnumerator HandleColorAdjustmentSequence()
     {
         isRunning = true;
+        deadSE?.Play();
 
         // ColorFilterをオンにする
         colorAdjustments.colorFilter.overrideState = true;
