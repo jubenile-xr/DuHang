@@ -367,7 +367,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             roomCompleteTransform.gameObject.SetActive(false);
         }
         // PANDAでもGODでもない場合（小動物）、カスタムプロパティからSpatialAnchorの位置情報を取得
-        else if (GetGameCharacter() != GameCharacter.GOD)
+        else
         {
             Vector3 anchorPosition;
             Quaternion anchorRotation;
