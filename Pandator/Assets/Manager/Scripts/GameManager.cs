@@ -282,13 +282,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < names.Length; i++)
         {
             var nm = names[i];
+            bool isMine = Character.GetMyName().Equals(nm);
+            Debug.Log($"SetupUI: Player {i}: {nm}, isMine: {isMine}");
             if (nm.Contains("BIRD") || nm.Contains("RABBIT") || nm.Contains("MOUSE"))
             {
                 switch (i)
                 {
-                    case 0: KilledImagedAttach.SetFirstCharacter(nm); break;
-                    case 1: KilledImagedAttach.SetSecondCharacter(nm); break;
-                    case 2: KilledImagedAttach.SetThirdCharacter(nm); break;
+                    case 0: KilledImagedAttach.SetFirstCharacter(nm, isMine); break;
+                    case 1: KilledImagedAttach.SetSecondCharacter(nm, isMine); break;
+                    case 2: KilledImagedAttach.SetThirdCharacter(nm, isMine); break;
                     default: Debug.LogError("Invalid player index"); break;
                 }
             }
