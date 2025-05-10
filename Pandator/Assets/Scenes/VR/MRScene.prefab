@@ -163,7 +163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1913949048154934779
 Transform:
   m_ObjectHideFlags: 0
@@ -808,8 +808,9 @@ MonoBehaviour:
   loadingScene: {fileID: 0}
   canvas: {fileID: 1815615267537046740}
   MRUI: {fileID: 1815615267537046740}
-  VRModel: {fileID: 0}
-  debugCanvas: {fileID: 0}
+  spatialAnchorLoader: {fileID: 0}
+  roomWall1: {fileID: 0}
+  roomWall2: {fileID: 0}
 --- !u!1 &9021320312689334678
 GameObject:
   m_ObjectHideFlags: 0
