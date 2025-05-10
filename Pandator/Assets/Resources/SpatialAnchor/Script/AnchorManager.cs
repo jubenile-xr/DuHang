@@ -26,6 +26,7 @@ public class AnchorManager : MonoBehaviourPunCallbacks
 
     public delegate void AnchorLoadedCallback();
     public event AnchorLoadedCallback OnAnchorLoaded;
+    [SerializeField] private SoundPlayer _loadFinSE;
 
     void Update()
     {
@@ -184,6 +185,7 @@ public class AnchorManager : MonoBehaviourPunCallbacks
                 Uuids = uuids
             };
             LoadAnchors(loadOptions);
+            _loadFinSE.Play();
         }
         catch (System.Exception e)
         {
