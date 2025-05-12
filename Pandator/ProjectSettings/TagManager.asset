@@ -16,6 +16,11 @@ TagManager:
   - PandaPlayer
   - Canvas
   - TrackedCamera
+  - spatialAnchor
+  - playerSpawn
+  - VRModel
+  - SpatialAnchorLoader
+  - DeadVolume
   - BGM
   - InterruptItem
   - Net

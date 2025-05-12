@@ -74,3 +74,6 @@ crashlytics-build.properties
 
 
 .env
+
+/[Aa]ssets/UI/Fonts/mini-wakuwaku-maru\ SDF.asset
+

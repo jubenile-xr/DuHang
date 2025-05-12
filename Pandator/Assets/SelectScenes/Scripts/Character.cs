@@ -10,7 +10,6 @@ public static class Character
         GOD
     }
     private static GameCharacters selectedAnimal = GameCharacters.GOD; // デフォルトはgod
-    private static string myName = "";
     public static GameCharacters GetSelectedAnimal()
     {
         return selectedAnimal;
@@ -19,6 +18,14 @@ public static class Character
     {
         selectedAnimal = animal;
     }
-    public static void SetMyName(string name) => myName = name;
-    public static string GetMyName() => myName;
+
+    private static string myName = "initial";
+    public static string GetMyName()
+    {
+        return myName;
+    }
+    public static void SetMyName(string name)
+    {
+        myName = name;
+    }
 }
