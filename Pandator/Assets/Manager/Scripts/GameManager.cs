@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
 
+    // startSE
+    [SerializeField] private SoundPlayer startSE;
+
     private void Start()
     {
         state = GameState.START;
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
+            startSE?.Play();
         }
 
         if (GetPlayerType() != PlayerType.GOD
