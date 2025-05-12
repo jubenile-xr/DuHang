@@ -16,6 +16,15 @@ TagManager:
   - PandaPlayer
   - Canvas
   - tutorialNet
+  - TrackedCamera
+  - spatialAnchor
+  - playerSpawn
+  - VRModel
+  - SpatialAnchorLoader
+  - DeadVolume
+  - BGM
+  - InterruptItem
+  - Net
   layers:
   - Default
   - TransparentFX

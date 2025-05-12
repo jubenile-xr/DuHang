@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 372099276744946912}
   m_Layer: 0
   m_Name: InterruptItem
-  m_TagString: Untagged
+  m_TagString: InterruptItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -11,7 +11,6 @@ public class PhotonInterruptGun : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject RightController;
     private float bulletSpeed = 100f;
-    [SerializeField] private float spanTime = 5f;
     private float recastTime = 0f;
     private bool shotable = true;
     [SerializeField]private GameObject shootSE;
@@ -41,14 +40,16 @@ public class PhotonInterruptGun : MonoBehaviour
             if (shotable && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
                 Shot();
-                shotable = false;
             }
         }
-        recastTime += Time.deltaTime;
-        if (recastTime > 5.0f){
-            if(!shotable)reloadSE?.GetComponent<SoundPlayer>().Play();
-            shotable = true;
-            recastTime = 0;
+        if(!shotable)
+        {
+            recastTime += Time.deltaTime;
+            if (recastTime > Durations.INTERRUPT_GUN_DURATION)
+            {
+                reloadSE?.GetComponent<SoundPlayer>().Play();
+                shotable = true;
+            }
         }
     }
     private void Shot()
@@ -56,5 +57,7 @@ public class PhotonInterruptGun : MonoBehaviour
         GameObject bullet = PhotonNetwork.Instantiate(bulletPrefab.name, RightController.transform.position, transform.rotation);
         bullet.GetComponent<Rigidbody>().AddForce(RightController.transform.forward * Time.deltaTime * 100 * bulletSpeed);
         shootSE?.GetComponent<SoundPlayer>().Play();
+        recastTime = 0f;
+        shotable = false;
     }
 }
