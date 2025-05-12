@@ -171,7 +171,6 @@ GameObject:
   - component: {fileID: 287829237816166381}
   - component: {fileID: 2416649789414078557}
   - component: {fileID: 224267548846101444}
-  - component: {fileID: 8739595244652945986}
   m_Layer: 0
   m_Name: BirdCameraRig
   m_TagString: Untagged
@@ -334,22 +333,6 @@ MonoBehaviour:
   - <Keyboard>/leftAlt
   - <Keyboard>/rightAlt
   - <Keyboard>/f2
---- !u!114 &8739595244652945986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3528499836265461033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf2edfb042f04fb98e985c935d63124, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 6903496662110101615}
-  animalLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &3785578283397347163
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +416,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -468,7 +451,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

@@ -15,6 +15,7 @@ public class RabbitMove : MonoBehaviour
     private GameObject rabbitOVRCameraRig;
     [Header("速度の閾値")]
     [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
+    private const float JUMP_MOVE_SPEED = 0.8f; // ジャンプ時の移動速度倍率
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -26,6 +27,10 @@ public class RabbitMove : MonoBehaviour
         //IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
+            // 左スティックの入力を0にする
+            Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+            leftStick = Vector2.zero; // 強引に0にする
+
             // 右手と左手の速度を取得
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
@@ -51,7 +56,7 @@ public class RabbitMove : MonoBehaviour
             {
                 return;
             }
-            
+
             float totalSpeed = (speedR + speedL) * moveSpeed;
 
             // 頭（カメラ）の向きを取得して移動方向を決定
@@ -63,6 +68,8 @@ public class RabbitMove : MonoBehaviour
             // 移動処理
             if (!isAButtonPressed){
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+            }else{
+                transform.Translate( JUMP_MOVE_SPEED * forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
         }
     }

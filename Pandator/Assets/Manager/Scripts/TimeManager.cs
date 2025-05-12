@@ -9,6 +9,10 @@ public class TimeManager : MonoBehaviour
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;
+    private SoundPlayer soundPlayer;
+    private const float LAST_SPURT_TIME = 30f; // 音楽の切り替え時間
+    private const float LAST_SPURT_PITCH = 1.5f; // 音楽のピッチ
+    private bool isChangeSound = false; // 音楽の切り替えフラグ
 
     private void Start()
     {
@@ -23,30 +27,46 @@ public class TimeManager : MonoBehaviour
                 Debug.Log("GameManager found.");
             }
         }
+
+        soundPlayer = GameObject.FindWithTag("BGM").GetComponent<SoundPlayer>();
+        if (soundPlayer)
+        {
+            Debug.Log("SoundPlayer found.");
+        }
+        else
+        {
+            Debug.Log("SoundPlayer not found.");
+        }
     }
 
     private void Update()
     {
-        if (canvas == null)
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD)
         {
-            canvas = GameObject.FindGameObjectWithTag("Canvas");
+            if (canvas == null)
+            {
+                canvas = GameObject.FindGameObjectWithTag("Canvas");
+            }
+            if (canvasDispTime == null)
+            {
+                canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+            }
+            if (canvasDispTime != null)
+            {
+                canvasDispTime.SetTimeText(FormatTime(gameTime));
+            }
+            // SmallAnimalはまだ作成していない
+            if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+            {
+                gameTime += Time.deltaTime;
+                SwitchGameState();
+            }
         }
-        if (canvasDispTime == null)
+        if(gameTime >= gameEndTime - LAST_SPURT_TIME && !isChangeSound)
         {
-            canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+            soundPlayer?.SetPitch(LAST_SPURT_PITCH);
+            isChangeSound = true;
         }
-        if (canvasDispTime != null)
-        {
-
-            canvasDispTime.SetTimeText(FormatTime(gameEndTime - gameTime));
-        }
-        // SmallAnimalはまだ作成していない
-        if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
-        {
-            gameTime += Time.deltaTime;
-            SwitchGameState();
-        }
-
     }
 
     private string FormatTime(float time)

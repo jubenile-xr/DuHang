@@ -8,6 +8,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -55,6 +56,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ローカルで管理するスコア配列
     private float[] localPlayerScores = new float[0];
 
+    // startSE
+    [SerializeField] private SoundPlayer startSE;
+
     private void Start()
     {
         state = GameState.START;
@@ -86,11 +90,10 @@ public class GameManager : MonoBehaviourPunCallbacks
                 playerType = PlayerType.MR;
                 break;
             default:
-                Debug.LogError("GOD PlayerType");
+                Debug.LogWarning("GOD PlayerType");
                 playerType = PlayerType.GOD;
                 break;
         }
-
     }
 
     private void Update()
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             && !hasPlayerNameCreated)
         {
             SetGameState(GameState.PLAY);
+            startSE?.Play();
         }
 
         if (GetPlayerType() != PlayerType.GOD
@@ -124,9 +128,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SetupDeadUI();
         }
-        
+
         HandleEndGame();
-        
 
         // ここほんまにむずかった
         // GodScene内での処理，GodSceneに(clone)で出てくるGameObjectのScoreManagerのSetNameをする
@@ -181,10 +184,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 previousLocalPlayerNameCount = localPlayerNames.Length;
             }
         }
-
-
     }
-
 
     public GameState GetGameState()
     {
@@ -209,7 +209,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public PlayerType GetPlayerType() => playerType;
     public void SetPlayerType(PlayerType type) => playerType = type;
-
 
     public void SetAliveCount(int count)
     {
@@ -237,7 +236,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             );
         }
     }
-    
+
     private void HandleEndGame()
     {
         if (GetGameState() == GameState.END && !hasSendToGAS )
@@ -282,13 +281,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < names.Length; i++)
         {
             var nm = names[i];
+            bool isMine = Character.GetMyName().Equals(nm);
+            Debug.Log($"SetupUI: Player {i}: {nm}, isMine: {isMine}");
             if (nm.Contains("BIRD") || nm.Contains("RABBIT") || nm.Contains("MOUSE"))
             {
                 switch (i)
                 {
-                    case 0: KilledImagedAttach.SetFirstCharacter(nm); break;
-                    case 1: KilledImagedAttach.SetSecondCharacter(nm); break;
-                    case 2: KilledImagedAttach.SetThirdCharacter(nm); break;
+                    case 0: KilledImagedAttach.SetFirstCharacter(nm, isMine); break;
+                    case 1: KilledImagedAttach.SetSecondCharacter(nm, isMine); break;
+                    case 2: KilledImagedAttach.SetThirdCharacter(nm, isMine); break;
                     default: Debug.LogError("Invalid player index"); break;
                 }
             }
@@ -314,7 +315,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         Debug.LogWarning("KilledImagedAttach found");
         // Photon のカスタムプロパティから名前に基づくインデックスを取得
-        Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
+        // Debug.LogWarning("PlayerDeadStatus: " + string.Join(", ", GetPlayerDeadStatus()));
 
         for (int i = 0; i < GetPlayerDeadStatus().Length; i++)
         {
@@ -341,7 +342,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         winnerAnimalNameList.Add(animalName);
     }
-
 
     private void InitializePlayerDeadStatusArray()
     {
@@ -411,7 +411,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-void UpdatePlayerNameListProperty()
+    void UpdatePlayerNameListProperty()
     {
         if (PhotonNetwork.InRoom)
         {
@@ -442,7 +442,6 @@ void UpdatePlayerNameListProperty()
         }
     }
 
-
     public string[] GetAllPlayerNames()
     {
         if (PhotonNetwork.InRoom
@@ -465,7 +464,6 @@ void UpdatePlayerNameListProperty()
         return localPlayerNames;
     }
 
-
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable props)
     {
         if (props.ContainsKey("aliveCount"))
@@ -473,16 +471,19 @@ void UpdatePlayerNameListProperty()
             aliveCount = (int)props["aliveCount"];
             Debug.Log("aliveCount updated: " + aliveCount);
         }
+
         if (props.ContainsKey("gameState"))
         {
             state = (GameState)(int)props["gameState"];
             Debug.Log("GameState updated: " + state);
         }
+
         if (props.ContainsKey("playerDeadStatus"))
         {
             playerDeadStatus = props["playerDeadStatus"] as bool[];
             Debug.Log("playerDeadStatus updated, len=" + (playerDeadStatus?.Length ?? 0));
         }
+
         if (props.ContainsKey("playerNameList"))
         {
             object propValue = props["playerNameList"];
@@ -499,8 +500,10 @@ void UpdatePlayerNameListProperty()
                     localPlayerNames[i] = objArray[i].ToString();
                 }
             }
+
             Debug.Log("playerNameList updated from room: " + string.Join(", ", localPlayerNames));
         }
+
         if (props.ContainsKey("playerScoreList"))
         {
             localPlayerScores = props["playerScoreList"] as float[];
@@ -561,11 +564,10 @@ void UpdatePlayerNameListProperty()
         }
     }
 
-
     public void SaveRankingData()
     {
         // 送信するデータの数が一致しているか確認
-        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;  
+        if (localPlayerNames.Length+1 != localPlayerScores.Length) return;
         string now = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
        for(var i = 0; i < localPlayerNames.Length; i++)
        {
@@ -601,9 +603,6 @@ void UpdatePlayerNameListProperty()
         {
             return null;
         }
-
-
-
     }
 
     private IEnumerator PostToGAS(string name, int score,string dateTime)
@@ -652,7 +651,6 @@ void UpdatePlayerNameListProperty()
         Debug.Log("SendToGAS: " + name + " " + score);
     }
 
-
     [System.Serializable]
     private class JsonData
     {
@@ -660,6 +658,13 @@ void UpdatePlayerNameListProperty()
         public int score;
         public string animal;
         public string dateTime;
+    }
+
+    [System.Serializable]
+    public class SceneTransform
+    {
+        public Vector3 position;
+        public Quaternion rotation;
     }
 }
 
