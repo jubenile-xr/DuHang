@@ -41,24 +41,26 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (canvas == null)
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD)
         {
-            canvas = GameObject.FindGameObjectWithTag("Canvas");
-        }
-        if (canvasDispTime == null && canvas != null)
-        {
-            canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
-        }
-        if (canvasDispTime != null)
-        {
-
-            canvasDispTime.SetTimeText(FormatTime(gameEndTime - gameTime));
-        }
-        // SmallAnimalはまだ作成していない
-        if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
-        {
-            gameTime += Time.deltaTime;
-            SwitchGameState();
+            if (canvas == null)
+            {
+                canvas = GameObject.FindGameObjectWithTag("Canvas");
+            }
+            if (canvasDispTime == null)
+            {
+                canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+            }
+            if (canvasDispTime != null)
+            {
+                canvasDispTime.SetTimeText(FormatTime(gameTime));
+            }
+            // SmallAnimalはまだ作成していない
+            if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+            {
+                gameTime += Time.deltaTime;
+                SwitchGameState();
+            }
         }
         if(gameTime >= gameEndTime - LAST_SPURT_TIME && !isChangeSound)
         {

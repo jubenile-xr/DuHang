@@ -275,13 +275,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: VRModel
+      propertyPath: debugCanvas
       value: 
-      objectReference: {fileID: 1353542806}
-    - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
-      propertyPath: eventSystem
-      value: 
-      objectReference: {fileID: 597934996}
+      objectReference: {fileID: 0}
     - target: {fileID: 1085382579734581275, guid: 42ee3ac440a124e979d6ccbe9bdf7c17, type: 3}
       propertyPath: loadingScene
       value: 
