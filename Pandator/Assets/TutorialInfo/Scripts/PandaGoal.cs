@@ -8,7 +8,6 @@ public class PandaGaol : MonoBehaviour
     private void Start()
     {
         instructionUI.text = "パンダの的に向かって撃て！";
-        HideObject();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -19,13 +18,6 @@ public class PandaGaol : MonoBehaviour
                 gameObject.SetActive(false);
                 instructionUI.text = "自由に遊んで！";
             }
-        }
-    }
-    private void HideObject()
-    {
-        if (Character.GetSelectedAnimal() != Character.GameCharacters.PANDA)
-        {
-            gameObject.SetActive(false);
         }
     }
 }

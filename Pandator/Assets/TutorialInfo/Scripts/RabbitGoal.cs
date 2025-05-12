@@ -7,7 +7,7 @@ public class RabbitGoal : MonoBehaviour
     [SerializeField] private TextMeshProUGUI instructionUI;
     private void Start()
     {
-        instructionUI.text = "パンダのボールにむかえ！";
+        instructionUI.text = "パンダのボールに\nむかえ！";
         HideObject();
     }
     private void OnTriggerEnter(Collider other)
