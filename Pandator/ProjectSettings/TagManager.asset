@@ -15,6 +15,7 @@ TagManager:
   - Ground
   - PandaPlayer
   - Canvas
+  - tutorialNet
   - TrackedCamera
   - spatialAnchor
   - playerSpawn
