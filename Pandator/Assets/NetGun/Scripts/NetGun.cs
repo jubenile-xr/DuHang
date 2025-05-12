@@ -12,9 +12,13 @@ public class NetGun : MonoBehaviourPun
     private bool shotable = true;
     private Animator animator;
     public GameManager gameManager;
+    public AudioClip chargeSound;
+    public AudioClip fireSound;
+    AudioSource audioSource;
     void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         // gameManagerの取得
         if (gameManager == null)
@@ -36,6 +40,7 @@ public class NetGun : MonoBehaviourPun
             if (shotable && photonView.IsMine && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
                 Shot();
+                audioSource.PlayOneShot(fireSound);
                 shotable = false;
                 spanTime = 0f; // 発射時にカウントをリセット
             }
@@ -48,6 +53,7 @@ public class NetGun : MonoBehaviourPun
             if (spanTime > Durations.NET_GUN_DURATION)
             {
                 shotable = true;
+                audioSource.PlayOneShot(chargeSound);
             }
         }
     }

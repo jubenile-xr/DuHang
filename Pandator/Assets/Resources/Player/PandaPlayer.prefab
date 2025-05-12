@@ -1013,9 +1013,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4059200145076803666}
     - target: {fileID: 8102731167259438974, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
+      propertyPath: fireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a934dfdaa2ae35b40aa7f9c2c487bc08, type: 3}
+    - target: {fileID: 8102731167259438974, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
       propertyPath: BulletSpeed
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8102731167259438974, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
+      propertyPath: chargeSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ff0bb66134e1a644e86883b47d5309bf, type: 3}
     - target: {fileID: 8102731167259438974, guid: d0cd697d8c11f4b0cb95ef955ba27e07, type: 3}
       propertyPath: RightController
       value: 
