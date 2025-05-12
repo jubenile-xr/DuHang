@@ -65,13 +65,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 Transform room = roomCompleteTransform.Find("room.002");
                 if (room != null)
                 {
-                    //room.gameObject.SetActive(false);
+                    room.gameObject.SetActive(false);
                 }
 
                 Transform room001 = roomCompleteTransform.Find("room.003");
                 if (room001 != null)
                 {
-                    //room001.gameObject.SetActive(false);
+                    room001.gameObject.SetActive(false);
                 }
             }
             else
@@ -363,7 +363,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             SetIsSpatialAnchorCreated(true);
             // SpatialAnchorの子オブジェクトを検索してroom_completeの子供のroomとroom.001を非アクティブに設定
-            Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete");
+            Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
             roomCompleteTransform.gameObject.SetActive(false);
         }
         // PANDAでもGODでもない場合（小動物）、カスタムプロパティからSpatialAnchorの位置情報を取得
