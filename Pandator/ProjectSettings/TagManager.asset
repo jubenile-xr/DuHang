@@ -20,6 +20,10 @@ TagManager:
   - playerSpawn
   - VRModel
   - SpatialAnchorLoader
+  - DeadVolume
+  - BGM
+  - InterruptItem
+  - Net
   layers:
   - Default
   - TransparentFX
@@ -27,10 +31,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Bird
+  - Mouse
+  - Rabbit
+  - Panda
   - 
   - 
   - 

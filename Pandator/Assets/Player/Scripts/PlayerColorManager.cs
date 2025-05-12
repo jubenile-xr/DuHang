@@ -70,4 +70,16 @@ public class PlayerColorManager : MonoBehaviour
             renderers[i].material = invisibleMaterial;
         }
     }
+
+    public void ChangeColorWhite()
+    {
+        GetRendererColors();
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            // 色を白にして不透明（alpha=1）に設定する
+            Color newColor = Color.white;
+            newColor.a = 1f;
+            renderers[i].material.color = newColor;
+        }
+    }
 }

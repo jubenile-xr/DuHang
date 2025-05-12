@@ -9,6 +9,10 @@ public class TimeManager : MonoBehaviour
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;
+    private SoundPlayer soundPlayer;
+    private const float LAST_SPURT_TIME = 30f; // 音楽の切り替え時間
+    private const float LAST_SPURT_PITCH = 1.5f; // 音楽のピッチ
+    private bool isChangeSound = false; // 音楽の切り替えフラグ
 
     private void Start()
     {
@@ -22,6 +26,16 @@ public class TimeManager : MonoBehaviour
             {
                 Debug.Log("GameManager found.");
             }
+        }
+
+        soundPlayer = GameObject.FindWithTag("BGM").GetComponent<SoundPlayer>();
+        if (soundPlayer)
+        {
+            Debug.Log("SoundPlayer found.");
+        }
+        else
+        {
+            Debug.Log("SoundPlayer not found.");
         }
     }
 
@@ -48,7 +62,11 @@ public class TimeManager : MonoBehaviour
                 SwitchGameState();
             }
         }
-
+        if(gameTime >= gameEndTime - LAST_SPURT_TIME && !isChangeSound)
+        {
+            soundPlayer?.SetPitch(LAST_SPURT_PITCH);
+            isChangeSound = true;
+        }
     }
 
     private string FormatTime(float time)

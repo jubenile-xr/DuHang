@@ -7,7 +7,8 @@ public class NetGun : MonoBehaviourPun
     [SerializeField] private float BulletSpeed = 0.5f;
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
-    [SerializeField] private float spanTime = 0f;
+    private float spanTime = 0f;
+    [SerializeField] private GameObject shootSE;
     private bool shotable = true;
     private Animator animator;
     public GameManager gameManager;
@@ -44,9 +45,9 @@ public class NetGun : MonoBehaviourPun
         if (!shotable)
         {
             spanTime += Time.deltaTime;
-            if (spanTime > 5.0f)
+            if (spanTime > Durations.NET_GUN_DURATION)
             {
-                shotable = true; // 5秒後に発射可能にする
+                shotable = true;
             }
         }
     }
@@ -57,5 +58,7 @@ public class NetGun : MonoBehaviourPun
 
         GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
+
+        shootSE?.GetComponent<SoundPlayer>().Play();
     }
 }
