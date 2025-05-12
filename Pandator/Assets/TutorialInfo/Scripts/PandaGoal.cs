@@ -5,10 +5,12 @@ using TMPro;
 public class PandaGaol : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI instructionUI;
+    private int hitGoalCount;
     private void Start()
     {
-        instructionUI.text = "パンダの的に向かって撃て！";
+        instructionUI.text = "小動物に向かって撃て！";
         HideObject();
+        hitGoalCount = 0;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -17,7 +19,11 @@ public class PandaGaol : MonoBehaviour
             if (other.CompareTag("tutorialNet"))
             {
                 gameObject.SetActive(false);
-                instructionUI.text = "自由に遊んで！";
+                hitGoalCount++;
+                if (hitGoalCount = 3)
+                {
+                    instructionUI.text = "自由に遊んで！";
+                }
             }
         }
     }
