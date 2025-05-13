@@ -78,7 +78,18 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 Debug.LogWarning("room_complete object not found under SpatialAnchor.");
             }
-
+            
+            //debugCanvasを表示
+            GameObject debugCanvasTransform = GameObject.FindWithTag("DebugCanvas");
+            if (debugCanvasTransform != null)
+            {
+                debugCanvasTransform.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("debugCanvas object not found.");
+            }
+            
             if (spatialAnchorLoader)
             {
                 SetupDebugEnvironment();
@@ -137,7 +148,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
         Transform canvasTransform = spatialAnchor.transform
             .GetComponentsInChildren<Transform>()
-            .FirstOrDefault(t => t.CompareTag("Canvas"));
+            .FirstOrDefault(t => t.CompareTag("DebugCanvas"));
 
         if (canvasTransform != null)
         {
