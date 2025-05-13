@@ -80,10 +80,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             
             //debugCanvasを表示
-            GameObject debugCanvasTransform = GameObject.FindWithTag("DebugCanvas");
+            Transform debugCanvasTransform = spatialAnchor.transform.Find("DebugCanvas");
             if (debugCanvasTransform != null)
             {
-                debugCanvasTransform.SetActive(true);
+                debugCanvasTransform.gameObject.SetActive(true);
             }
             else
             {
@@ -96,10 +96,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.LogError("SpatialAnchorLoader componentis missing on the tagged object!");;
+                Debug.LogError("SpatialAnchorLoader componentis missing on the tagged object!");
             }
 
-            SetupDebugEnvironment();
+            //SetupDebugEnvironment();
             return;
         }
 
