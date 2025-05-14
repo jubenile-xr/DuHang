@@ -8,7 +8,7 @@ public class PandaGaol : MonoBehaviour
     private HitCountGoal hitGoalCount;
     private void Start()
     {
-        instructionUI.text = "小動物に向かって撃て！";
+        instructionUI.text = "小動物に向かって撃て！！！";
         HideObject();
         hitGoalCount = new HitCountGoal();
 
@@ -20,10 +20,11 @@ public class PandaGaol : MonoBehaviour
             if (other.CompareTag("tutorialNet"))
             {
                 gameObject.SetActive(false);
-                hitGoalCount.SetHitCount(); // インスタンスを使用
-                if (hitGoalCount.GetHitCount() == 3)
+                HitCountGoal.Instance.SetHitCount(); // Singleton インスタンスを使用
+                instructionUI.text = HitCountGoal.Instance.GetHitCount().ToString();
+                if (HitCountGoal.Instance.GetHitCount() == 3)
                 {
-                    instructionUI.text = "自由に遊んで！";
+                    instructionUI.text = "自由に遊ぼう！";
                 }
             }
         }
