@@ -13,6 +13,9 @@ public class TimeManager : MonoBehaviour
     private const float LAST_SPURT_TIME = 30f; // 音楽の切り替え時間
     private const float LAST_SPURT_PITCH = 1.3f; // 音楽のピッチ
     private bool isChangeSound = false; // 音楽の切り替えフラグ
+    private const float START_TEXT_TIME = 3f; // ゲーム開始時のテキスト表示時間
+    private SupportText supportText; // ゲーム開始時のテキスト
+    private bool isStart = false; // ゲーム開始フラグ
 
     private void Start()
     {
@@ -47,17 +50,32 @@ public class TimeManager : MonoBehaviour
             {
                 canvasDispTime.SetTimeText(FormatTime(GAME_END_TIME - gameTime));
             }
+            if(supportText == null)
+            {
+                supportText = canvas.GetComponent<SupportText>();
+            }
             // SmallAnimalはまだ作成していない
             if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
+                if (!isStart)
+                {
+                    supportText?.SetSupportText("START");
+                    supportText?.MoveLeftToRight();
+                    isStart = true;
+                }
                 gameTime += Time.deltaTime;
+            }
+            if (gameTime >= GAME_END_TIME)
+            {
                 SwitchGameState();
             }
-        }
-        if(gameTime >= GAME_END_TIME - LAST_SPURT_TIME && !isChangeSound)
-        {
-            soundPlayer?.SetPitch(LAST_SPURT_PITCH);
-            isChangeSound = true;
+            if (gameTime >= GAME_END_TIME - LAST_SPURT_TIME && !isChangeSound)
+            {
+                supportText?.SetSupportText("のこり" + (int)(LAST_SPURT_TIME) + "秒");
+                supportText?.MoveLeftToRight();
+                soundPlayer?.SetPitch(LAST_SPURT_PITCH);
+                isChangeSound = true;
+            }
         }
     }
 
@@ -76,9 +94,6 @@ public class TimeManager : MonoBehaviour
 
     private void SwitchGameState()
     {
-        if (gameTime >= GAME_END_TIME)
-        {
-            gameManager.SetGameState(GameManager.GameState.END);
-        }
+        gameManager.SetGameState(GameManager.GameState.END);
     }
 }
