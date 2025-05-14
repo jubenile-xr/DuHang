@@ -5,13 +5,13 @@ public class TimeManager : MonoBehaviour
 {
     [Header("ゲーム中の時間")] private float gameTime;
 
-    private float gameEndTime = 300f; // ゲーム終了時間
+    private const float GAME_END_TIME = 120f; // ゲーム終了時間
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;
     private SoundPlayer soundPlayer;
     private const float LAST_SPURT_TIME = 30f; // 音楽の切り替え時間
-    private const float LAST_SPURT_PITCH = 1.5f; // 音楽のピッチ
+    private const float LAST_SPURT_PITCH = 1.3f; // 音楽のピッチ
     private bool isChangeSound = false; // 音楽の切り替えフラグ
 
     private void Start()
@@ -29,14 +29,6 @@ public class TimeManager : MonoBehaviour
         }
 
         soundPlayer = GameObject.FindWithTag("BGM").GetComponent<SoundPlayer>();
-        if (soundPlayer)
-        {
-            Debug.Log("SoundPlayer found.");
-        }
-        else
-        {
-            Debug.Log("SoundPlayer not found.");
-        }
     }
 
     private void Update()
@@ -49,11 +41,11 @@ public class TimeManager : MonoBehaviour
             }
             if (canvasDispTime == null)
             {
-                canvasDispTime = canvas.GetComponentInChildren<CanvasDispTime>();
+                canvasDispTime = canvas.GetComponent<CanvasDispTime>();
             }
             if (canvasDispTime != null)
             {
-                canvasDispTime.SetTimeText(FormatTime(gameTime));
+                canvasDispTime.SetTimeText(FormatTime(GAME_END_TIME - gameTime));
             }
             // SmallAnimalはまだ作成していない
             if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
@@ -62,7 +54,7 @@ public class TimeManager : MonoBehaviour
                 SwitchGameState();
             }
         }
-        if(gameTime >= gameEndTime - LAST_SPURT_TIME && !isChangeSound)
+        if(gameTime >= GAME_END_TIME - LAST_SPURT_TIME && !isChangeSound)
         {
             soundPlayer?.SetPitch(LAST_SPURT_PITCH);
             isChangeSound = true;
@@ -84,7 +76,7 @@ public class TimeManager : MonoBehaviour
 
     private void SwitchGameState()
     {
-        if (gameTime >= gameEndTime)
+        if (gameTime >= GAME_END_TIME)
         {
             gameManager.SetGameState(GameManager.GameState.END);
         }
