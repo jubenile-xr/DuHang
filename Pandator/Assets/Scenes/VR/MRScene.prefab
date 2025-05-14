@@ -1312,6 +1312,7 @@ MonoBehaviour:
   RabbitImage: {fileID: 2800000, guid: d20fe06a843e3134692137081c3a890d, type: 3}
   BirdImage: {fileID: 2800000, guid: 3483eee38b666694c94d8edc16fab087, type: 3}
   MouseImage: {fileID: 2800000, guid: e1b824ccd43abb844af2dc05f73b8002, type: 3}
+  FrameImage: {fileID: 0}
 --- !u!114 &8735816665294347150
 MonoBehaviour:
   m_ObjectHideFlags: 0
