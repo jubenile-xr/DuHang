@@ -8,18 +8,14 @@ public class NetGun : MonoBehaviourPun
     [SerializeField] private GameObject RightController;
     [SerializeField] private GameObject Tip;
     private float spanTime = 0f;
-    [SerializeField] private GameObject shootSE;
+    [SerializeField] private SoundPlayer shootSE;
+    [SerializeField] private SoundPlayer chargeSE;
     private bool shotable = true;
     private Animator animator;
     public GameManager gameManager;
-    public AudioClip chargeSound;
-    public AudioClip fireSound;
-    AudioSource audioSource;
     void Start()
     {
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
-
         // gameManagerの取得
         if (gameManager == null)
         {
@@ -40,7 +36,6 @@ public class NetGun : MonoBehaviourPun
             if (shotable && photonView.IsMine && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {
                 Shot();
-                audioSource.PlayOneShot(fireSound);
                 shotable = false;
                 spanTime = 0f; // 発射時にカウントをリセット
             }
@@ -53,7 +48,7 @@ public class NetGun : MonoBehaviourPun
             if (spanTime > Durations.NET_GUN_DURATION)
             {
                 shotable = true;
-                audioSource.PlayOneShot(chargeSound);
+                chargeSE.Play();
             }
         }
     }
@@ -65,6 +60,6 @@ public class NetGun : MonoBehaviourPun
         GameObject bulletInstance = PhotonNetwork.Instantiate("InterruptItem/Net", Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
 
-        shootSE?.GetComponent<SoundPlayer>().Play();
+        shootSE.Play();
     }
 }
