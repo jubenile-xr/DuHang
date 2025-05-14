@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PandaGaol : MonoBehaviour
@@ -21,10 +20,9 @@ public class PandaGaol : MonoBehaviour
             {
                 gameObject.SetActive(false);
                 hitGoalCount.SetHitCount();
-                instructionUI.text = hitGoalCount.GetHitCount().ToString();
                 if (hitGoalCount.GetHitCount() == 3)
                 {
-                    instructionUI.text = "自由に遊！";
+                    instructionUI.text = "自由に遊ぼう！";
                 }
             }
         }
