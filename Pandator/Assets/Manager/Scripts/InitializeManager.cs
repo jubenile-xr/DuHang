@@ -5,6 +5,7 @@ using Photon.Realtime;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using OVR;
 
 public class InitializeManager : MonoBehaviourPunCallbacks
 {
@@ -47,6 +48,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private bool isSpatialAnchorLoaded = false;
     // キーボード入力検出用フラグ
     private bool yKeyPressed = false;
+
+    // VR空間のスケール（MR空間との比率）
+    private const float VRWorldScale = 1.0f; // この値は実際の環境に合わせて調整する必要があります
 
     void Start()
     {
@@ -578,8 +582,23 @@ private IEnumerator WaitForGameManager()
         if (anchorTransform != null)
         {
             Debug.Log("SpatialAnchor loaded successfully. Setting custom property.");
-            SetSpatialAnchorTransformProperty(anchorTransform.position, anchorTransform.rotation);
-            isSpatialAnchorLoaded = true;
+
+            // OVRSceneManagerから座標系の変換行列を取得
+            OVRSceneManager sceneManager = FindObjectOfType<OVRSceneManager>();
+            if (sceneManager != null)
+            {
+                // OVRSceneManagerの座標系でのSpatialAnchorの位置を取得
+                Matrix4x4 sceneToWorldMatrix = sceneManager.transform.localToWorldMatrix;
+                Vector3 sceneSpacePosition = sceneToWorldMatrix.MultiplyPoint3x4(anchorTransform.position);
+                Quaternion sceneSpaceRotation = sceneManager.transform.rotation * anchorTransform.rotation;
+
+                SetSpatialAnchorTransformProperty(sceneSpacePosition, sceneSpaceRotation);
+                isSpatialAnchorLoaded = true;
+            }
+            else
+            {
+                Debug.LogError("OVRSceneManager not found in the scene!");
+            }
         }
         else
         {
@@ -621,8 +640,22 @@ private IEnumerator WaitForGameManager()
                 try
                 {
                     GameManager.SceneTransform anchorTransform = JsonUtility.FromJson<GameManager.SceneTransform>(transformJson);
-                    position = anchorTransform.position;
-                    rotation = anchorTransform.rotation;
+
+                    // VRプレイヤーの場合、座標系の変換を行う
+                    if (GetGameCharacter() != GameCharacter.PANDA)
+                    {
+                        // VR空間での原点を基準とした位置に変換
+                        position = anchorTransform.position;
+                        rotation = anchorTransform.rotation;
+
+                        // VRプレイヤーのスケールに合わせて調整（必要に応じて調整）
+                        position *= VRWorldScale;
+                    }
+                    else
+                    {
+                        position = anchorTransform.position;
+                        rotation = anchorTransform.rotation;
+                    }
                     return true;
                 }
                 catch (System.Exception e)
