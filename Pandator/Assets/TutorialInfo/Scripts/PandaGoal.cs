@@ -5,14 +5,14 @@ using TMPro;
 public class PandaGaol : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI instructionUI;
-    private HitCountGoal hitGoalCount;
+    [SerializeField] private HitCountGoal hitGoalCount; // 参照を追加
+
     private void Start()
     {
         instructionUI.text = "小動物に向かって撃て！！！";
         HideObject();
-        hitGoalCount = new HitCountGoal();
-
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (Character.GetSelectedAnimal() == Character.GameCharacters.PANDA)
@@ -20,15 +20,16 @@ public class PandaGaol : MonoBehaviour
             if (other.CompareTag("tutorialNet"))
             {
                 gameObject.SetActive(false);
-                HitCountGoal.Instance.SetHitCount(); // Singleton インスタンスを使用
-                instructionUI.text = HitCountGoal.Instance.GetHitCount().ToString();
-                if (HitCountGoal.Instance.GetHitCount() == 3)
+                hitGoalCount.SetHitCount();
+                instructionUI.text = hitGoalCount.GetHitCount().ToString();
+                if (hitGoalCount.GetHitCount() == 3)
                 {
-                    instructionUI.text = "自由に遊ぼう！";
+                    instructionUI.text = "自由に遊！";
                 }
             }
         }
     }
+
     private void HideObject()
     {
         if (Character.GetSelectedAnimal() != Character.GameCharacters.PANDA)
