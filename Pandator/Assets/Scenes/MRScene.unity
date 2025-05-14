@@ -127,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 385956932133453335, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 447930441920104339, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1295255931325412875, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -175,10 +167,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1580685296633559266, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1653197830429053310, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: loadingScene
       value: 
@@ -187,50 +175,9 @@ PrefabInstance:
       propertyPath: spatialAnchorLoader
       value: 
       objectReference: {fileID: 915088401}
-      objectReference: {fileID: 1239429730}
-    - target: {fileID: 1815615267537046740, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1913949048154934779, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 2398792433572911778, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5289718109543558049, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6884378872439537101, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
       propertyPath: m_Name
       value: MRScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 6940615925592244548, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7220880955355323675, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7545908344203642466, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7617849623210855763, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7720147438817481182, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9021320312689334678, guid: 85a503e1428e24b12b0097b263ad904c, type: 3}
-      propertyPath: m_Layer
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -245,10 +192,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4639367931515619612, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6573216436334774062, guid: ea07b1ee46ae21c409a9c6019925e5b4, type: 3}
       propertyPath: m_Name
       value: GameStartAnimation

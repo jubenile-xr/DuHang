@@ -47,6 +47,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private bool isSpatialAnchorLoaded = false;
     // キーボード入力検出用フラグ
     private bool yKeyPressed = false;
+    [SerializeField] private SoundPlayer bgm;
 
     void Start()
     {
@@ -189,6 +190,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 loadingScene.SetActive(false);
                 eventSystem.SetActive(true);
+                bgm?.Play();
 
                 // playerSpawnのtransform.positionを取得
                 Vector3 spawnPosition = Vector3.zero;
