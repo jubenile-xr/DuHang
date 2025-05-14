@@ -82,17 +82,28 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 Debug.LogWarning("room_complete object not found under SpatialAnchor.");
             }
-
+            
+            //debugCanvasを表示
+            Transform debugCanvasTransform = spatialAnchor.transform.Find("DebugCanvas");
+            if (debugCanvasTransform != null)
+            {
+                debugCanvasTransform.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("debugCanvas object not found.");
+            }
+            
             if (spatialAnchorLoader)
             {
                 SetupDebugEnvironment();
             }
             else
             {
-                Debug.LogError("SpatialAnchorLoader componentis missing on the tagged object!");;
+                Debug.LogError("SpatialAnchorLoader componentis missing on the tagged object!");
             }
 
-            SetupDebugEnvironment();
+            //SetupDebugEnvironment();
             return;
         }
 
@@ -141,7 +152,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         Instantiate(Resources.Load<GameObject>("CameraRig/debugCamera"));
         Transform canvasTransform = spatialAnchor.transform
             .GetComponentsInChildren<Transform>()
-            .FirstOrDefault(t => t.CompareTag("Canvas"));
+            .FirstOrDefault(t => t.CompareTag("DebugCanvas"));
 
         if (canvasTransform != null)
         {

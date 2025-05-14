@@ -448,7 +448,7 @@ RectTransform:
   m_GameObject: {fileID: 2619168315556994609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.59, z: 1}
+  m_LocalScale: {x: 0.12, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5824048889624634857}
@@ -1011,8 +1011,8 @@ GameObject:
   - component: {fileID: 6890680543571994856}
   - component: {fileID: 8844792784044444829}
   m_Layer: 5
-  m_Name: Canvas
-  m_TagString: Canvas
+  m_Name: DebugCanvas
+  m_TagString: DebugCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
