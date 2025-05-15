@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9089496725377257616}
   - component: {fileID: 7339377896819713431}
-  - component: {fileID: 557573091100395459}
+  - component: {fileID: 870114198151919708}
+  - component: {fileID: 993028642017750327}
   m_Layer: 0
   m_Name: NetGunShoot
   m_TagString: Untagged
@@ -43,8 +44,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0d5c9870bbb721d43b6dce44b930e752, type: 3}
-  m_Resource: {fileID: 8300000, guid: 0d5c9870bbb721d43b6dce44b930e752, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ff0bb66134e1a644e86883b47d5309bf, type: 3}
+  m_Resource: {fileID: 8300000, guid: ff0bb66134e1a644e86883b47d5309bf, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
   m_Pitch: 1
@@ -130,7 +131,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &557573091100395459
+--- !u!114 &870114198151919708
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,7 +140,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 4500274382751097007}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f36357fb139574844ae6589345067f76, type: 3}
+  m_Script: {fileID: 11500000, guid: 9eded3ed24d84400db78b15f65550146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 7339377896819713431}
+--- !u!114 &993028642017750327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4500274382751097007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eded3ed24d84400db78b15f65550146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 7339377896819713431}
