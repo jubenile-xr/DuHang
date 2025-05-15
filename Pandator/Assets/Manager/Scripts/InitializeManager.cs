@@ -45,11 +45,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     public GameObject roomWall1;
     public GameObject roomWall2;
 
-    // SpatialAnchorのロード状態を管理
-    private bool isSpatialAnchorLoaded = false;
-    // キーボード入力検出用フラグ
-    private bool yKeyPressed = false;
-
     // VR空間のスケール（MR空間との比率）
     private const float VRWorldScale = 1.0f; // この値は実際の環境に合わせて調整する必要があります
 
@@ -144,19 +139,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    // private IEnumerator WaitForAnchorLoadAndSetupDebugForPanda()
-    // {
-    //     // spatialAnchorLoaderのisLoadedがtrueになるまで待機
-    //     while (!spatialAnchorLoader.isLoaded)
-    //     {
-    //         yield return null;
-    //     }
-
-    //     isAnchorLoaded = true;
-    //     Debug.Log("Anchor loaded successfully in debug mode for PANDA");
-    //     SetupDebugEnvironment();
-    // }
-
     private void SetupDebugEnvironment()
     {
         loadingScene.SetActive(false);
@@ -222,11 +204,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             if (TryGetSpatialAnchorTransform(out anchorPosition, out anchorRotation))
             {
                 CreateSpatialAnchor(anchorPosition, anchorRotation);
+                SetIsSpatialAnchorCreated(true);
             }
         }
 
+
         // ゲームマネージャーが存在し、アニメーションが終了し、プレイヤーが生成されていない場合
-        if (gameManager && (isAnimationFinished || character == GameCharacter.GOD) && !isPlayerCreated)
+        if (gameManager != null && (isAnimationFinished || character == GameCharacter.GOD) && !isPlayerCreated && isSpatialAnchorCreated)
         {
             if (gameManager.GetPlayerType() != GameManager.PlayerType.GOD)
             {
@@ -411,21 +395,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             roomCompleteTransform.gameObject.SetActive(false);
         }
 
-
-    }
-
-    private IEnumerator WaitForAnchorLoadAndCreateSpatialAnchorForPanda()
-    {
-        // spatialAnchorLoaderのisLoadedがtrueになるまで待機
-        //while (!spatialAnchorLoader.isLoaded)
-        //{
-        //    yield return null;
-        //}
-
-        Debug.Log("Anchor loaded successfully for PANDA. Creating SpatialAnchor via PhotonNetwork.");
-        spatialAnchor = PhotonNetwork.Instantiate("SpatialAnchor/prefab/spatialAnchor", new Vector3(0f, 0f, 0f), Quaternion.identity);
-        SetIsSpatialAnchorCreated(true);
-        yield return null;
 
     }
 
@@ -657,7 +626,6 @@ private IEnumerator WaitForGameManager()
 
                 SetSpatialAnchorTransformProperty(sceneSpacePosition, sceneSpaceRotation);
                 SetIsSpatialAnchorCreated(true);
-                isSpatialAnchorLoaded = true;
             }
             else
             {
