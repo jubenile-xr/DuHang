@@ -25,6 +25,7 @@ TagManager:
   - BGM
   - InterruptItem
   - Net
+  - DebugCanvas
   layers:
   - Default
   - TransparentFX
