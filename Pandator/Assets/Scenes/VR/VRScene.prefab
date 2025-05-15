@@ -339,7 +339,7 @@ GameObject:
   - component: {fileID: 1085382579734581275}
   m_Layer: 0
   m_Name: InitializeManager
-  m_TagString: Untagged
+  m_TagString: InitializeManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -380,6 +380,8 @@ MonoBehaviour:
   spatialAnchorLoader: {fileID: 0}
   roomWall1: {fileID: 0}
   roomWall2: {fileID: 0}
+  anchorLoadRetryInterval: 1
+  anchorLoadTimeout: 30
   bgm: {fileID: 6118470356408368543}
 --- !u!1 &3534568670885312736
 GameObject:
