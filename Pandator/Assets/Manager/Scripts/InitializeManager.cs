@@ -40,7 +40,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject spatialAnchor;
     private bool isSpatialAnchorCreated = false;
     private bool localIsSpatialAnchorCreated = false; // ローカルでの状態管理用
-    private Transform playerSpawnPoint;
+    private Vector3 playerSpawnPoint;
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
     public GameObject roomWall1;
     public GameObject roomWall2;
@@ -250,9 +250,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
                 if (playerSpawnPoint != null)
                 {
-                    spawnPosition = playerSpawnPoint.position;
-                    cameraPositionAnimal = playerSpawnPoint.position;
-                    cameraPositionPanda = playerSpawnPoint.position;
+                    spawnPosition = playerSpawnPoint;
+                    spawnPosition.y += 2;
+                    cameraPositionAnimal = playerSpawnPoint;
+                    cameraPositionPanda = playerSpawnPoint;
                 }
                 else
                 {
@@ -680,9 +681,8 @@ private IEnumerator WaitForGameManager()
             localAnchorRotation = rotation;
             hasLocalAnchorTransform = true;
 
-            playerSpawnPoint = spatialAnchor
-                .GetComponentsInChildren<Transform>()
-                .FirstOrDefault(t => t.CompareTag("playerSpawn"));
+
+            playerSpawnPoint = position;
 
             if (character == GameCharacter.BIRD || character == GameCharacter.RABBIT ||
                 character == GameCharacter.MOUSE)
