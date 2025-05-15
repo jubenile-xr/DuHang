@@ -18,11 +18,14 @@ public class MouseMove : MonoBehaviour
 
     [Header("速度の閾値")]
     [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
-
+    private InitializeManager InitializeManager;
+    private float floarValue;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         moveSpeed = normalSpeed; // 初期値を通常速度に設定
+        InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
+        floarValue = InitializeManager.GetLocalAnchorPosition().y;
     }
 
     private void Update()
@@ -74,6 +77,12 @@ public class MouseMove : MonoBehaviour
             {
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
+        }
+        
+        //落ちた時用
+        if (transform.position.y < floarValue)
+        {
+            transform.position = new Vector3(transform.position.x, floarValue + 0.1f, transform.position.z);
         }
     }
 

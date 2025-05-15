@@ -40,10 +40,13 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private GameObject spatialAnchor;
     private bool isSpatialAnchorCreated = false;
     private bool localIsSpatialAnchorCreated = false; // ローカルでの状態管理用
-    private Transform playerSpawnPoint;
+    private Vector3 playerSpawnPoint;
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
     public GameObject roomWall1;
     public GameObject roomWall2;
+    private Vector3 spawnPosition;
+    private Vector3 cameraPositionAnimal;
+    private Vector3 cameraPositionPanda;
 
     // VR空間のスケール（MR空間との比率）
     private const float VRWorldScale = 1.0f; // この値は実際の環境に合わせて調整する必要があります
@@ -60,6 +63,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private SoundPlayer bgm;
 
+    private bool isPlayerRigidbodyDestoryed = false;
     void Start()
     {
         loadingTime = 0;
@@ -180,6 +184,76 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
+        // VRプレイヤーの位置更新処理
+        if (player != null && (character == GameCharacter.MOUSE || character == GameCharacter.RABBIT || character == GameCharacter.BIRD))
+        {
+            PhotonView photonView = player.GetComponent<PhotonView>();
+            if (photonView != null && photonView.IsMine)
+            {
+                // カメラの位置に基づいてプレイヤーの位置を更新
+                if (camera != null)
+                {
+                    Transform centerEyeAnchor = camera.transform.Find("TrackingSpace/CenterEyeAnchor");
+                    if (centerEyeAnchor != null)
+                    {
+                        switch (character)
+                        {
+                            case GameCharacter.BIRD:
+                                // BIRDの場合は専用の位置更新ロジック
+                                player.transform.position = centerEyeAnchor.position;
+                                player.transform.rotation = centerEyeAnchor.rotation;
+                                break;
+
+                            case GameCharacter.RABBIT:
+                                // RABBITの場合は専用の位置更新ロジック
+                                Vector3 rabbitPosition = centerEyeAnchor.position;
+                                rabbitPosition.y = player.transform.position.y; // Y座標は維持
+                                player.transform.position = rabbitPosition;
+
+                                // 回転は水平方向のみ
+                                Vector3 rabbitRotation = centerEyeAnchor.rotation.eulerAngles;
+                                rabbitRotation.x = 0;
+                                rabbitRotation.z = 0;
+                                player.transform.rotation = Quaternion.Euler(rabbitRotation);
+                                break;
+
+                            case GameCharacter.MOUSE:
+                                // MOUSEの場合は専用の位置更新ロジック
+                                Vector3 mousePosition = centerEyeAnchor.position;
+                                mousePosition.y = player.transform.position.y; // Y座標は維持
+                                player.transform.position = mousePosition;
+
+                                // 回転は水平方向のみ
+                                Vector3 mouseRotation = centerEyeAnchor.rotation.eulerAngles;
+                                mouseRotation.x = 0;
+                                mouseRotation.z = 0;
+                                player.transform.rotation = Quaternion.Euler(mouseRotation);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY &&
+            !isPlayerRigidbodyDestoryed)
+        {
+            GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
+            foreach (GameObject masterPlayer in masterPlayers)
+            {
+                if (masterPlayer.GetComponentInChildren<StateManager>().GetPlayerName() != Character.GetMyName())
+                {
+                    Rigidbody[] childRigidbodies = masterPlayer.GetComponentsInChildren<Rigidbody>();
+                    foreach (Rigidbody rb in childRigidbodies)
+                    {
+                        Destroy(rb);
+                    }
+                }
+
+            }
+            isPlayerRigidbodyDestoryed = true;
+        }
+
         // PANDAプレイヤーの場合のアンカーロード処理
         if (character == GameCharacter.PANDA && spatialAnchor != null && !isAnchorLoadAttempted)
         {
@@ -221,20 +295,21 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 bgm?.Play();
 
                 // playerSpawnのtransform.positionを取得
-                Vector3 spawnPosition = Vector3.zero;
-                Vector3 cameraPositionAnimal = Vector3.zero;
-                Vector3 cameraPositionPanda = Vector3.zero;
+                spawnPosition = Vector3.zero;
+                cameraPositionAnimal = Vector3.zero;
+                cameraPositionPanda = Vector3.zero;
 
                 if (playerSpawnPoint != null)
                 {
-                    spawnPosition = playerSpawnPoint.position;
-                    cameraPositionAnimal = playerSpawnPoint.position;
-                    cameraPositionPanda = playerSpawnPoint.position;
+                    spawnPosition = playerSpawnPoint;
+                    spawnPosition.y += 2;
+                    cameraPositionAnimal = playerSpawnPoint;
+                    cameraPositionPanda = playerSpawnPoint;
                 }
                 else
                 {
                     // デフォルトのスポーン位置
-                    spawnPosition = new Vector3(0f, 3.0f, 0f);
+                    spawnPosition = new Vector3(localAnchorPosition.x, localAnchorPosition.y + 2, localAnchorPosition.z);
                     cameraPositionAnimal = new Vector3(0f, 1.0f, 0f);
                     cameraPositionPanda = new Vector3(0f, 0f, 0f);
                 }
@@ -254,6 +329,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         player.GetComponent<BirdMoveController>()
                             .SetCenterEyeAnchor(
                                 camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
+
+                        // PhotonTransformViewの設定を確認・更新
+                        PhotonTransformView birdTransformView = player.GetComponent<PhotonTransformView>();
+                        if (birdTransformView != null)
+                        {
+                            birdTransformView.m_SynchronizePosition = true;
+                            birdTransformView.m_SynchronizeRotation = true;
+                            birdTransformView.m_UseLocal = false; // ワールド座標を使用
+                        }
+
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.RABBIT:
@@ -262,6 +347,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         camera = Instantiate(Resources.Load<GameObject>("CameraRig/RabbitCameraRig"),
                             cameraPositionAnimal, Quaternion.identity);
+
+                        // PhotonTransformViewの設定を確認・更新
+                        PhotonTransformView rabbitTransformView = player.GetComponent<PhotonTransformView>();
+                        if (rabbitTransformView != null)
+                        {
+                            rabbitTransformView.m_SynchronizePosition = true;
+                            rabbitTransformView.m_SynchronizeRotation = true;
+                            rabbitTransformView.m_UseLocal = false; // ワールド座標を使用
+                        }
+
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.MOUSE:
@@ -270,6 +365,16 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         scoreManager = player.GetComponentInChildren<ScoreManager>();
                         camera = Instantiate(Resources.Load<GameObject>("CameraRig/MouseCameraRig"),
                             cameraPositionAnimal, Quaternion.identity);
+
+                        // PhotonTransformViewの設定を確認・更新
+                        PhotonTransformView mouseTransformView = player.GetComponent<PhotonTransformView>();
+                        if (mouseTransformView != null)
+                        {
+                            mouseTransformView.m_SynchronizePosition = true;
+                            mouseTransformView.m_SynchronizeRotation = true;
+                            mouseTransformView.m_UseLocal = false; // ワールド座標を使用
+                        }
+
                         canvas.SetActive(true);
                         break;
                     case GameCharacter.PANDA:
@@ -657,9 +762,8 @@ private IEnumerator WaitForGameManager()
             localAnchorRotation = rotation;
             hasLocalAnchorTransform = true;
 
-            playerSpawnPoint = spatialAnchor
-                .GetComponentsInChildren<Transform>()
-                .FirstOrDefault(t => t.CompareTag("playerSpawn"));
+
+            playerSpawnPoint = position;
 
             if (character == GameCharacter.BIRD || character == GameCharacter.RABBIT ||
                 character == GameCharacter.MOUSE)

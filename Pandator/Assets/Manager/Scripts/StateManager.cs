@@ -18,6 +18,7 @@ public class StateManager : MonoBehaviour
     [SerializeField] private RabbitJump rabbitJump;
     [SerializeField] private BirdMoveController birdMoveController;
     [SerializeField] private MouseMove mouseMove;
+    private bool isDeadLogicExecuted = false;
     private string playerName;
     private enum GameCharacter
     {
@@ -79,6 +80,16 @@ public class StateManager : MonoBehaviour
 
     private void Update()
     {
+        if(gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+        {
+            SetAlive(!GetMyDeadStatus());
+        }
+
+        if (!isAlive && GetComponent<PhotonView>().IsMine && !isDeadLogicExecuted)
+        {
+            DeadLogic();
+        }
+
         if (isInterrupted)
         {
             time += Time.deltaTime;
@@ -104,6 +115,40 @@ public class StateManager : MonoBehaviour
         // {
         //     SetAlive(false);
         // }
+    }
+    // 自分の死亡ステータスを取得するメソッド
+    public bool GetMyDeadStatus()
+    {
+        if (gameManager == null) return false;
+
+        // GameManagerから全プレイヤー名を取得
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        if (playerNames == null || playerNames.Length == 0) return false;
+
+        // 現在のプレイヤー名を取得
+        string myName = Character.GetMyName();
+
+        // 一致するインデックスを検索
+        int myIndex = -1;
+        for (int i = 0; i < playerNames.Length; i++)
+        {
+            if (playerNames[i].Contains(myName))
+            {
+                myIndex = i;
+                break;
+            }
+        }
+
+        // インデックスが見つかった場合、対応する死亡ステータスを返す
+        if (myIndex >= 0 && myIndex < gameManager.GetPlayerDeadStatus().Length)
+        {
+            bool isDead = gameManager.GetPlayerDeadStatus()[myIndex];
+            Debug.Log($"プレイヤー {myName} の死亡ステータス: {isDead}");
+            return isDead;
+        }
+
+        Debug.LogWarning($"プレイヤー {myName} のインデックスが見つかりません");
+        return false;
     }
 
     private void ResetState()
@@ -145,15 +190,7 @@ public class StateManager : MonoBehaviour
 
     public void SetAlive(bool value)
     {
-        if (GetComponent<PhotonView>().IsMine)
-        {
-            if (!value)
-            {
-                DeadLogic();
-            }
-
-            isAlive = value;
-        }
+        isAlive = value;
     }
 
     public bool GetAlive()
@@ -164,7 +201,8 @@ public class StateManager : MonoBehaviour
     // 死亡時の処理
     private void DeadLogic()
     {
-        if (!isAlive || !GetComponent<PhotonView>().IsMine) return;
+        isDeadLogicExecuted = true;
+        GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
         scoreManager.SetAliveTime(Time.time);
         gameManager.SetDecrementAliveCount();
         deadVolumeController?.RunDeadVolume();
@@ -233,5 +271,10 @@ public class StateManager : MonoBehaviour
     public void SetPlayerName(string name)
     {
         playerName = name;
+    }
+    
+    public string GetPlayerName()
+    {
+        return playerName;
     }
 }

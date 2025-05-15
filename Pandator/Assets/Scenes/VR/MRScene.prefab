@@ -638,7 +638,7 @@ GameObject:
   - component: {fileID: 1653197830429053310}
   m_Layer: 0
   m_Name: PhotonGamemanager
-  m_TagString: Untagged
+  m_TagString: InitializeManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -679,6 +679,8 @@ MonoBehaviour:
   spatialAnchorLoader: {fileID: 0}
   roomWall1: {fileID: 0}
   roomWall2: {fileID: 0}
+  anchorLoadRetryInterval: 1
+  anchorLoadTimeout: 30
   bgm: {fileID: 7428039889501458225}
 --- !u!1 &9021320312689334678
 GameObject:

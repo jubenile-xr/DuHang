@@ -54,6 +54,7 @@ public class RabbitMove : MonoBehaviour
             // 速度が閾値以下の場合は移動しない
             if (speedR < speedThreshold && speedL < speedThreshold)
             {
+                transform.Translate(Vector3.zero);
                 return;
             }
 
