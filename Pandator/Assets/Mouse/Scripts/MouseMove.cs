@@ -77,12 +77,12 @@ public class MouseMove : MonoBehaviour
             {
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
-            
-            //落ちた時用
-            if (transform.position.y < floarValue)
-            {
-                transform.position = new Vector3(transform.position.x, floarValue + 0.5f, transform.position.z);
-            }
+        }
+        
+        //落ちた時用
+        if (transform.position.y < floarValue)
+        {
+            transform.position = new Vector3(transform.position.x, floarValue + 0.5f, transform.position.z);
         }
     }
 
