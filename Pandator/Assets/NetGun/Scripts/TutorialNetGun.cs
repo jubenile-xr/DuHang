@@ -8,6 +8,8 @@ public class TutorialNetGun : MonoBehaviour
     [SerializeField] private float spanTime = 0f;
     private bool shotable = true;
     private Animator animator;
+    [SerializeField] private SoundPlayer shootSE;
+    [SerializeField] private SoundPlayer chargeSE;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,6 +37,7 @@ public class TutorialNetGun : MonoBehaviour
             if (spanTime > 5.0f)
             {
                 shotable = true; // 5秒後に発射可能にする
+                chargeSE.Play();
             }
         }
     }
@@ -45,5 +48,7 @@ public class TutorialNetGun : MonoBehaviour
 
         GameObject bulletInstance = Instantiate(Resources.Load<GameObject>("InterruptItem/Net"), Tip.transform.position, Quaternion.LookRotation(RightController.transform.forward));
         bulletInstance.GetComponent<Rigidbody>().AddForce(-RightController.transform.forward * 20 * Time.deltaTime * 1000 * BulletSpeed);
+        
+        shootSE.Play();
     }
 }
