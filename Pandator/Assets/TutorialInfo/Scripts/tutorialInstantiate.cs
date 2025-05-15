@@ -20,20 +20,27 @@ public class tutorialInstantiate : MonoBehaviour
         {
             //各キャラの生成
             case Character.GameCharacters.BIRD:
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"),
+                    new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
-                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), eyePos.transform.position, Quaternion.identity);
-                player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
+                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"),
+                    eyePos.transform.position, Quaternion.identity);
+                player.GetComponent<BirdMoveController>()
+                    .SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
                 SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.RABBIT:
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"),
+                    new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"),
+                    new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.MOUSE:
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"),
+                    new Vector3(0f, 2.0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"),
+                    new Vector3(0f, 1.0f, 0f), Quaternion.identity);
                 SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.PANDA:
@@ -43,8 +50,10 @@ public class tutorialInstantiate : MonoBehaviour
                 Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
                 roomCompleteTransform.gameObject.SetActive(false);
 
-                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"),
+                    new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 1.0f, 0f),
+                    Quaternion.identity);
                 break;
         }
 
@@ -58,6 +67,7 @@ public class tutorialInstantiate : MonoBehaviour
             Debug.LogError("CreatePhotonAvatar script is missing on the instantiated player object!");
             return;
         }
+
         avatarScript.ExecuteCreatePhotonAvatar();
 
         switch (Character.GetSelectedAnimal())
@@ -75,6 +85,7 @@ public class tutorialInstantiate : MonoBehaviour
                     Debug.LogError("MouseMove script is missing on the instantiated player object!");
                     return;
                 }
+
                 mouseMoveScript.SetMouseOVRCameraRig();
                 break;
             case Character.GameCharacters.RABBIT:
@@ -84,6 +95,7 @@ public class tutorialInstantiate : MonoBehaviour
                     Debug.LogError("RabbitMove script is missing on the instantiated player object!");
                     return;
                 }
+
                 rabbitMoveScript.SetRabbitOVRCameraRig();
                 break;
             case Character.GameCharacters.BIRD:
@@ -93,6 +105,7 @@ public class tutorialInstantiate : MonoBehaviour
                 Debug.LogWarning("未処理のキャラクタータイプです: " + Character.GetSelectedAnimal());
                 break;
         }
+
         CanvasCameraSetter.Instance.SetCanvasCamera();
         CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
@@ -101,7 +114,8 @@ public class tutorialInstantiate : MonoBehaviour
     private void Update()
     {
         // PANDAプレイヤーの場合のアンカーロード処理
-        if (Character.GetSelectedAnimal() == Character.GameCharacters.PANDA && spatialAnchor != null && !isAnchorLoadAttempted)
+        if (Character.GetSelectedAnimal() == Character.GameCharacters.PANDA && spatialAnchor != null &&
+            !isAnchorLoadAttempted)
         {
             AnchorManager anchorManager = spatialAnchor.GetComponent<AnchorManager>();
             if (anchorManager != null)
@@ -157,10 +171,12 @@ public class tutorialInstantiate : MonoBehaviour
         isAnchorLoadAttempted = true;
         isSpatialAnchorCreated = true;
 
-    
-    private void SetLayerToIgnoreMyself()
-    {
-        Character.SetLayer(player,LayerMask.NameToLayer("IgnoreMyself"));
-        camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself"));
     }
-}
+
+    private void SetLayerToIgnoreMyself()
+        {
+            Character.SetLayer(player, LayerMask.NameToLayer("IgnoreMyself"));
+            camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &=
+                ~(1 << LayerMask.NameToLayer("IgnoreMyself"));
+        }
+    }
