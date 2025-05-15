@@ -24,14 +24,17 @@ public class tutorialInstantiate : MonoBehaviour
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), eyePos.transform.position, Quaternion.identity);
                 player.GetComponent<BirdMoveController>().SetCenterEyeAnchor(camera.transform.Find("TrackingSpace/CenterEyeAnchor").transform);
+                SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.RABBIT:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.MOUSE:
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"), new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f), Quaternion.identity);
+                SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.PANDA:
                 // PANDAの場合はspatialAnchorを生成
@@ -94,6 +97,7 @@ public class tutorialInstantiate : MonoBehaviour
         CanvasCameraSetter.Instance.SetCanvasSortingLayer();
     }
 
+
     private void Update()
     {
         // PANDAプレイヤーの場合のアンカーロード処理
@@ -152,5 +156,11 @@ public class tutorialInstantiate : MonoBehaviour
         // ロードの成功/失敗に関わらず、次の処理に進むためのフラグを設定
         isAnchorLoadAttempted = true;
         isSpatialAnchorCreated = true;
+
+    
+    private void SetLayerToIgnoreMyself()
+    {
+        Character.SetLayer(player,LayerMask.NameToLayer("IgnoreMyself"));
+        camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself"));
     }
 }
