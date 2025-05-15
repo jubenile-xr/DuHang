@@ -58,6 +58,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private Quaternion localAnchorRotation;
     private bool hasLocalAnchorTransform = false;
 
+    [SerializeField] private SoundPlayer bgm;
+
     void Start()
     {
         loadingTime = 0;
