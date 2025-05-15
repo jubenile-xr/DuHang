@@ -44,6 +44,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField]private SpatialAnchorLoader spatialAnchorLoader;
     public GameObject roomWall1;
     public GameObject roomWall2;
+    private Vector3 spawnPosition;
+    private Vector3 cameraPositionAnimal;
+    private Vector3 cameraPositionPanda;
 
     // VR空間のスケール（MR空間との比率）
     private const float VRWorldScale = 1.0f; // この値は実際の環境に合わせて調整する必要があります
@@ -237,9 +240,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 bgm?.Play();
 
                 // playerSpawnのtransform.positionを取得
-                Vector3 spawnPosition = Vector3.zero;
-                Vector3 cameraPositionAnimal = Vector3.zero;
-                Vector3 cameraPositionPanda = Vector3.zero;
+                spawnPosition = Vector3.zero;
+                cameraPositionAnimal = Vector3.zero;
+                cameraPositionPanda = Vector3.zero;
 
                 if (playerSpawnPoint != null)
                 {
