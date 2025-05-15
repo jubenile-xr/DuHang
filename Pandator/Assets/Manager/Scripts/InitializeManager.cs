@@ -60,6 +60,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     [SerializeField] private SoundPlayer bgm;
 
+    private bool isPlayerRigidbodyDestoryed = false;
     void Start()
     {
         loadingTime = 0;
@@ -180,6 +181,21 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
+        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY &&
+            !isPlayerRigidbodyDestoryed)
+        {
+            GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
+            foreach (GameObject masterPlayer in masterPlayers)
+            {
+                Rigidbody[] childRigidbodies = masterPlayer.GetComponentsInChildren<Rigidbody>();
+                foreach (Rigidbody rb in childRigidbodies)
+                {
+                    Destroy(rb);
+                }
+            }
+            isPlayerRigidbodyDestoryed = true;
+        }
+
         // PANDAプレイヤーの場合のアンカーロード処理
         if (character == GameCharacter.PANDA && spatialAnchor != null && !isAnchorLoadAttempted)
         {
@@ -234,7 +250,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 else
                 {
                     // デフォルトのスポーン位置
-                    spawnPosition = new Vector3(0f, 3.0f, 0f);
+                    spawnPosition = new Vector3(localAnchorPosition.x, localAnchorPosition.y + 2, localAnchorPosition.z);
                     cameraPositionAnimal = new Vector3(0f, 1.0f, 0f);
                     cameraPositionPanda = new Vector3(0f, 0f, 0f);
                 }
