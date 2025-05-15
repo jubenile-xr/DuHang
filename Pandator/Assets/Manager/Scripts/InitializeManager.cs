@@ -190,11 +190,15 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
             foreach (GameObject masterPlayer in masterPlayers)
             {
-                Rigidbody[] childRigidbodies = masterPlayer.GetComponentsInChildren<Rigidbody>();
-                foreach (Rigidbody rb in childRigidbodies)
+                if (masterPlayer.GetComponentInChildren<StateManager>().GetPlayerName() != Character.GetMyName())
                 {
-                    Destroy(rb);
+                    Rigidbody[] childRigidbodies = masterPlayer.GetComponentsInChildren<Rigidbody>();
+                    foreach (Rigidbody rb in childRigidbodies)
+                    {
+                        Destroy(rb);
+                    }
                 }
+                
             }
             isPlayerRigidbodyDestoryed = true;
         }

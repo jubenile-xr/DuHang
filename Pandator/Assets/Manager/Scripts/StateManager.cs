@@ -272,4 +272,9 @@ public class StateManager : MonoBehaviour
     {
         playerName = name;
     }
+    
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
 }
