@@ -7,8 +7,15 @@ public class MouseGaol : MonoBehaviour
     [SerializeField] private TextMeshProUGUI instructionUI;
     private void Start()
     {
-        instructionUI.text = "パンダのボールに\nむかえ！";
-        HideObject();
+        if (Character.GetSelectedAnimal() != Character.GameCharacters.MOUSE)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+            instructionUI.text = "パンダのボールに\nむかえ！";
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -19,13 +26,6 @@ public class MouseGaol : MonoBehaviour
                 gameObject.SetActive(false);
                 instructionUI.text = "動物を打ってみよう！";
             }
-        }
-    }
-    private void HideObject()
-    {
-        if (Character.GetSelectedAnimal() != Character.GameCharacters.MOUSE)
-        {
-            gameObject.SetActive(false);
         }
     }
 }
