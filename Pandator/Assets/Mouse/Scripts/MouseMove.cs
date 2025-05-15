@@ -82,7 +82,7 @@ public class MouseMove : MonoBehaviour
         //落ちた時用
         if (transform.position.y < floarValue)
         {
-            transform.position = new Vector3(transform.position.x, floarValue + 0.5f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, floarValue + 0.1f, transform.position.z);
         }
     }
 
