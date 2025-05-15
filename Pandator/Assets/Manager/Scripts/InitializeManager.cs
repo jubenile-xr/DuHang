@@ -216,6 +216,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             {
                 loadingScene.SetActive(false);
                 eventSystem.SetActive(true);
+                bgm?.Play();
 
                 // playerSpawnのtransform.positionを取得
                 Vector3 spawnPosition = Vector3.zero;
