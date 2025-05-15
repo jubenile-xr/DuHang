@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Photon.Pun;
@@ -340,6 +341,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         }
 
                         canvas.SetActive(true);
+                        SetPlayerLayerToIgnoreMyself(player, camera);
                         break;
                     case GameCharacter.RABBIT:
                         player = PhotonNetwork.Instantiate("Player/RabbitPlayer", spawnPosition, Quaternion.identity);
@@ -358,6 +360,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         }
 
                         canvas.SetActive(true);
+                        SetPlayerLayerToIgnoreMyself(player, camera);
                         break;
                     case GameCharacter.MOUSE:
                         player = PhotonNetwork.Instantiate("Player/MousePlayer", spawnPosition, Quaternion.identity);
@@ -376,6 +379,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         }
 
                         canvas.SetActive(true);
+                        SetPlayerLayerToIgnoreMyself(player, camera);
                         break;
                     case GameCharacter.PANDA:
                         player = PhotonNetwork.Instantiate("Player/PandaPlayer", spawnPosition, Quaternion.identity);
@@ -385,7 +389,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         canvas.SetActive(true);
                         break;
                 }
-
                 //カメラ生成の確認
                 if (camera == null)
                 {
@@ -895,4 +898,13 @@ private IEnumerator WaitForGameManager()
     {
         return hasLocalAnchorTransform;
     }
+
+    private void SetPlayerLayerToIgnoreMyself(GameObject player, GameObject camera)
+    {
+        //PUN2ではLayerを追跡することはできないぽいので、Layerをスクリプトで変更することで自身を見えないようにしている
+        Character.SetLayer(player, LayerMask.NameToLayer("IgnoreMyself"));
+        camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself")); 
+    }
+    
+
 }
