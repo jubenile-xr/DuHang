@@ -7,8 +7,15 @@ public class BirdGaol : MonoBehaviour
     [SerializeField] private TextMeshProUGUI instructionUI;
     private void Start()
     {
-        instructionUI.text = "パンダのボールに\nむかえ！";
-        HideObject();
+        if (Character.GetSelectedAnimal() == Character.GameCharacters.BIRD)
+        {
+            gameObject.SetActive(true);
+            instructionUI.text = "パンダのボールに\nむかえ！";
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -19,13 +26,6 @@ public class BirdGaol : MonoBehaviour
                 gameObject.SetActive(false);
                 instructionUI.text = "動物を打ってみよう！";
             }
-        }
-    }
-    private void HideObject()
-    {
-        if (Character.GetSelectedAnimal() != Character.GameCharacters.BIRD)
-        {
-            gameObject.SetActive(false);
         }
     }
 }
