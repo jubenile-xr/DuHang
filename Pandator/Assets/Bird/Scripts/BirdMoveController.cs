@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class BirdMoveController : MonoBehaviour
 {
+    private bool isKeybord = false;
     private bool isInitialized = false;
     public Transform OvrPlayer;
     public Transform CenterEyeAnchor;
@@ -50,6 +51,12 @@ public class BirdMoveController : MonoBehaviour
 
     {
         if (!isInitialized) return;
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SetIsKeybord(true);
+        }
+        
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
@@ -97,6 +104,20 @@ public class BirdMoveController : MonoBehaviour
                 isFlying = false;
             }
         }
+
+        //以下内容用于脱离VR环境使用
+
+        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
+        //if (isAButtonPressed)
+        //{
+        //    isFlying = true;
+        //    verticalVelocity = liftForce;
+        //}
+        //else
+        //{
+        //    isFlying = false;
+        //}
+
     }
     void HandleWalking()
     {
@@ -110,12 +131,24 @@ public class BirdMoveController : MonoBehaviour
             input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
         }
 
+        Vector2 input;
+        if (isKeybord)
+        {
+            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
+        else
+        {
+            // 右摇杆输入 // get the right thumbstick input // 右スティックの入力を取得する
+            input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        }
+
         if(input.magnitude > 0)
         {
             isWalking = true;
         }
         else
         {
+            
             isWalking = false;
         }
 
@@ -140,10 +173,19 @@ public class BirdMoveController : MonoBehaviour
         {
             verticalVelocity = 0f;
         }
+
     }
 
     void HandleFlight()
     {
+        //// 刚刚按下 A
+        //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
+
+        ////是否持续按住 A
+        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
+        //这部分为后续添加的飞行控制或者技能代码提供接口，暂时不需要
+        //*this part is for the future flight control or skill code, not needed for now
+
         //根据是否按住飞行按钮来施加重力 //apply gravity based on the flight button // 飛行ボタンの押下状態に応じて重力を適用する
         if (!isFlying) return;
 
@@ -159,6 +201,7 @@ public class BirdMoveController : MonoBehaviour
         movement.y += verticalVelocity;
 
         CharacterController.Move(flyForce *movement * Time.deltaTime);
+        
     }
 
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
@@ -182,5 +225,10 @@ public class BirdMoveController : MonoBehaviour
     public void SetThumbstickMovementEnabled(bool enabled)
     {
         disableThumbstickMovement = !enabled;
+    }
+    
+    private void SetIsKeybord(bool isKeybord)
+    {
+        this.isKeybord = isKeybord;
     }
 }
