@@ -112,8 +112,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             startSE?.Play();
         }
 
-        if (GetPlayerType() != PlayerType.GOD
-            && GetGameState() == GameState.PLAY
+        if (GetGameState() == GameState.PLAY
             && !hasPlayerNameCreated)
         {
             // Initialize player dead status array first

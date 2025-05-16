@@ -31,51 +31,48 @@ public class TimeManager : MonoBehaviour
             }
         }
 
-        soundPlayer = GameObject.FindWithTag("BGM").GetComponent<SoundPlayer>();
+        soundPlayer = GameObject.FindWithTag("BGM")?.GetComponent<SoundPlayer>();
     }
 
     private void Update()
     {
-        if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD)
+        if (canvas == null)
         {
-            if (canvas == null)
+            canvas = GameObject.FindGameObjectWithTag("Canvas");
+        }
+        if (canvasDispTime == null)
+        {
+            canvasDispTime = canvas.GetComponent<CanvasDispTime>();
+        }
+        if (canvasDispTime != null)
+        {
+            canvasDispTime.SetTimeText(FormatTime(GAME_END_TIME - gameTime));
+        }
+        if (supportText == null)
+        {
+            supportText = canvas.GetComponent<SupportText>();
+        }
+        // SmallAnimalはまだ作成していない
+        if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+        {
+            if (!isStart)
             {
-                canvas = GameObject.FindGameObjectWithTag("Canvas");
-            }
-            if (canvasDispTime == null)
-            {
-                canvasDispTime = canvas.GetComponent<CanvasDispTime>();
-            }
-            if (canvasDispTime != null)
-            {
-                canvasDispTime.SetTimeText(FormatTime(GAME_END_TIME - gameTime));
-            }
-            if(supportText == null)
-            {
-                supportText = canvas.GetComponent<SupportText>();
-            }
-            // SmallAnimalはまだ作成していない
-            if (canvasDispTime != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
-            {
-                if (!isStart)
-                {
-                    supportText?.SetSupportText("START");
-                    supportText?.MoveLeftToRight();
-                    isStart = true;
-                }
-                gameTime += Time.deltaTime;
-            }
-            if (gameTime >= GAME_END_TIME)
-            {
-                SwitchGameState();
-            }
-            if (gameTime >= GAME_END_TIME - LAST_SPURT_TIME && !isChangeSound)
-            {
-                supportText?.SetSupportText("のこり" + (int)(LAST_SPURT_TIME) + "秒");
+                supportText?.SetSupportText("START");
                 supportText?.MoveLeftToRight();
-                soundPlayer?.SetPitch(LAST_SPURT_PITCH);
-                isChangeSound = true;
+                isStart = true;
             }
+            gameTime += Time.deltaTime;
+        }
+        if (gameTime >= GAME_END_TIME)
+        {
+            SwitchGameState();
+        }
+        if (gameTime >= GAME_END_TIME - LAST_SPURT_TIME && !isChangeSound)
+        {
+            supportText?.SetSupportText("のこり" + (int)(LAST_SPURT_TIME) + "秒");
+            supportText?.MoveLeftToRight();
+            soundPlayer?.SetPitch(LAST_SPURT_PITCH);
+            isChangeSound = true;
         }
     }
 
