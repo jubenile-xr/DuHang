@@ -236,25 +236,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY &&
-            !isPlayerRigidbodyDestoryed)
-        {
-            GameObject[] masterPlayers = GameObject.FindGameObjectsWithTag("MasterPlayer");
-            foreach (GameObject masterPlayer in masterPlayers)
-            {
-                if (masterPlayer.GetComponentInChildren<StateManager>().GetPlayerName() != Character.GetMyName())
-                {
-                    Rigidbody[] childRigidbodies = masterPlayer.GetComponentsInChildren<Rigidbody>();
-                    foreach (Rigidbody rb in childRigidbodies)
-                    {
-                        Destroy(rb);
-                    }
-                }
-
-            }
-            isPlayerRigidbodyDestoryed = true;
-        }
-
         // PANDAプレイヤーの場合のアンカーロード処理
         if (character == GameCharacter.PANDA && spatialAnchor != null && !isAnchorLoadAttempted)
         {
@@ -903,8 +884,8 @@ private IEnumerator WaitForGameManager()
     {
         //PUN2ではLayerを追跡することはできないぽいので、Layerをスクリプトで変更することで自身を見えないようにしている
         Character.SetLayer(player, LayerMask.NameToLayer("IgnoreMyself"));
-        camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself")); 
+        camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself"));
     }
-    
+
 
 }
