@@ -154,7 +154,6 @@ public class StateManager : MonoBehaviour
     private void ResetState()
     {
         isInterrupted = false;
-        time = 0;
         playerColorManager?.ChangeColorOriginal();
         switch (character)
         {
@@ -172,12 +171,15 @@ public class StateManager : MonoBehaviour
                 Debug.Log("Unknown character type: " + character);
                 break;
         }
+        time = 0;
     }
 
     public void SetInterrupted(bool value)
     {
-        if (value)
+        Debug.Log("SetInterrupted: " + value);
+        if (value && !isAlive)
         {
+            Debug.Log("SetInterrupted: Dead");
             InterruptLogic();
         }
         isInterrupted = value;
@@ -272,7 +274,7 @@ public class StateManager : MonoBehaviour
     {
         playerName = name;
     }
-    
+
     public string GetPlayerName()
     {
         return playerName;
