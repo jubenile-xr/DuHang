@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
 
 public class GameManager : MonoBehaviourPunCallbacks
-{
+{]
     public enum GameState
     {
         START,
@@ -116,11 +116,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             && GetGameState() == GameState.PLAY
             && !hasPlayerNameCreated)
         {
-            SetAliveCount(GetAllPlayerNames().Length);
+            // Initialize player dead status array first
+            InitializePlayerDeadStatusArray();
+            // Set alive count based on playerDeadStatus instead of player names length
+            UpdateAliveCountFromDeadStatus();
             // localPlayerNamesに格納されている名前を出力する
             Debug.Log("Local Player Names: " + GetAllPlayerNames().Length);
             SetupUI();
-            InitializePlayerDeadStatusArray();
             hasPlayerNameCreated = true;
         }
 
@@ -227,6 +229,35 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // New method to update aliveCount based on playerDeadStatus array
+    public void UpdateAliveCountFromDeadStatus()
+    {
+        if (playerDeadStatus == null || playerDeadStatus.Length == 0)
+            return;
+
+        int alivePlayerCount = 0;
+
+        // Count the number of players that are still alive (false in playerDeadStatus)
+        for (int i = 0; i < playerDeadStatus.Length; i++)
+        {
+            if (!playerDeadStatus[i])
+            {
+                alivePlayerCount++;
+            }
+        }
+
+        // Update the aliveCount with the new value
+        aliveCount = alivePlayerCount;
+        UpdateAliveCountProperty();
+
+        // Check if all VR players are dead
+        if (aliveCount <= 0)
+        {
+            SetGameState(GameState.END);
+            winner = Winner.PANDA;
+        }
+    }
+
     private void UpdateAliveCountProperty()
     {
         if (PhotonNetwork.InRoom)
@@ -287,9 +318,15 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 switch (i)
                 {
-                    case 0: KilledImagedAttach.SetFirstCharacter(nm, isMine); break;
-                    case 1: KilledImagedAttach.SetSecondCharacter(nm, isMine); break;
-                    case 2: KilledImagedAttach.SetThirdCharacter(nm, isMine); break;
+                    case 0:
+                        KilledImagedAttach.SetFirstCharacter(nm, isMine);
+                        break;
+                    case 1:
+                        KilledImagedAttach.SetSecondCharacter(nm, isMine);
+                        break;
+                    case 2:
+                        KilledImagedAttach.SetThirdCharacter(nm, isMine);
+                        break;
                     default: Debug.LogError("Invalid player index"); break;
                 }
             }

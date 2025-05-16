@@ -110,11 +110,6 @@ public class StateManager : MonoBehaviour
             Debug.Log("FlashEffect component found in the canvas.");
             isGetFlashEffect = true;
         }
-        // // TEST: Qを押したら死ぬ
-        // if (Input.GetKeyDown(KeyCode.Q))
-        // {
-        //     SetAlive(false);
-        // }
     }
     // 自分の死亡ステータスを取得するメソッド
     public bool GetMyDeadStatus()
@@ -183,20 +178,12 @@ public class StateManager : MonoBehaviour
         isInterrupted = value;
     }
 
-    public bool GetInterrupted()
-    {
-        return isInterrupted;
-    }
 
     public void SetAlive(bool value)
     {
         isAlive = value;
     }
 
-    public bool GetAlive()
-    {
-        return isAlive;
-    }
 
     // 死亡時の処理
     private void DeadLogic()
@@ -204,27 +191,26 @@ public class StateManager : MonoBehaviour
         isDeadLogicExecuted = true;
         GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
         scoreManager.SetAliveTime(Time.time);
-        gameManager.SetDecrementAliveCount();
         deadVolumeController?.RunDeadVolume();
 
         string[] playerNames = gameManager.GetAllPlayerNames();
         Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
         Debug.Log("State:PlayerName" + playerName);
 
+        bool isAlreadyDead = false;
         for (int i = 0; i < playerNames.Length; i++)
         {
-            Debug.Log("State:PlayerNames TF" + playerNames[i].Contains(playerName));
             if (playerNames[i].Contains(playerName))
             {
-                gameManager.SetPlayerDeadStatusTrue(i);
+                isAlreadyDead = gameManager.GetPlayerDeadStatus()[i];
+                if (!isAlreadyDead)
+                {
+                    gameManager.SetPlayerDeadStatusTrue(i);
+                    gameManager.UpdateAliveCountFromDeadStatus();
+                }
+                break;
             }
         }
-
-        //地面に落とす
-        //TODO: 実際の地面との調整が必要
-        // parentObject.transform.position = new Vector3(parentObject.transform.position.x, 0, parentObject.transform.position.z);
-        Debug.Log("Dead");
-
     }
 
     private void InterruptLogic()
@@ -249,30 +235,11 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    private int GetPlayerIndexByName(string playerName)
-    {
-        // PhotonNetwork.PlayerList からプレイヤー情報をリストに格納し、ActorNumber の昇順にソートする
-        List<Player> players = new List<Player>(PhotonNetwork.PlayerList);
-        players.Sort((a, b) => a.ActorNumber.CompareTo(b.ActorNumber));
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            if (players[i].CustomProperties.TryGetValue("playerName", out object existingName))
-            {
-                if (existingName.ToString() == playerName)
-                {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     public void SetPlayerName(string name)
     {
         playerName = name;
     }
-    
+
     public string GetPlayerName()
     {
         return playerName;
