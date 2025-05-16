@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon;
 
 public class GameManager : MonoBehaviourPunCallbacks
-{]
+{
     public enum GameState
     {
         START,
