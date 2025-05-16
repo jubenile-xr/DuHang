@@ -80,7 +80,7 @@ public class StateManager : MonoBehaviour
 
     private void Update()
     {
-        if(gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
         {
             SetAlive(!GetMyDeadStatus());
         }
@@ -97,6 +97,10 @@ public class StateManager : MonoBehaviour
             {
                 ResetState();
             }
+        }
+        else
+        {
+            ResetState();
         }
         if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetDeadVolumeController)
         {
