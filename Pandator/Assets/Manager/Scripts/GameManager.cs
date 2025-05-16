@@ -275,10 +275,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 SaveRankingData();
             }
-            else //神以外は結果画面に遷移する
-            {
-                LoadResultScene();
-            }
+            LoadResultScene();
         }
     }
 
