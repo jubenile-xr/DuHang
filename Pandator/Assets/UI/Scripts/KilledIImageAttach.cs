@@ -35,6 +35,10 @@ public class KilledImagedAttach : MonoBehaviour
     private static bool isSecondCharacterIsMe = false;
     private static bool isThirdCharacterIsMe = false;
 
+    private Vector2 FirstImagePosition = new Vector2(350f, 200f);
+    private Vector2 SecondImagePosition = new Vector2(210f, 200f);
+    private Vector2 ThirdImagePosition = new Vector2(70f, 200f);
+
 
     private void Start()
     {
@@ -44,6 +48,12 @@ public class KilledImagedAttach : MonoBehaviour
         SecondImage = SecondImageObject.AddComponent<RawImage>();
         ThirdImageObject = new GameObject("ThirdAnimalImage");
         ThirdImage = ThirdImageObject.AddComponent<RawImage>();
+        if (Character.GetSelectedAnimal() == Character.GameCharacters.GOD)
+        {
+            FirstImagePosition = new Vector2(750f, 350f);
+            SecondImagePosition = new Vector2(550f, 350f);
+            ThirdImagePosition = new Vector2(350f, 350f);
+        }
     }
     private void Update()
     {
@@ -135,13 +145,13 @@ public class KilledImagedAttach : MonoBehaviour
         // RectTransformの設定
         RectTransform setimage = FirstImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
-        setimage.anchoredPosition = new Vector2(350f, 200f); // 位置
+        setimage.anchoredPosition = FirstImagePosition; // 位置
         // FrameImageの設定
         if (isFirstCharacterIsMe)
         {
             FrameImage.SetActive(true);
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
-            setFrame.anchoredPosition = new Vector2(350f, 200f); // 位置
+            setFrame.anchoredPosition = FirstImagePosition; // 位置
         }
         // レンダラーの順番を設定
         FirstImageObject.transform.SetAsFirstSibling();
@@ -154,13 +164,13 @@ public class KilledImagedAttach : MonoBehaviour
         // RectTransformの設定
         RectTransform setimage = SecondImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
-        setimage.anchoredPosition = new Vector2(210f, 200f); // 位置
+        setimage.anchoredPosition = SecondImagePosition; // 位置
         // FrameImageの設定
         if (isSecondCharacterIsMe)
         {
             FrameImage.SetActive(true);
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
-            setFrame.anchoredPosition = new Vector2(210f, 200f); // 位置
+            setFrame.anchoredPosition = SecondImagePosition; // 位置
         }
 
         // レンダラーの順番を設定
@@ -174,13 +184,13 @@ public class KilledImagedAttach : MonoBehaviour
         // RectTransformの設定
         RectTransform setimage = ThirdImageObject.GetComponent<RectTransform>();
         setimage.sizeDelta = new Vector2(100f, 100f); // サイズ
-        setimage.anchoredPosition = new Vector2(70f, 200f); // 位置
+        setimage.anchoredPosition = ThirdImagePosition; // 位置
         // FrameImageの設定
         if (isThirdCharacterIsMe)
         {
             FrameImage.SetActive(true);
             RectTransform setFrame = FrameImage.GetComponent<RectTransform>();
-            setFrame.anchoredPosition = new Vector2(70f, 200f); // 位置
+            setFrame.anchoredPosition = ThirdImagePosition; // 位置
         }
         // レンダラーの順番を設定
         ThirdImageObject.transform.SetAsFirstSibling();
