@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
@@ -65,6 +66,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     [SerializeField] private SoundPlayer bgm;
 
     private bool isPlayerRigidbodyDestoryed = false;
+
+    private List<GameObject> SmallAnimalPlayerObjects;
     void Start()
     {
         loadingTime = 0;
@@ -144,6 +147,10 @@ public class InitializeManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.ConnectUsingSettings();
+        if (SmallAnimalPlayerObjects == null)
+        {
+            SmallAnimalPlayerObjects = new List<GameObject>();
+        }
     }
 
     private void SetupDebugEnvironment()
@@ -170,6 +177,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        
         // デバッグモードの場合は以降の処理をスキップ
         if (DebugManager.GetDebugMode())
         {
@@ -266,6 +274,14 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
         }
 
+        if (character == GameCharacter.PANDA && gameManager.GetGameState() == GameManager.GameState.START)
+        {
+            SetModelDeactive();
+        }else if(character == GameCharacter.PANDA)
+        {
+            // PhotonNetwork.Instantiate("GameOverCube", new Vector3(0f, 0f, 0f), Quaternion.identity);
+            SetModelActive();
+        }
 
         // ゲームマネージャーが存在し、アニメーションが終了し、プレイヤーが生成されていない場合
         if (gameManager != null && (isAnimationFinished || character == GameCharacter.GOD) && !isPlayerCreated && isSpatialAnchorCreated)
@@ -429,6 +445,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             SetPlayerCreated(true);
         }
+
+
     }
 
     // ルームに参加する処理
@@ -489,6 +507,28 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
 
     }
+
+    private void SetModelActive()
+    {
+        foreach(GameObject model in SmallAnimalPlayerObjects)
+        {
+            model.SetActive(true);
+        }
+    }
+    private void SetModelDeactive()
+    {
+        GameObject model = GameObject.FindWithTag("Model");
+        if (model != null)
+        {
+            SmallAnimalPlayerObjects.Add(model);
+            model.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("Model not found.");
+        }
+    }
+    
 
     private Transform FindPlayerSpawnPointInAnchor(GameObject anchor)
     {
