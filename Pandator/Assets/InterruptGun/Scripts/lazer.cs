@@ -6,6 +6,7 @@ public class lazer : MonoBehaviour
     public Transform laserOrigin; // レーザーの発射位置
     public float laserRange = 50f; // レーザーの最大距離
     private LineRenderer lineRenderer;
+    private bool isKeybord = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,12 +19,22 @@ public class lazer : MonoBehaviour
     void Update()
     {
         ShootLaser();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            isKeybord = true;
+        }
+
+        if (isKeybord)
+        {
+            laserOrigin = Camera.main.transform;
+        }
     }
 
     void ShootLaser()
     {
         RaycastHit hit;
-        Vector3 startPosition = laserOrigin.position;
+        Vector3 startPosition = laserOrigin.position + new Vector3(0f, -0.1f, 0f); 
         Vector3 endPosition = startPosition + laserOrigin.forward * laserRange;
 
         if (Physics.Raycast(startPosition, laserOrigin.forward, out hit, laserRange))

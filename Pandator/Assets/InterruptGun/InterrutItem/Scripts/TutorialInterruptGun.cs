@@ -25,7 +25,7 @@ public class TutorialInterruptGun : MonoBehaviour
         {
             SetIsKeybord(true);
         }
-        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (shotable)
             {

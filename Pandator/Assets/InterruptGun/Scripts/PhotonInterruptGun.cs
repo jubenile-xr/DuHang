@@ -35,7 +35,7 @@ public class PhotonInterruptGun : MonoBehaviour
 
     private void Update()
     {
-        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Space))
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger) || Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (shotable && gameManager.GetGameState() == GameManager.GameState.PLAY)
             {

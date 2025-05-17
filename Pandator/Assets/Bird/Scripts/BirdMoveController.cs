@@ -40,6 +40,9 @@ public class BirdMoveController : MonoBehaviour
 
     // サムスティックを無効にするフラグ
     [SerializeField] private bool disableThumbstickMovement = true;
+    
+    private float xAngle = 0f;
+    private float yAngle = 0f;
 
     void Start()
     {
@@ -71,6 +74,17 @@ public class BirdMoveController : MonoBehaviour
         // 左スティックの入力を0にする
         Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
         leftStick = Vector2.zero; // 強引に0にする
+
+        if (isKeybord)
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+            xAngle -= mouseY;
+            xAngle = Mathf.Clamp(xAngle, -90f, 90f);
+            yAngle += mouseX;
+            // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
+            CenterEyeAnchor.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
+        }
     }
     void TellBirdMode()
     {
@@ -82,20 +96,18 @@ public class BirdMoveController : MonoBehaviour
         float leftStrength = leftHandVel.magnitude;
         float rightStrength = rightHandVel.magnitude;
         float avgStrength = (leftStrength + rightStrength) * 0.5f;
-
-        if (avgStrength > flapStartThreshold)
+        
+        if (avgStrength > flapStartThreshold || Input.GetKey(KeyCode.Space))
         {
             aboveCount++;
             belowCount = 0; //重置低于阈值的帧数 //reset the below count // 閾値未満のフレーム数をリセットする
-
+            
             if (!isFlying && aboveCount >= framesToStart)
             {
                 verticalVelocity = liftForce;
                 isFlying = true;
             }
-        }
-        else
-        {
+        }else {
             belowCount++;
             aboveCount = 0;
 
