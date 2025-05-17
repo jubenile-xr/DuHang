@@ -45,7 +45,7 @@ public class PhotonInterruptGun : MonoBehaviour
         if(!shotable)
         {
             recastTime += Time.deltaTime;
-            if (recastTime > Durations.INTERRUPT_GUN_DURATION)
+            if (recastTime > Durations.INTERRUPT_GUN_DURATION && !shotable)
             {
                 reloadSE?.GetComponent<SoundPlayer>().Play();
                 shotable = true;

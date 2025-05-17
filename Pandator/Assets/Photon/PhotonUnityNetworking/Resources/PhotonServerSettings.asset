@@ -11,18 +11,18 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   AppSettings:
     AppIdRealtime: 3054757d-65b9-4778-a9e1-2f18454beb45
-    AppIdFusion: 
-    AppIdChat: 
-    AppIdVoice: 
-    AppVersion: 
+    AppIdFusion:
+    AppIdChat:
+    AppIdVoice:
+    AppVersion:
     UseNameServer: 1
     FixedRegion: jp
-    Server: 
+    Server:
     Port: 0
-    ProxyServer: 
+    ProxyServer:
     Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
@@ -39,6 +39,8 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - ApplyDeadEffects
+  - UpdatePlayerDeadStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

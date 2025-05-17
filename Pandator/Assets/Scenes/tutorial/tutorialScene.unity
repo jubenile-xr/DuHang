@@ -167,6 +167,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1591844345982407656, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1591844345982407656, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2632223353020900461, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: m_Name
       value: tutorialScene
@@ -174,21 +182,12 @@ PrefabInstance:
     - target: {fileID: 4406341001301152750, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: roomPrefab
       value: 
-      objectReference: {fileID: 107610199}
-    - target: {fileID: 7479661031460463461, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
---- !u!1 &107610199 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7479661031460463461, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
-  m_PrefabInstance: {fileID: 107610198}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

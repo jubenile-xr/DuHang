@@ -25,17 +25,17 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
 
     private void OnCreate()
     {
-        Debug.Log("Trying to find GameObject with tag 'MasterPlayer'");
-        masterPlayerObject = GameObject.FindGameObjectWithTag("MasterPlayer");
-        if (masterPlayerObject == null)
-        {
-            Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
-        }
-        else
-        {
-            // オブジェクトが見つかった場合は active 状態にする
-            masterPlayerObject.SetActive(true);
-        }
+        // Debug.Log("Trying to find GameObject with tag 'MasterPlayer'");
+        // masterPlayerObject = GameObject.FindGameObjectWithTag("MasterPlayer");
+        // if (masterPlayerObject == null)
+        // {
+        //     Debug.LogError("MasterPlayer object not found! Check the tag and its active status in the scene.");
+        // }
+        // else
+        // {
+        //     // オブジェクトが見つかった場合は active 状態にする
+        //     masterPlayerObject.SetActive(true);
+        // }
 
         rootTargets[0] = GameObject.FindGameObjectWithTag("CameraRig");
         if (rootTargets[0] == null)
@@ -81,7 +81,7 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         //_stateManager = GameObject.FindGameObjectWithTag("StateManager");
         //_manager = _stateManager.GetComponent<NetworkStateManagerSample>();
         //_isGrabStateManage = _stateManager.GetComponent<IsGrabStateManage>();
-        _controller = masterPlayerObject.GetComponent<CharacterController>();
+        //_controller = masterPlayerObject.GetComponent<CharacterController>();
         if (rootTargets[0] != null && rootTargets[1] != null && rootTargets[2] != null && rootTargets[3] != null)
         {
             isCreated = true;
@@ -96,13 +96,12 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         }
         if (isCreated)
         {
-            this.transform.position = masterPlayerObject.transform.position;
-                this.transform.rotation = masterPlayerObject.transform.rotation;
-                for (int i = 0; i < 4; i++)
-                {
-                    Targets[i].transform.position = rootTargets[i].transform.position;
-                    Targets[i].transform.rotation = rootTargets[i].transform.rotation;
-                }
+            for (int i = 0; i < 4; i++)
+            {
+                Targets[i].transform.position = rootTargets[i].transform.position;
+                Targets[i].transform.rotation = rootTargets[i].transform.rotation;
+            }
+
         }
     }
 

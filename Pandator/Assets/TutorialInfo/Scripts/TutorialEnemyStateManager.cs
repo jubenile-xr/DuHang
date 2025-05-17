@@ -7,7 +7,6 @@ public class TutorialEnemyStateManager : MonoBehaviour
     private bool isAlive;
     [Header("妨害の継続時間")] private const float resetTime = 3.0f;
     private float time;
-    [SerializeField] private GameObject cloneObject;
     // Update is called once per frame
     void Update()
     {

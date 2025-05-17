@@ -15,6 +15,7 @@ TagManager:
   - Ground
   - PandaPlayer
   - Canvas
+  - tutorialNet
   - TrackedCamera
   - spatialAnchor
   - playerSpawn
@@ -24,6 +25,9 @@ TagManager:
   - BGM
   - InterruptItem
   - Net
+  - DebugCanvas
+  - InitializeManager
+  - Model
   layers:
   - Default
   - TransparentFX
@@ -35,13 +39,13 @@ TagManager:
   - Mouse
   - Rabbit
   - Panda
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - BIRD1
+  - BIRD2
+  - BIRD3
+  - RABBIT1
+  - RABBIT2
+  - RABBIT3
+  - IgnoreMyself
   - 
   - 
   - 

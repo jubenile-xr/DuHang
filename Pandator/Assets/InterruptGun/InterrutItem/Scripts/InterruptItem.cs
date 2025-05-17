@@ -43,5 +43,7 @@ public class InterrupteItem : MonoBehaviour
                 hitSE?.GetComponent<SoundPlayer>().Play();
             }
         }
+        // このオブジェクトを消す
+        Destroy(gameObject);
     }
 }
