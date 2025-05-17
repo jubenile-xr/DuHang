@@ -38,5 +38,7 @@ public class InterrupteItem : MonoBehaviour
             Debug.Log("hit!");
             hitSE?.GetComponent<SoundPlayer>().Play();
         }
+        // このオブジェクトを消す
+        Destroy(gameObject);
     }
 }

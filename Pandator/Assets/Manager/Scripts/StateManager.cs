@@ -81,7 +81,7 @@ public class StateManager : MonoBehaviourPun
 
     private void Update()
     {
-        if(gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
+        if (gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
         {
             // GameManagerの死亡状態を確認して、isAliveを更新
             bool shouldBeAlive = !GetMyDeadStatus();
@@ -98,6 +98,10 @@ public class StateManager : MonoBehaviourPun
             {
                 ResetState();
             }
+        }
+        else
+        {
+            ResetState();
         }
         if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetDeadVolumeController)
         {
@@ -152,7 +156,6 @@ public class StateManager : MonoBehaviourPun
     private void ResetState()
     {
         isInterrupted = false;
-        time = 0;
         playerColorManager?.ChangeColorOriginal();
         switch (character)
         {
@@ -170,12 +173,15 @@ public class StateManager : MonoBehaviourPun
                 Debug.Log("Unknown character type: " + character);
                 break;
         }
+        time = 0;
     }
 
     public void SetInterrupted(bool value)
     {
-        if (value)
+        Debug.Log("SetInterrupted: " + value);
+        if (value && !isAlive)
         {
+            Debug.Log("SetInterrupted: Dead");
             InterruptLogic();
         }
         isInterrupted = value;
