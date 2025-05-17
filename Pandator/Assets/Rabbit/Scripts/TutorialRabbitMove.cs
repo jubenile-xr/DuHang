@@ -15,6 +15,10 @@ public class TutorialRabbitMove : MonoBehaviour
     [Header("速度の閾値")]
     [SerializeField] private float speedThreshold = 0.1f; // 移動のための速度の閾値
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    private bool isKeybord = false;
+    private float xAngle = 0f;
+    private float yAngle = 0f;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,6 +28,11 @@ public class TutorialRabbitMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            isKeybord = true;
+        }
+        
         // 右手と左手の速度を取得
         Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
         Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
@@ -49,7 +58,7 @@ public class TutorialRabbitMove : MonoBehaviour
         leftStick = Vector2.zero; // 強引に0にする
 
         // 速度が閾値以下の場合は移動しない
-        if (speedR < speedThreshold && speedL < speedThreshold)
+        if (speedR < speedThreshold && speedL < speedThreshold && !isKeybord)
         {
             return;
         }
@@ -63,10 +72,33 @@ public class TutorialRabbitMove : MonoBehaviour
         forwardDirection.Normalize();
 
         // 移動処理
-        if (!isAButtonPressed)
+        if (!isAButtonPressed && !isKeybord)
         {
             transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+        }else if (isKeybord)
+        {
+            float moveX = Input.GetAxis("Horizontal");
+            float moveZ = Input.GetAxis("Vertical");
+            
+
+            forwardDirection =  Camera.main.transform.right* moveX + Camera.main.transform.forward * moveZ;
+            totalSpeed = 2f;
+            transform.Translate(forwardDirection.normalized * totalSpeed * Time.deltaTime, Space.World);
         }
+
+        //マウスでのカメラ操作
+        if (isKeybord)
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+            xAngle -= mouseY;
+            xAngle = Mathf.Clamp(xAngle, -90f, 90f);
+            yAngle += mouseX;
+            // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
+            Camera.main.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
+        }
+
+
     }
     public void SetRabbitOVRCameraRig()
     {

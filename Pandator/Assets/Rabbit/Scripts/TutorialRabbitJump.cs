@@ -5,7 +5,7 @@ public class TutorialRabbitJump : MonoBehaviour
 {
     private float jumpForce; // ジャンプ力
     private const float jumpSlow = 5.0f;
-    private const float jumpNormal = 3.0f;
+    private const float jumpNormal = 6.0f;
     private const float handSpeedThreshold = 1.5f; // 手の振りの速度の閾値
     private const float speedSyncThreshold = 0.5f; // 両手の速度差の閾値（同時判定用）
     private float maxR, maxL, maxAbs;
@@ -74,7 +74,7 @@ public class TutorialRabbitJump : MonoBehaviour
 
         //bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
         // 条件を満たしたらジャンプ
-        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.J) && isGrounded))
+        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.Space) && isGrounded))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // 空中にいると判定
