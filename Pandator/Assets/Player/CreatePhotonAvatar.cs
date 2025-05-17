@@ -96,8 +96,6 @@ public class CreatePhotonAvatar : MonoBehaviourPunCallbacks
         }
         if (isCreated)
         {
-            this.transform.position = masterPlayerObject.transform.position;
-                this.transform.rotation = masterPlayerObject.transform.rotation;
                 for (int i = 0; i < 4; i++)
                 {
                     Targets[i].transform.position = rootTargets[i].transform.position;
