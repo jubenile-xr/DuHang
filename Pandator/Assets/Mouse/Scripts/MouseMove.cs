@@ -78,7 +78,7 @@ public class MouseMove : MonoBehaviour
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
         }
-        
+
         //落ちた時用
         if (transform.position.y < floarValue)
         {
