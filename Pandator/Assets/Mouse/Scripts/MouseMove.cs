@@ -20,6 +20,7 @@ public class MouseMove : MonoBehaviour
     [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
     private InitializeManager InitializeManager;
     private float floarValue;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();

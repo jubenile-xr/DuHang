@@ -55,7 +55,15 @@ public class tutorialInstantiate : MonoBehaviour
                     new Vector3(0f, 0f, 0f), Quaternion.identity);
 
                 Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
-                roomCompleteTransform.gameObject.SetActive(false);
+                if (roomCompleteTransform != null)
+                {
+                    roomCompleteTransform.gameObject.SetActive(false);
+                }
+                else
+                {
+                    Debug.Log("No room");
+                }
+                
 
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"),
                     new Vector3(0f, 1.0f, 0f), Quaternion.identity);
@@ -84,6 +92,12 @@ public class tutorialInstantiate : MonoBehaviour
                 passthrough.SetActive(true);
                 planePrefab.SetActive(true);
                 OVRSceneManager.SetActive(true);
+                GameObject rabbit = spatialAnchor.transform.Find("tutorialRabbit").gameObject;
+                rabbit.SetActive(true);
+                GameObject mouse = spatialAnchor.transform.Find("tutorialMouse").gameObject;
+                mouse.SetActive(true);
+                GameObject bird = spatialAnchor.transform.Find("tutorialBird").gameObject;
+                bird.SetActive(true);
                 break;
             case Character.GameCharacters.MOUSE:
                 TutorialMouseMove mouseMoveScript = player.GetComponentInChildren<TutorialMouseMove>();
