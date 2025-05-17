@@ -51,34 +51,34 @@ public class Net : MonoBehaviourPun
                 // プレイヤーのIDを取得
                 int playerViewID = playerPhotonView.ViewID;
 
-                // RPC関数を呼び出して全プレイヤーにヒット通知
-                photonView.RPC("PlayerHitByNet", RpcTarget.AllBuffered, playerViewID);
+                // RPC関数を呼び出して全プレイヤーに死亡状態の更新を通知
+                photonView.RPC("UpdatePlayerDeadStatus", RpcTarget.AllBuffered, playerViewID);
             }
             else
             {
                 // PhotonViewがない場合は直接処理
-                ProcessPlayerHit(player);
+                UpdateDeadStatusDirectly(player);
             }
 
             Debug.Log("Player hit by net: " + player.name);
         }
     }
 
-    // RPCでネットワーク同期された衝突処理
+    // RPCでネットワーク同期された死亡状態更新処理
     [PunRPC]
-    private void PlayerHitByNet(int playerViewID)
+    private void UpdatePlayerDeadStatus(int playerViewID)
     {
         // プレイヤーIDからプレイヤーオブジェクトを検索
         PhotonView hitPlayerView = PhotonView.Find(playerViewID);
         if (hitPlayerView != null)
         {
             GameObject hitPlayer = hitPlayerView.gameObject;
-            ProcessPlayerHit(hitPlayer);
+            UpdateDeadStatusDirectly(hitPlayer);
         }
     }
 
-    // プレイヤーヒット処理共通化
-    private void ProcessPlayerHit(GameObject player)
+    // プレイヤーの死亡状態を更新する
+    private void UpdateDeadStatusDirectly(GameObject player)
     {
         // Make sure we have a GameManager
         if(gameManager == null)
@@ -107,52 +107,27 @@ public class Net : MonoBehaviourPun
             bool isAlreadyDead = IsPlayerAlreadyDead(playerName);
             if (!isAlreadyDead)
             {
-                // Set the player to not alive in StateManager
+                // GameManagerの死亡状態を更新（これがマスターデータ）
+                UpdateGameManagerDeadStatus(playerName);
+
+                // StateManagerにも死亡を通知（表示の更新などStateManagerの責任に任せる）
                 stateManager.SetAlive(false);
-
-                // Visual feedback - change color
-                PlayerColorManager colorManager = player.GetComponent<PlayerColorManager>();
-                if (colorManager != null)
-                {
-                    colorManager.ChangeColorInvisible();
-                }
-
-                // Run dead volume effect if it's this player
-                PhotonView playerView = player.GetComponent<PhotonView>();
-                if (playerView != null && playerView.IsMine)
-                {
-                    DeadVolumeController deadVol = GameObject.FindWithTag("DeadVolume")?.GetComponent<DeadVolumeController>();
-                    if(deadVol != null)
-                    {
-                        deadVol.RunDeadVolume();
-                    }
-                }
-
-                // Update playerDeadStatus in GameManager
-                UpdatePlayerDeadStatus(playerName);
             }
         }
         else
         {
             // StateManagerがない場合は名前でプレイヤーを特定
-            PlayerColorManager colorManager = player.GetComponent<PlayerColorManager>();
-            if(colorManager != null)
+            string[] playerNames = gameManager.GetAllPlayerNames();
+            for (int i = 0; i < playerNames.Length; i++)
             {
-                colorManager.ChangeColorInvisible();
-
-                // Find which player this is in the playerNames array
-                string[] playerNames = gameManager.GetAllPlayerNames();
-                for (int i = 0; i < playerNames.Length; i++)
+                if (player.name.Contains(playerNames[i]))
                 {
-                    if (player.name.Contains(playerNames[i]))
+                    if (!gameManager.GetPlayerDeadStatus()[i])
                     {
-                        if (!gameManager.GetPlayerDeadStatus()[i])
-                        {
-                            gameManager.SetPlayerDeadStatusTrue(i);
-                            gameManager.UpdateAliveCountFromDeadStatus();
-                        }
-                        break;
+                        gameManager.SetPlayerDeadStatusTrue(i);
+                        gameManager.UpdateAliveCountFromDeadStatus();
                     }
+                    break;
                 }
             }
         }
@@ -174,8 +149,8 @@ public class Net : MonoBehaviourPun
         return false;
     }
 
-    // playerDeadStatusを更新
-    private void UpdatePlayerDeadStatus(string playerName)
+    // GameManagerの死亡状態を更新
+    private void UpdateGameManagerDeadStatus(string playerName)
     {
         string[] playerNames = gameManager.GetAllPlayerNames();
         for (int i = 0; i < playerNames.Length; i++)

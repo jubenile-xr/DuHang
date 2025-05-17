@@ -6,7 +6,7 @@ using UnityEngine;
 public class StateManager : MonoBehaviourPun
 {
     private bool isInterrupted;
-    private bool isAlive;
+    private bool isAlive = true;
     [Header("妨害の継続時間")] private const float interruptedTime = 3.0f;
     private float time;
     [SerializeField] private PlayerColorManager playerColorManager;
@@ -31,6 +31,7 @@ public class StateManager : MonoBehaviourPun
     private DeadVolumeController deadVolumeController;
     private bool isGetFlashEffect = false;
     private bool isGetDeadVolumeController = false;
+
     private void Start()
     {
         isInterrupted = false;
@@ -82,12 +83,12 @@ public class StateManager : MonoBehaviourPun
     {
         if(gameManager != null && gameManager.GetGameState() == GameManager.GameState.PLAY)
         {
-            SetAlive(!GetMyDeadStatus());
-        }
-
-        if (!isAlive && photonView.IsMine && !isDeadLogicExecuted)
-        {
-            photonView.RPC("SyncDeadLogic", RpcTarget.AllBuffered);
+            // GameManagerの死亡状態を確認して、isAliveを更新
+            bool shouldBeAlive = !GetMyDeadStatus();
+            if (isAlive != shouldBeAlive)
+            {
+                SetAlive(shouldBeAlive);
+            }
         }
 
         if (isInterrupted)
@@ -100,17 +101,18 @@ public class StateManager : MonoBehaviourPun
         }
         if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetDeadVolumeController)
         {
-            deadVolumeController = GameObject.FindWithTag("DeadVolume").GetComponent<DeadVolumeController>();
+            deadVolumeController = GameObject.FindWithTag("DeadVolume")?.GetComponent<DeadVolumeController>();
             Debug.Log("DeadVolumeController component found in the DeadVolume.");
             isGetDeadVolumeController = true;
         }
         if (Character.GetSelectedAnimal() != Character.GameCharacters.GOD && Character.GetSelectedAnimal() != Character.GameCharacters.PANDA && !isGetFlashEffect)
         {
-            flashEffect = GameObject.FindWithTag("Canvas").GetComponentInChildren<FlashEffect>();
+            flashEffect = GameObject.FindWithTag("Canvas")?.GetComponentInChildren<FlashEffect>();
             Debug.Log("FlashEffect component found in the canvas.");
             isGetFlashEffect = true;
         }
     }
+
     // 自分の死亡ステータスを取得するメソッド
     public bool GetMyDeadStatus()
     {
@@ -179,46 +181,61 @@ public class StateManager : MonoBehaviourPun
         isInterrupted = value;
     }
 
-
+    // 生存状態を設定するメソッド。falseの場合（死亡時）には視覚効果も適用する
     public void SetAlive(bool value)
     {
+        // 状態に変化がなければ何もしない
+        if (isAlive == value) return;
+
         isAlive = value;
+
+        // 死亡した場合
+        if (!isAlive && !isDeadLogicExecuted)
+        {
+            // 視覚効果の適用と死亡ロジックの実行をRPCで同期
+            photonView.RPC("ApplyDeadEffects", RpcTarget.AllBuffered);
+        }
     }
 
-
-    // RPCで同期される死亡ロジック実行メソッド
+    // 死亡エフェクトを適用するRPCメソッド
     [PunRPC]
-    private void SyncDeadLogic()
+    private void ApplyDeadEffects()
     {
-        // すでに実行済みであれば何もしない
+        // すでに実行済みなら何もしない
         if (isDeadLogicExecuted) return;
 
-        DeadLogic();
-    }
+        // 透明化エフェクト（全クライアントで実行）
+        playerColorManager?.ChangeColorInvisible();
 
-    // 死亡時の処理
-    private void DeadLogic()
-    {
-        isDeadLogicExecuted = true;
-        GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
-
+        // スコア記録（全クライアントで実行）
         if (scoreManager != null)
         {
             scoreManager.SetAliveTime(Time.time);
         }
 
-        if (photonView.IsMine && deadVolumeController != null)
+        // 自分が所有するプレイヤーの場合のみの処理
+        if (photonView.IsMine)
         {
-            deadVolumeController.RunDeadVolume();
+            // 画面効果
+            if (deadVolumeController != null)
+            {
+                deadVolumeController.RunDeadVolume();
+            }
+
+            // 必要に応じてGameManagerの死亡状態も更新
+            UpdateGameManagerDeadStatus();
         }
 
-        string[] playerNames = gameManager.GetAllPlayerNames();
-        Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
-        Debug.Log("State:PlayerName: " + playerName);
+        // 死亡ロジック実行済みフラグを設定
+        isDeadLogicExecuted = true;
+    }
 
-        // Only update playerDeadStatus if it hasn't been updated already
-        // by checking if the current player is already marked as dead
-        bool isAlreadyDead = false;
+    // GameManagerの死亡状態を更新
+    private void UpdateGameManagerDeadStatus()
+    {
+        if (gameManager == null || string.IsNullOrEmpty(playerName)) return;
+
+        string[] playerNames = gameManager.GetAllPlayerNames();
         int myIndex = -1;
 
         for (int i = 0; i < playerNames.Length; i++)
@@ -226,12 +243,11 @@ public class StateManager : MonoBehaviourPun
             if (playerNames[i].Contains(playerName))
             {
                 myIndex = i;
-                isAlreadyDead = gameManager.GetPlayerDeadStatus()[i];
                 break;
             }
         }
 
-        if (myIndex >= 0 && !isAlreadyDead)
+        if (myIndex >= 0 && !gameManager.GetPlayerDeadStatus()[myIndex])
         {
             gameManager.SetPlayerDeadStatusTrue(myIndex);
             gameManager.UpdateAliveCountFromDeadStatus();
