@@ -177,7 +177,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        
+
         // デバッグモードの場合は以降の処理をスキップ
         if (DebugManager.GetDebugMode())
         {
@@ -300,7 +300,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                 if (playerSpawnPoint != null)
                 {
                     spawnPosition = playerSpawnPoint;
-                    spawnPosition.y += 2;
+                    spawnPosition.y += 2.0f;
                     cameraPositionAnimal = playerSpawnPoint;
                     cameraPositionPanda = playerSpawnPoint;
                 }
@@ -500,6 +500,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                 new Vector3(0f, 0f, 0f), Quaternion.identity);
             SetIsSpatialAnchorCreated(true);
+
+
             // SpatialAnchorの子オブジェクトを検索してroom_completeの子供のroomとroom.001を非アクティブに設定
             Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
             roomCompleteTransform.gameObject.SetActive(false);
@@ -528,7 +530,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             Debug.LogError("Model not found.");
         }
     }
-    
+
 
     private Transform FindPlayerSpawnPointInAnchor(GameObject anchor)
     {
@@ -786,12 +788,22 @@ private IEnumerator WaitForGameManager()
             localAnchorRotation = rotation;
             hasLocalAnchorTransform = true;
 
-
-            playerSpawnPoint = position;
-
             if (character == GameCharacter.BIRD || character == GameCharacter.RABBIT ||
                 character == GameCharacter.MOUSE)
             {
+                // playerSpawnPointタグを持つ子オブジェクトの位置を取得
+                Transform spawnTransform = FindPlayerSpawnPointInAnchor(spatialAnchor);
+                if (spawnTransform != null)
+                {
+                    playerSpawnPoint = spawnTransform.position;
+                    Debug.Log($"Found playerSpawn point at position: {playerSpawnPoint}");
+                }
+                else
+                {
+                    playerSpawnPoint = position;
+                    Debug.LogWarning("playerSpawn tag not found in spatialAnchor, using default position.");
+                }
+
                 localIsSpatialAnchorCreated = true;
             }
 

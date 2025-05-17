@@ -167,13 +167,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1591844345982407656, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1591844345982407656, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2632223353020900461, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
       propertyPath: m_Name
       value: tutorialScene
       objectReference: {fileID: 0}
-    - target: {fileID: 8627124481498236424, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
-      propertyPath: m_text
-      value: "\u52D5\u7269\u3092\u6253\u3063\u3066\u307F\u3088\u3046\uFF01"
+    - target: {fileID: 4406341001301152750, guid: 4b93d8750b5ef47a1b741b8c98779615, type: 3}
+      propertyPath: roomPrefab
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
