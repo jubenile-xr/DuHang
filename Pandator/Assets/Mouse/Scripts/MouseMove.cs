@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MouseMove : MonoBehaviour
@@ -20,6 +21,11 @@ public class MouseMove : MonoBehaviour
     [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
     private InitializeManager InitializeManager;
     private float floarValue;
+    
+    private bool isKeybord = false;
+    private float xAngle = 0f;
+    private float yAngle = 0f;
+    
 
     private void Start()
     {
@@ -31,6 +37,11 @@ public class MouseMove : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            isKeybord = true;
+        }
+        
         // IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
@@ -56,7 +67,7 @@ public class MouseMove : MonoBehaviour
             leftStick = Vector2.zero; // 強引に0にする
 
             // 速度が閾値以下の場合は移動しない
-            if (speedR < speedThreshold && speedL < speedThreshold)
+            if (speedR < speedThreshold && speedL < speedThreshold && !isKeybord)
             {
                 return;
             }
@@ -76,6 +87,15 @@ public class MouseMove : MonoBehaviour
             }
             else
             {
+                // キーボード操作
+                if (isKeybord)
+                {
+                    float moveX = Input.GetAxis("Horizontal");
+                    float moveZ = Input.GetAxis("Vertical");
+                    forwardDirection = Camera.main.transform.right * moveX + Camera.main.transform.forward * moveZ;
+                    totalSpeed = 2f;
+                    forwardDirection.Normalize();
+                }
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
         }
@@ -84,6 +104,17 @@ public class MouseMove : MonoBehaviour
         if (transform.position.y < floarValue)
         {
             transform.position = new Vector3(transform.position.x, floarValue + 0.1f, transform.position.z);
+        }
+        
+        if (isKeybord)
+        {
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+            xAngle -= mouseY;
+            xAngle = Mathf.Clamp(xAngle, -90f, 90f);
+            yAngle += mouseX;
+            // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
+            Camera.main.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
         }
     }
 

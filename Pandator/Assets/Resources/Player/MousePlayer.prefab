@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4014016701356397757}
   - component: {fileID: 532125524189991524}
   - component: {fileID: 6904615155179378973}
-  - component: {fileID: 6314878593413762173}
   m_Layer: 7
   m_Name: MousePlayer
   m_TagString: MasterPlayer
@@ -114,19 +113,6 @@ MonoBehaviour:
   scoreMultiplier: 100
   hitPoint: 50
   PandaMaxPoint: 1500
---- !u!114 &6314878593413762173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1493936698039859339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13a6b88370a7d4c5dbbbc9d9911b373d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
 --- !u!1 &1757019761417475256
 GameObject:
   m_ObjectHideFlags: 0
