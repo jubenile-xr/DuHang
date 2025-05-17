@@ -20,8 +20,6 @@ public class tutorialInstantiate : MonoBehaviour
         {
             //各キャラの生成
             case Character.GameCharacters.BIRD:
-                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                    new Vector3(0f, 0f, 0f), Quaternion.identity);
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialBird"),
                     new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 GameObject eyePos = player.transform.Find("eyePos").gameObject;
@@ -32,8 +30,6 @@ public class tutorialInstantiate : MonoBehaviour
                 SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.RABBIT:
-                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                    new Vector3(0f, 0f, 0f), Quaternion.identity);
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialRabbit"),
                     new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"),
@@ -41,8 +37,6 @@ public class tutorialInstantiate : MonoBehaviour
                 SetLayerToIgnoreMyself();
                 break;
             case Character.GameCharacters.MOUSE:
-                spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
-                    new Vector3(0f, 0f, 0f), Quaternion.identity);
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialMouse"),
                     new Vector3(0f, 2.0f, 0f), Quaternion.identity);
                 camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"),
