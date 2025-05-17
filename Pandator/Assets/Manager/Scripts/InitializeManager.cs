@@ -214,29 +214,29 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                                 break;
 
                             case GameCharacter.RABBIT:
-                                // RABBITの場合は専用の位置更新ロジック
-                                Vector3 rabbitPosition = centerEyeAnchor.position;
-                                rabbitPosition.y = player.transform.position.y; // Y座標は維持
-                                player.transform.position = rabbitPosition;
-
-                                // 回転は水平方向のみ
-                                Vector3 rabbitRotation = centerEyeAnchor.rotation.eulerAngles;
-                                rabbitRotation.x = 0;
-                                rabbitRotation.z = 0;
-                                player.transform.rotation = Quaternion.Euler(rabbitRotation);
+                                // // RABBITの場合は専用の位置更新ロジック
+                                // Vector3 rabbitPosition = centerEyeAnchor.position;
+                                // rabbitPosition.y = player.transform.position.y; // Y座標は維持
+                                // player.transform.position = rabbitPosition;
+                                //
+                                // // 回転は水平方向のみ
+                                // Vector3 rabbitRotation = centerEyeAnchor.rotation.eulerAngles;
+                                // rabbitRotation.x = 0;
+                                // rabbitRotation.z = 0;
+                                // player.transform.rotation = Quaternion.Euler(rabbitRotation);
                                 break;
 
                             case GameCharacter.MOUSE:
-                                // MOUSEの場合は専用の位置更新ロジック
-                                Vector3 mousePosition = centerEyeAnchor.position;
-                                mousePosition.y = player.transform.position.y; // Y座標は維持
-                                player.transform.position = mousePosition;
-
-                                // 回転は水平方向のみ
-                                Vector3 mouseRotation = centerEyeAnchor.rotation.eulerAngles;
-                                mouseRotation.x = 0;
-                                mouseRotation.z = 0;
-                                player.transform.rotation = Quaternion.Euler(mouseRotation);
+                                // // MOUSEの場合は専用の位置更新ロジック
+                                // Vector3 mousePosition = centerEyeAnchor.position;
+                                // mousePosition.y = player.transform.position.y; // Y座標は維持
+                                // player.transform.position = mousePosition;
+                                //
+                                // // 回転は水平方向のみ
+                                // Vector3 mouseRotation = centerEyeAnchor.rotation.eulerAngles;
+                                // mouseRotation.x = 0;
+                                // mouseRotation.z = 0;
+                                // player.transform.rotation = Quaternion.Euler(mouseRotation);
                                 break;
                         }
                     }

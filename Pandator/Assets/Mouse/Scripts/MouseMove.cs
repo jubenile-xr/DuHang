@@ -20,12 +20,10 @@ public class MouseMove : MonoBehaviour
     [SerializeField] private float speedThreshold = 0.1f; // これより遅かったら動かない
     private InitializeManager InitializeManager;
     private float floarValue;
-    
-    private bool isGrounded = false; // 地面に触れているか
-    [SerializeField] private float fallSpeed = 1.0f; // 手動落下速度
+
     private void Start()
     {
-        //rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         moveSpeed = normalSpeed; // 初期値を通常速度に設定
         InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
         floarValue = InitializeManager.GetLocalAnchorPosition().y;
@@ -80,12 +78,6 @@ public class MouseMove : MonoBehaviour
             {
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
-            
-            // 地面にも壁にも触れていなければ落下させる
-            if (!isGrounded && !isCollisionWall)
-            {
-                transform.position += Vector3.down * fallSpeed * Time.deltaTime;
-            }
         }
         
         //落ちた時用
@@ -115,11 +107,7 @@ public class MouseMove : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             isCollisionWall = true;
-            //rb.useGravity = false;
-        }
-        else if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
+            rb.useGravity = false;
         }
     }
 
@@ -128,11 +116,7 @@ public class MouseMove : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             rb.useGravity = true;
-            //isCollisionWall = false;
-        }
-        else if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
+            isCollisionWall = false;
         }
     }
 }
