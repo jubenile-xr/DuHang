@@ -123,20 +123,12 @@ public class BirdMoveController : MonoBehaviour
     {
         // サムスティックが無効化されている場合は入力をゼロにする
         Vector2 input = Vector2.zero;
-
-        // サムスティックが有効な場合のみ入力を取得
-        if (!disableThumbstickMovement)
-        {
-            // 右摇杆输入 // get the right thumbstick input // 右スティックの入力を取得する
-            input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
-        }
-
-        Vector2 input;
+        
         if (isKeybord)
         {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
-        else
+        else if(!disableThumbstickMovement)    // サムスティックが有効な場合のみ入力を取得
         {
             // 右摇杆输入 // get the right thumbstick input // 右スティックの入力を取得する
             input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
