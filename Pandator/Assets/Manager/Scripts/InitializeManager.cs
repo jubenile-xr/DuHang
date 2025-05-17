@@ -29,6 +29,9 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     private static string playerName;
     private bool hasPlayerNameCreated = false;
+    private string myPlayerName = ""; // 自分のプレイヤー名をローカルで保持
+    private float playerNameCheckTimer = 0f; // 名前の再送用タイマー
+    private const float PLAYER_NAME_CHECK_INTERVAL = 1.0f; // 名前の確認間隔（秒）
     private StateManager stateManager;
     private ScoreManager scoreManager;
     [SerializeField]private GameObject eventSystem;
@@ -177,7 +180,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-
         // デバッグモードの場合は以降の処理をスキップ
         if (DebugManager.GetDebugMode())
         {
@@ -190,6 +192,28 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             if (loadingTime > 14f)
             {
                 SetIsAnimationFinished(true);
+            }
+        }
+
+        // プレイヤー名が設定済みで、定期的な再確認処理
+        if (!string.IsNullOrEmpty(myPlayerName) && gameManager != null && PhotonNetwork.InRoom)
+        {
+            // GameState.STARTの時のみ再送処理を実行
+            if (gameManager.GetGameState() == GameManager.GameState.START)
+            {
+                playerNameCheckTimer += Time.deltaTime;
+
+                // 一定間隔で名前の存在チェックと再送処理
+                if (playerNameCheckTimer >= PLAYER_NAME_CHECK_INTERVAL)
+                {
+                    playerNameCheckTimer = 0f;
+                    CheckAndResendPlayerName();
+                }
+            }
+            else
+            {
+                // START状態でない場合はタイマーをリセット
+                playerNameCheckTimer = 0f;
             }
         }
 
@@ -445,8 +469,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             }
             SetPlayerCreated(true);
         }
-
-
     }
 
     // ルームに参加する処理
@@ -506,8 +528,6 @@ public class InitializeManager : MonoBehaviourPunCallbacks
             Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
             roomCompleteTransform.gameObject.SetActive(false);
         }
-
-
     }
 
     private void SetModelActive()
@@ -639,6 +659,34 @@ private IEnumerator WaitForGameManager()
         }
     }
 
+    // プレイヤー名の存在チェックと再送処理
+    private void CheckAndResendPlayerName()
+    {
+        if (string.IsNullOrEmpty(myPlayerName) || gameManager == null)
+            return;
+
+        // 現在のプレイヤー名配列を取得
+        string[] currentNames = gameManager.GetAllPlayerNames();
+        bool nameExists = false;
+
+        // 自分の名前が配列内に存在するかチェック
+        foreach (string name in currentNames)
+        {
+            if (name.Equals(myPlayerName))
+            {
+                nameExists = true;
+                break;
+            }
+        }
+
+        // 存在しなければ再送
+        if (!nameExists)
+        {
+            Debug.LogWarning("プレイヤー名が存在しないため再送: " + myPlayerName);
+            gameManager.AddLocalPlayerName(myPlayerName);
+        }
+    }
+
     private void CreatePlayerName()
     {
         Debug.LogWarning("CreatePlayerName");
@@ -663,7 +711,14 @@ private IEnumerator WaitForGameManager()
             if (!exists)
             {
                 Debug.LogWarning("PlayerName Created! " + candidateName);
+
+                // 名前をPhoton配列に追加
                 gameManager.AddLocalPlayerName(candidateName);
+
+                // ローカル変数に保存
+                myPlayerName = candidateName;
+
+                // 他のコンポーネントに名前をセット
                 stateManager.SetPlayerName(candidateName);
                 scoreManager.SetPlayerName(candidateName);
                 Character.SetMyName(candidateName);
@@ -938,6 +993,4 @@ private IEnumerator WaitForGameManager()
         Character.SetLayer(player, LayerMask.NameToLayer("IgnoreMyself"));
         camera.transform.FindChildRecursive("CenterEyeAnchor").GetComponent<Camera>().cullingMask &= ~(1 << LayerMask.NameToLayer("IgnoreMyself"));
     }
-
-
 }
