@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class StateManager : MonoBehaviour
+public class StateManager : MonoBehaviourPun
 {
     private bool isInterrupted;
     private bool isAlive;
@@ -85,9 +85,9 @@ public class StateManager : MonoBehaviour
             SetAlive(!GetMyDeadStatus());
         }
 
-        if (!isAlive && GetComponent<PhotonView>().IsMine && !isDeadLogicExecuted)
+        if (!isAlive && photonView.IsMine && !isDeadLogicExecuted)
         {
-            DeadLogic();
+            photonView.RPC("SyncDeadLogic", RpcTarget.AllBuffered);
         }
 
         if (isInterrupted)
@@ -122,6 +122,7 @@ public class StateManager : MonoBehaviour
 
         // 現在のプレイヤー名を取得
         string myName = Character.GetMyName();
+        if (string.IsNullOrEmpty(myName)) return false;
 
         // 一致するインデックスを検索
         int myIndex = -1;
@@ -185,31 +186,55 @@ public class StateManager : MonoBehaviour
     }
 
 
+    // RPCで同期される死亡ロジック実行メソッド
+    [PunRPC]
+    private void SyncDeadLogic()
+    {
+        // すでに実行済みであれば何もしない
+        if (isDeadLogicExecuted) return;
+
+        DeadLogic();
+    }
+
     // 死亡時の処理
     private void DeadLogic()
     {
         isDeadLogicExecuted = true;
         GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
-        scoreManager.SetAliveTime(Time.time);
-        deadVolumeController?.RunDeadVolume();
+
+        if (scoreManager != null)
+        {
+            scoreManager.SetAliveTime(Time.time);
+        }
+
+        if (photonView.IsMine && deadVolumeController != null)
+        {
+            deadVolumeController.RunDeadVolume();
+        }
 
         string[] playerNames = gameManager.GetAllPlayerNames();
         Debug.Log("State:DeadLogic: Player Names: " + string.Join(", ", playerNames));
-        Debug.Log("State:PlayerName" + playerName);
+        Debug.Log("State:PlayerName: " + playerName);
 
+        // Only update playerDeadStatus if it hasn't been updated already
+        // by checking if the current player is already marked as dead
         bool isAlreadyDead = false;
+        int myIndex = -1;
+
         for (int i = 0; i < playerNames.Length; i++)
         {
             if (playerNames[i].Contains(playerName))
             {
+                myIndex = i;
                 isAlreadyDead = gameManager.GetPlayerDeadStatus()[i];
-                if (!isAlreadyDead)
-                {
-                    gameManager.SetPlayerDeadStatusTrue(i);
-                    gameManager.UpdateAliveCountFromDeadStatus();
-                }
                 break;
             }
+        }
+
+        if (myIndex >= 0 && !isAlreadyDead)
+        {
+            gameManager.SetPlayerDeadStatusTrue(myIndex);
+            gameManager.UpdateAliveCountFromDeadStatus();
         }
     }
 

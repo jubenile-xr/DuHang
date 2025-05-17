@@ -1,14 +1,13 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class Net : MonoBehaviour
+public class Net : MonoBehaviourPun
 {
     private float time = 0.0f;
     [SerializeField]private float collisionDeleteTime = 0.1f;
     private float collisionTime = 0.0f;
     private Animator animator;
     private GameManager gameManager;
-    private PhotonView photonView;
 
     //一度当たったらonにする
     private bool isCollision = false;
@@ -18,7 +17,6 @@ public class Net : MonoBehaviour
     {
         animator = this.GetComponent<Animator>();
         gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
-        photonView = GetComponent<PhotonView>();
 
         animator.SetTrigger("Capture");
     }
@@ -38,88 +36,156 @@ public class Net : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if(isCollision) return;
-        GameObject Player = collision.gameObject;
+        GameObject player = collision.gameObject;
 
-        if(Player.CompareTag("Player"))
+        if(player.CompareTag("Player"))
         {
             isCollision = true;
             //速度を0に
             GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
 
-            // Make sure we have a GameManager
-            if(gameManager == null)
+            // プレイヤーオブジェクトがPhotonViewを持っているか確認
+            PhotonView playerPhotonView = player.GetComponent<PhotonView>();
+            if (playerPhotonView != null)
             {
-                gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
-                if(gameManager == null)
-                {
-                    Debug.LogError("GameManager not found in Net collision!");
-                    return;
-                }
+                // プレイヤーのIDを取得
+                int playerViewID = playerPhotonView.ViewID;
+
+                // RPC関数を呼び出して全プレイヤーにヒット通知
+                photonView.RPC("PlayerHitByNet", RpcTarget.AllBuffered, playerViewID);
+            }
+            else
+            {
+                // PhotonViewがない場合は直接処理
+                ProcessPlayerHit(player);
             }
 
-            // Get the player's StateManager
-            StateManager stateManager = Player.GetComponent<StateManager>();
-            if(stateManager != null)
+            Debug.Log("Player hit by net: " + player.name);
+        }
+    }
+
+    // RPCでネットワーク同期された衝突処理
+    [PunRPC]
+    private void PlayerHitByNet(int playerViewID)
+    {
+        // プレイヤーIDからプレイヤーオブジェクトを検索
+        PhotonView hitPlayerView = PhotonView.Find(playerViewID);
+        if (hitPlayerView != null)
+        {
+            GameObject hitPlayer = hitPlayerView.gameObject;
+            ProcessPlayerHit(hitPlayer);
+        }
+    }
+
+    // プレイヤーヒット処理共通化
+    private void ProcessPlayerHit(GameObject player)
+    {
+        // Make sure we have a GameManager
+        if(gameManager == null)
+        {
+            gameManager = GameObject.FindWithTag("GameManager")?.GetComponent<GameManager>();
+            if(gameManager == null)
+            {
+                Debug.LogError("GameManager not found in Net collision!");
+                return;
+            }
+        }
+
+        // Get the player's StateManager
+        StateManager stateManager = player.GetComponent<StateManager>();
+        if(stateManager != null)
+        {
+            // プレイヤー名を取得
+            string playerName = stateManager.GetPlayerName();
+            if (string.IsNullOrEmpty(playerName))
+            {
+                Debug.LogWarning("Player name is null or empty");
+                return;
+            }
+
+            // すでに死んでいないか確認
+            bool isAlreadyDead = IsPlayerAlreadyDead(playerName);
+            if (!isAlreadyDead)
             {
                 // Set the player to not alive in StateManager
                 stateManager.SetAlive(false);
 
-                // Get the player's name
-                string playerName = stateManager.GetPlayerName();
-
                 // Visual feedback - change color
-                Player.GetComponent<PlayerColorManager>()?.ChangeColorInvisible();
-
-                // Run dead volume effect if it's a VR player
-                DeadVolumeController deadVol = GameObject.FindWithTag("DeadVolume")?.GetComponent<DeadVolumeController>();
-                if(deadVol != null && stateManager.GetComponent<PhotonView>().IsMine)
+                PlayerColorManager colorManager = player.GetComponent<PlayerColorManager>();
+                if (colorManager != null)
                 {
-                    deadVol.RunDeadVolume();
+                    colorManager.ChangeColorInvisible();
+                }
+
+                // Run dead volume effect if it's this player
+                PhotonView playerView = player.GetComponent<PhotonView>();
+                if (playerView != null && playerView.IsMine)
+                {
+                    DeadVolumeController deadVol = GameObject.FindWithTag("DeadVolume")?.GetComponent<DeadVolumeController>();
+                    if(deadVol != null)
+                    {
+                        deadVol.RunDeadVolume();
+                    }
                 }
 
                 // Update playerDeadStatus in GameManager
+                UpdatePlayerDeadStatus(playerName);
+            }
+        }
+        else
+        {
+            // StateManagerがない場合は名前でプレイヤーを特定
+            PlayerColorManager colorManager = player.GetComponent<PlayerColorManager>();
+            if(colorManager != null)
+            {
+                colorManager.ChangeColorInvisible();
+
+                // Find which player this is in the playerNames array
                 string[] playerNames = gameManager.GetAllPlayerNames();
                 for (int i = 0; i < playerNames.Length; i++)
                 {
-                    if (playerNames[i].Contains(playerName))
+                    if (player.name.Contains(playerNames[i]))
                     {
-                        // Set this player's dead status to true
-                        gameManager.SetPlayerDeadStatusTrue(i);
-
-                        // Update aliveCount based on playerDeadStatus
-                        gameManager.UpdateAliveCountFromDeadStatus();
+                        if (!gameManager.GetPlayerDeadStatus()[i])
+                        {
+                            gameManager.SetPlayerDeadStatusTrue(i);
+                            gameManager.UpdateAliveCountFromDeadStatus();
+                        }
                         break;
                     }
                 }
             }
-            else
+        }
+    }
+
+    // プレイヤーがすでに死亡状態かチェック
+    private bool IsPlayerAlreadyDead(string playerName)
+    {
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        bool[] playerDeadStatus = gameManager.GetPlayerDeadStatus();
+
+        for (int i = 0; i < playerNames.Length; i++)
+        {
+            if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
             {
-                // Handle case when no StateManager (might be PANDA MR player)
-                // For PANDA player, we need to find out which VR player was hit
-                PlayerColorManager colorManager = Player.GetComponent<PlayerColorManager>();
-                if(colorManager != null)
-                {
-                    // Visual feedback
-                    colorManager.ChangeColorInvisible();
-
-                    // Find which player this is in the playerNames array
-                    string[] playerNames = gameManager.GetAllPlayerNames();
-                    for (int i = 0; i < playerNames.Length; i++)
-                    {
-                        if (Player.name.Contains(playerNames[i]))
-                        {
-                            // Set this player's dead status to true
-                            gameManager.SetPlayerDeadStatusTrue(i);
-
-                            // Update aliveCount based on playerDeadStatus
-                            gameManager.UpdateAliveCountFromDeadStatus();
-                            break;
-                        }
-                    }
-                }
+                return playerDeadStatus[i];
             }
+        }
+        return false;
+    }
 
-            Debug.Log("Player hit by net: " + Player.name);
+    // playerDeadStatusを更新
+    private void UpdatePlayerDeadStatus(string playerName)
+    {
+        string[] playerNames = gameManager.GetAllPlayerNames();
+        for (int i = 0; i < playerNames.Length; i++)
+        {
+            if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
+            {
+                gameManager.SetPlayerDeadStatusTrue(i);
+                gameManager.UpdateAliveCountFromDeadStatus();
+                break;
+            }
         }
     }
 }

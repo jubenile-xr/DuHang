@@ -53,6 +53,7 @@ public class tutorialInstantiate : MonoBehaviour
                 // PANDAの場合はspatialAnchorを生成
                 spatialAnchor = Instantiate(Resources.Load<GameObject>("SpatialAnchor/prefab/spatialAnchor"),
                     new Vector3(0f, 0f, 0f), Quaternion.identity);
+
                 Transform roomCompleteTransform = spatialAnchor.transform.Find("room_complete004");
                 roomCompleteTransform.gameObject.SetActive(false);
 
