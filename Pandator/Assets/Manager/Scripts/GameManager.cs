@@ -640,14 +640,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private IEnumerator PostToGAS(string name, int score,string dateTime)
     {
-        string url = "https://script.google.com/macros/s/AKfycbzxxcnMLuVew32JIY8NuzDsEc5JsDaB0RsjwtKI_3_4_ZSkageQGTk8CjM_dGa4wPlI/exec";
+        string url = "https://script.google.com/macros/s/AKfycbyY_owGTG88vJx_2hieTMpRGVW6EkQVyT1qdTwGKu66OlLiFxzl3MSsaIjXgx-UUpE/exec";
 
         JsonData data = new JsonData
         {
             name = name,
             score = score,
             animal = JudgeAnimal(name),
-            dateTime = dateTime
+            dateTime = dateTime,
+            winner = winnerAnimalNameList.Contains("name")
         };
 
         if (data.animal == null)
@@ -691,6 +692,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         public int score;
         public string animal;
         public string dateTime;
+        public bool winner;
     }
 
     [System.Serializable]
