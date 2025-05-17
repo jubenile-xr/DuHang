@@ -178,7 +178,6 @@ public class StateManager : MonoBehaviourPun
 
     public void SetInterrupted(bool value)
     {
-        Debug.Log("SetInterrupted: " + value);
         if (value && !isAlive)
         {
             Debug.Log("SetInterrupted: Dead");
