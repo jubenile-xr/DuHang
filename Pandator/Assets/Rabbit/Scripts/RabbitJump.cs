@@ -15,6 +15,8 @@ public class RabbitJump : MonoBehaviourPun
     private bool isGrounded = true; // 地面にいるかの判定
     private Queue<(float timestamp, float value)> valueHistory = new Queue<(float, float)>();
     private const float timeToKeep = 0.2f;
+    
+    private bool isKeybord = false;
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
@@ -27,6 +29,11 @@ public class RabbitJump : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine || rb == null) return;
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            isKeybord = true;
+        }
 
         // 右手のAボタンが押されたかチェック
         bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
@@ -75,7 +82,7 @@ public class RabbitJump : MonoBehaviourPun
 
         //bool TestKeySpace = Input.GetKeyDown(KeyCode.Space);
         // 条件を満たしたらジャンプ
-        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.J) && isGrounded))
+        if ((isAButtonPressed && isGrounded && isHandSwinging && isSwingUp) || (Input.GetKeyDown(KeyCode.Space) && isGrounded))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; // 空中にいると判定

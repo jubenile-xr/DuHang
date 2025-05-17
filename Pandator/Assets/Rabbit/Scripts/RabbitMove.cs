@@ -18,16 +18,28 @@ public class RabbitMove : MonoBehaviour
     private const float JUMP_MOVE_SPEED = 0.8f; // ジャンプ時の移動速度倍率
     private InitializeManager InitializeManager;
     private float floarValue;
-    private void Start()
+    
+    private bool isKeybord = false;
+    private float xAngle = 0f;
+    private float yAngle = 0f;
+    
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
         moveSpeed = normalSpeed; // 初期値を通常速度に設定
         InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
         floarValue = InitializeManager.GetLocalAnchorPosition().y;
+        
     }
 
-    private void Update()
+    void Update()
     {
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            isKeybord = true;
+        }
+        
         //IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
@@ -56,10 +68,14 @@ public class RabbitMove : MonoBehaviour
             transform.rotation = targetRotation;
 
             // 速度が閾値以下の場合は移動しない
-            if (speedR < speedThreshold && speedL < speedThreshold)
+            if (speedR < speedThreshold && speedL < speedThreshold && !isKeybord)
             {
-                transform.Translate(Vector3.zero);
-                return;
+                // 速度が閾値以下の場合は移動しない
+                if (isAButtonPressed)
+                {
+                    transform.Translate(Vector3.zero);
+                    return;
+                }
             }
 
             float totalSpeed = (speedR + speedL) * moveSpeed;
@@ -71,10 +87,30 @@ public class RabbitMove : MonoBehaviour
             forwardDirection.Normalize();
 
             // 移動処理
-            if (!isAButtonPressed){
+            if (!isAButtonPressed && !isKeybord)
+            {
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
-            }else{
-                transform.Translate( JUMP_MOVE_SPEED * forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+            }else if (isKeybord)
+            {
+                float moveX = Input.GetAxis("Horizontal");
+                float moveZ = Input.GetAxis("Vertical");
+            
+
+                forwardDirection = Camera.main.transform.right* moveX + Camera.main.transform.forward * moveZ;
+                totalSpeed = 2f;
+                transform.Translate(forwardDirection.normalized * totalSpeed * Time.deltaTime, Space.World);
+            }
+            
+            //マウスでのカメラ操作
+            if (isKeybord)
+            {
+                float mouseX = Input.GetAxis("Mouse X");
+                float mouseY = Input.GetAxis("Mouse Y");
+                xAngle -= mouseY;
+                xAngle = Mathf.Clamp(xAngle, -90f, 90f);
+                yAngle += mouseX;
+                // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
+                Camera.main.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
             }
             
             //落ちた時用
