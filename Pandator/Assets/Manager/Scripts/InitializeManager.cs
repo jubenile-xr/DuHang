@@ -209,8 +209,8 @@ public class InitializeManager : MonoBehaviourPunCallbacks
                         {
                             case GameCharacter.BIRD:
                                 // BIRDの場合は専用の位置更新ロジック
-                                player.transform.position = centerEyeAnchor.position;
-                                player.transform.rotation = centerEyeAnchor.rotation;
+                                // player.transform.position = centerEyeAnchor.position;
+                                // player.transform.rotation = centerEyeAnchor.rotation;
                                 break;
 
                             case GameCharacter.RABBIT:

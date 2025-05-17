@@ -13,7 +13,7 @@ public class InterruptGun : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
             bullet.GetComponent<Rigidbody>().AddForce(transform.forward * -bulletSpeed);
