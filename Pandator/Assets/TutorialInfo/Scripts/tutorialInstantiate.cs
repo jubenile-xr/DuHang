@@ -61,7 +61,7 @@ public class tutorialInstantiate : MonoBehaviour
 
                 player = Instantiate(Resources.Load<GameObject>("TutorialPlayer/TutorialPanda"),
                     new Vector3(0f, 1.0f, 0f), Quaternion.identity);
-                camera = Instantiate(Resources.Load<GameObject>("TutorialCameraRig/TutorialCameraRig"), new Vector3(0f, 1.0f, 0f),
+                camera = Instantiate(Resources.Load<GameObject>("CameraRig/PandaCameraRig"), new Vector3(0f, 1.0f, 0f),
                     Quaternion.identity);
                 break;
         }
