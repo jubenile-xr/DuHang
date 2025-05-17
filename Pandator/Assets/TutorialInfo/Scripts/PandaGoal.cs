@@ -1,22 +1,24 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class PandaGaol : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI instructionUI;
-    private void Start()
+    private HitCountGoal hitGoalCount; // 参照を追加
+
+    void Start()
     {
-        instructionUI.text = "パンダの的に向かって撃て！";
+        // HitCountGoalコンポーネントをシーン内から検索
+        hitGoalCount = FindObjectOfType<HitCountGoal>();
     }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (Character.GetSelectedAnimal() == Character.GameCharacters.PANDA)
         {
-            if (other.CompareTag("tutorialNet"))
+            if (other.CompareTag("Net"))
             {
                 gameObject.SetActive(false);
-                instructionUI.text = "自由に遊んで！";
+                hitGoalCount.SetHitCount();
             }
         }
     }
