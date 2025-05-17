@@ -11,7 +11,7 @@ public static class Character
         PANDA,
         GOD
     }
-    private static GameCharacters selectedAnimal = GameCharacters.GOD; // デフォルトはgod
+    private static GameCharacters selectedAnimal = GameCharacters.BIRD; // デフォルトはgod
     public static GameCharacters GetSelectedAnimal()
     {
         return selectedAnimal;
