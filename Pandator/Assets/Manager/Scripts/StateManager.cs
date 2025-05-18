@@ -134,7 +134,7 @@ public class StateManager : MonoBehaviourPun
         int myIndex = -1;
         for (int i = 0; i < playerNames.Length; i++)
         {
-            if (playerNames[i].Contains(myName))
+            if (playerNames[i].Equals(playerName))
             {
                 myIndex = i;
                 break;
@@ -245,7 +245,7 @@ public class StateManager : MonoBehaviourPun
 
         for (int i = 0; i < playerNames.Length; i++)
         {
-            if (playerNames[i].Contains(playerName))
+            if (playerNames[i].Equals(playerName))
             {
                 myIndex = i;
                 break;

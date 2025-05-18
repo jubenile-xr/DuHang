@@ -118,6 +118,9 @@ public class Net : MonoBehaviourPun
         {
             // StateManagerがない場合は名前でプレイヤーを特定
             string[] playerNames = gameManager.GetAllPlayerNames();
+            Debug.Log($"ヒットしたプレイヤー名: {player.name}");
+            Debug.Log($"プレイヤー名リスト: {string.Join(", ", playerNames)}");
+            Debug.Log($"死亡状態変更前: {string.Join(", ", gameManager.GetPlayerDeadStatus())}");
             for (int i = 0; i < playerNames.Length; i++)
             {
                 if (player.name.Contains(playerNames[i]))
@@ -130,6 +133,7 @@ public class Net : MonoBehaviourPun
                     break;
                 }
             }
+            Debug.Log($"死亡状態変更後: {string.Join(", ", gameManager.GetPlayerDeadStatus())}");
         }
     }
 
@@ -141,7 +145,7 @@ public class Net : MonoBehaviourPun
 
         for (int i = 0; i < playerNames.Length; i++)
         {
-            if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
+            if if (playerNames[i].Equals(playerName)) || playerName.Equals(playerNames[i]))
             {
                 return playerDeadStatus[i];
             }
@@ -170,7 +174,7 @@ public class Net : MonoBehaviourPun
                 string[] playerNames = gameManager.GetAllPlayerNames();
                 for (int i = 0; i < playerNames.Length; i++)
                 {
-                    if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
+                    if (if (playerNames[i].Equals(playerName)) || playerName.Equals(playerNames[i]))
                     {
                         // マスタークライアントは他のプレイヤーのステータスを直接更新
                         gameManager.SetPlayerDeadStatusTrue(i);

@@ -82,7 +82,7 @@ public class ScoreManager : MonoBehaviour
         {
             for (int i = 0; i < playerNames.Length; i++)
             {
-                if (playerNames[i].Contains(playerName))
+                if (playerNames[i].Equals(playerName))
                 {
                     gameManager.SetLocalPlayerScore(i, GetScore());
                 }
