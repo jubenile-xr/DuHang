@@ -152,14 +152,33 @@ public class Net : MonoBehaviourPun
     // GameManagerの死亡状態を更新
     private void UpdateGameManagerDeadStatus(string playerName)
     {
-        string[] playerNames = gameManager.GetAllPlayerNames();
-        for (int i = 0; i < playerNames.Length; i++)
+        // プレイヤー自身が自分の状態を更新するか確認
+        if (photonView.IsMine || PhotonNetwork.IsMasterClient)
         {
-            if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
+            // 自分自身のプレイヤーが当たった場合は自分で状態を更新
+            if (playerName == Character.GetMyName())
             {
-                gameManager.SetPlayerDeadStatusTrue(i);
-                gameManager.UpdateAliveCountFromDeadStatus();
-                break;
+                // SetOwnPlayerDeadStatusTrueを使用してRPCなしで状態を更新
+                gameManager.SetOwnPlayerDeadStatusTrue();
+                Debug.Log($"プレイヤー {playerName} が自身の死亡状態を更新しました");
+                return;
+            }
+
+            // マスタークライアントの場合は他のプレイヤーの状態も更新できる
+            if (PhotonNetwork.IsMasterClient)
+            {
+                string[] playerNames = gameManager.GetAllPlayerNames();
+                for (int i = 0; i < playerNames.Length; i++)
+                {
+                    if (playerNames[i].Contains(playerName) || playerName.Contains(playerNames[i]))
+                    {
+                        // マスタークライアントは他のプレイヤーのステータスを直接更新
+                        gameManager.SetPlayerDeadStatusTrue(i);
+                        gameManager.UpdateAliveCountFromDeadStatus();
+                        Debug.Log($"マスタークライアントがプレイヤー {playerName} の死亡状態を更新しました");
+                        break;
+                    }
+                }
             }
         }
     }

@@ -388,13 +388,56 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+    // プレイヤー自身が自分の死亡状態を設定するメソッド
+    public void SetOwnPlayerDeadStatusTrue()
+    {
+        // 自分の名前を取得
+        string myName = Character.GetMyName();
+        // 全プレイヤー名を取得
+        string[] allNames = GetAllPlayerNames();
+
+        // 自分の名前に対応するインデックスを検索
+        int myIndex = -1;
+        for (int i = 0; i < allNames.Length; i++)
+        {
+            if (allNames[i] == myName)
+            {
+                myIndex = i;
+                break;
+            }
+        }
+
+        // 有効なインデックスが見つかった場合のみ死亡状態を変更
+        if (myIndex >= 0 && playerDeadStatus != null && myIndex < playerDeadStatus.Length)
+        {
+            // すでに死亡状態の場合は何もしない
+            if (playerDeadStatus[myIndex])
+                return;
+
+            playerDeadStatus[myIndex] = true;
+            Debug.Log($"プレイヤー {myName} (インデックス: {myIndex}) が自身の死亡状態をtrueに設定しました");
+
+            // 死亡状態をPhotonプロパティに同期
+            UpdatePlayerDeadStatusProperty();
+
+            // 生存者数を更新
+            UpdateAliveCountFromDeadStatus();
+        }
+        else
+        {
+            Debug.LogError($"自身の死亡状態の設定に失敗: プレイヤー {myName} が見つからないか、インデックス {myIndex} が無効です");
+        }
+    }
+
     private void UpdatePlayerDeadStatusProperty()
     {
         if (PhotonNetwork.InRoom)
         {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(
-                new ExitGames.Client.Photon.Hashtable { ["playerDeadStatus"] = playerDeadStatus }
-            );
+            // 競合を防ぐため、一度現在のプロパティを取得してから設定する
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props["playerDeadStatus"] = playerDeadStatus;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+            Debug.Log("playerDeadStatus更新: " + string.Join(", ", playerDeadStatus.Select(b => b.ToString()).ToArray()));
         }
     }
 
@@ -688,4 +731,3 @@ public class GameManager : MonoBehaviourPunCallbacks
         public Quaternion rotation;
     }
 }
-
