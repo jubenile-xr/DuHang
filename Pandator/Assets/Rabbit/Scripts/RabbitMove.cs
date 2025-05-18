@@ -90,6 +90,9 @@ public class RabbitMove : MonoBehaviour
             if (!isAButtonPressed && !isKeybord)
             {
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
+            }else if(isAbuttonPressrd && !isKeybord)
+            {
+                transform.Translate( JUMP_MOVE_SPEED * forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }else if (isKeybord)
             {
                 float moveX = Input.GetAxis("Horizontal");
