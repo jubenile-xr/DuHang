@@ -145,7 +145,7 @@ public class Net : MonoBehaviourPun
 
         for (int i = 0; i < playerNames.Length; i++)
         {
-            if if (playerNames[i].Equals(playerName)) || playerName.Equals(playerNames[i]))
+            if (playerNames[i].Equals(playerName)|| playerName.Equals(playerNames[i]))
             {
                 return playerDeadStatus[i];
             }
@@ -174,7 +174,7 @@ public class Net : MonoBehaviourPun
                 string[] playerNames = gameManager.GetAllPlayerNames();
                 for (int i = 0; i < playerNames.Length; i++)
                 {
-                    if (if (playerNames[i].Equals(playerName)) || playerName.Equals(playerNames[i]))
+                    if (playerNames[i].Equals(playerName) || playerName.Equals(playerNames[i]))
                     {
                         // マスタークライアントは他のプレイヤーのステータスを直接更新
                         gameManager.SetPlayerDeadStatusTrue(i);
