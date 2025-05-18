@@ -211,22 +211,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerType GetPlayerType() => playerType;
     public void SetPlayerType(PlayerType type) => playerType = type;
 
-    public void SetAliveCount(int count)
-    {
-        aliveCount = count;
-        UpdateAliveCountProperty();
-    }
-
-    public void SetDecrementAliveCount()
-    {
-        aliveCount--;
-        UpdateAliveCountProperty();
-        if (aliveCount <= 0)
-        {
-            SetGameState(GameState.END);
-            winner = Winner.PANDA;
-        }
-    }
 
     // New method to update aliveCount based on playerDeadStatus array
     public void UpdateAliveCountFromDeadStatus()
@@ -395,6 +379,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             playerDeadStatus[index] = true;
             UpdatePlayerDeadStatusProperty();
+            // プレイヤーの死亡状態を更新した後に生存者数を更新する
+            UpdateAliveCountFromDeadStatus();
         }
         else
         {
