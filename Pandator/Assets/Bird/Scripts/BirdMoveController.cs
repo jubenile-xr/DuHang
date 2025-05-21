@@ -40,7 +40,7 @@ public class BirdMoveController : MonoBehaviour
 
     // サムスティックを無効にするフラグ
     [SerializeField] private bool disableThumbstickMovement = true;
-    
+
     private float xAngle = 0f;
     private float yAngle = 0f;
 
@@ -59,7 +59,7 @@ public class BirdMoveController : MonoBehaviour
         {
             SetIsKeybord(true);
         }
-        
+
         TellBirdMode();//判断是否进入飞行模式//tell the bird to fly or not
 
         if (!isFlying)
@@ -96,12 +96,12 @@ public class BirdMoveController : MonoBehaviour
         float leftStrength = leftHandVel.magnitude;
         float rightStrength = rightHandVel.magnitude;
         float avgStrength = (leftStrength + rightStrength) * 0.5f;
-        
+
         if (avgStrength > flapStartThreshold || Input.GetKey(KeyCode.Space))
         {
             aboveCount++;
             belowCount = 0; //重置低于阈值的帧数 //reset the below count // 閾値未満のフレーム数をリセットする
-            
+
             if (!isFlying && aboveCount >= framesToStart)
             {
                 verticalVelocity = liftForce;
@@ -135,16 +135,16 @@ public class BirdMoveController : MonoBehaviour
     {
         // サムスティックが無効化されている場合は入力をゼロにする
         Vector2 input = Vector2.zero;
-        
+
         if (isKeybord)
         {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
-        else if(!disableThumbstickMovement)    // サムスティックが有効な場合のみ入力を取得
-        {
-            // 右摇杆输入 // get the right thumbstick input // 右スティックの入力を取得する
-            input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
-        }
+        // else if(!disableThumbstickMovement)    // サムスティックが有効な場合のみ入力を取得
+        // {
+        //     // 右摇杆输入 // get the right thumbstick input // 右スティックの入力を取得する
+        //     input = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+        // }
 
         if(input.magnitude > 0)
         {
@@ -152,7 +152,7 @@ public class BirdMoveController : MonoBehaviour
         }
         else
         {
-            
+
             isWalking = false;
         }
 
@@ -205,7 +205,7 @@ public class BirdMoveController : MonoBehaviour
         movement.y += verticalVelocity;
 
         CharacterController.Move(flyForce *movement * Time.deltaTime);
-        
+
     }
 
     public void SetCenterEyeAnchor(Transform centerEyeAnchor)
@@ -230,7 +230,7 @@ public class BirdMoveController : MonoBehaviour
     {
         disableThumbstickMovement = !enabled;
     }
-    
+
     private void SetIsKeybord(bool isKeybord)
     {
         this.isKeybord = isKeybord;
