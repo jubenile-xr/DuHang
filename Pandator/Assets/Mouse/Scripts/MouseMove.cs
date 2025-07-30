@@ -26,6 +26,10 @@ public class MouseMove : MonoBehaviour
     private float xAngle = 0f;
     private float yAngle = 0f;
     
+    // --- 追加 ---
+    private Transform spawnPoint; // スポーン地点のTransform
+    // --- 追加ここまで ---
+    
 
     private void Start()
     {
@@ -33,6 +37,20 @@ public class MouseMove : MonoBehaviour
         moveSpeed = normalSpeed; // 初期値を通常速度に設定
         InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
         floarValue = InitializeManager.GetLocalAnchorPosition().y;
+
+        // --- 追加 ---
+        // "playerSpawn"タグを持つゲームオブジェクトを検索して登録
+        GameObject spawnObject = GameObject.FindWithTag("playerSpawn");
+        if (spawnObject != null)
+        {
+            spawnPoint = spawnObject.transform;
+        }
+        else
+        {
+            // 見つからなかった場合にエラーメッセージを表示
+            Debug.LogError("Error: 'playerSpawn' tag not found in the scene.");
+        }
+        // --- 追加ここまで ---
     }
 
     private void Update()
@@ -45,18 +63,42 @@ public class MouseMove : MonoBehaviour
         // IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
+            // --- 追加 ---
+            // キーボードの'R'キーか、Meta Questの右コントローラーの'A'ボタンが押された瞬間をチェック
+            if (Input.GetKeyDown(KeyCode.R) || OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
+            {
+                // spawnPointが設定されていれば、その位置に移動
+                if (spawnPoint != null)
+                {
+                    transform.position = spawnPoint.position;
+                    // テレポート後の慣性をなくすため、Rigidbodyの速度をリセット
+                    if (rb != null)
+                    {
+                        rb.linearVelocity = Vector3.zero;
+                        rb.angularVelocity = Vector3.zero;
+                    }
+                    return; // このフレームでは他の移動処理を行わない
+                }
+            }
+            // --- 追加ここまで ---
+
             // 右手と左手の速度を取得
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
 
-            // XZ平面上の速度の合計を計算
+            // Y軸方向の速度の絶対値を取得
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
 
             // カメラの位置をねずみの位置に合わせる
             Vector3 cameraPosition = transform.position;
             cameraPosition.y += 0.2f; // y軸を+0.2
-            mouseOVRCameraRig.transform.position = cameraPosition;
+            // --- 修正 ---
+            if (mouseOVRCameraRig != null) // Nullチェックを追加してエラーを回避
+            {
+                mouseOVRCameraRig.transform.position = cameraPosition;
+            }
+            // --- 修正ここまで ---
 
             // カメラの向きをねずみの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
@@ -83,11 +125,12 @@ public class MouseMove : MonoBehaviour
             // 移動処理
             if (isCollisionWall)
             {
+                // 壁に接触している間は登る
                 transform.position += transform.up * Time.deltaTime * climbSpeed;
             }
             else
             {
-                // キーボード操作
+                // キーボード操作の場合、移動方向と速度を上書き
                 if (isKeybord)
                 {
                     float moveX = Input.GetAxis("Horizontal");
@@ -96,6 +139,7 @@ public class MouseMove : MonoBehaviour
                     totalSpeed = 2f;
                     forwardDirection.Normalize();
                 }
+                // 通常の移動
                 transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
             }
         }
@@ -106,6 +150,7 @@ public class MouseMove : MonoBehaviour
             transform.position = new Vector3(transform.position.x, floarValue + 0.1f, transform.position.z);
         }
         
+        // マウスでのカメラ操作
         if (isKeybord)
         {
             float mouseX = Input.GetAxis("Mouse X");
@@ -113,7 +158,6 @@ public class MouseMove : MonoBehaviour
             xAngle -= mouseY;
             xAngle = Mathf.Clamp(xAngle, -90f, 90f);
             yAngle += mouseX;
-            // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
             Camera.main.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
         }
     }
@@ -135,7 +179,7 @@ public class MouseMove : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Wall"))
         {
             isCollisionWall = true;
             rb.useGravity = false;
@@ -144,7 +188,7 @@ public class MouseMove : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.CompareTag("Wall"))
         {
             rb.useGravity = true;
             isCollisionWall = false;
