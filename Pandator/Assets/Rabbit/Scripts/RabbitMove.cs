@@ -22,11 +22,9 @@ public class RabbitMove : MonoBehaviour
     private bool isKeybord = false;
     private float xAngle = 0f;
     private float yAngle = 0f;
-
-    // --- 追加 ---
+    
     [Header("スポーン地点")]
     private Transform spawnPoint; // スポーン地点のTransform
-    // --- 追加ここまで ---
     
     void Start()
     {
@@ -59,9 +57,8 @@ public class RabbitMove : MonoBehaviour
         //IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
-            // --- 追加 ---
-            // キーボードの'R'キーか、Meta Questの右コントローラーの'A'ボタンが押された瞬間をチェック
-            if (Input.GetKeyDown(KeyCode.R) || OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
+            // キーボードの'R'キーか、Meta Questの左コントローラーの'X,Y'ボタンが押された瞬間をチェック
+            if (Input.GetKeyDown(KeyCode.R) || (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.Four)))
             {
                 // spawnPointが設定されていれば、その位置に移動
                 if (spawnPoint != null)
@@ -76,7 +73,6 @@ public class RabbitMove : MonoBehaviour
                     return; // このフレームでは他の移動処理を行わない
                 }
             }
-            // --- 追加ここまで ---
 
             // 左スティックの入力を0にする
             Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
@@ -96,12 +92,11 @@ public class RabbitMove : MonoBehaviour
             // カメラの位置をうさぎの位置に合わせる
             Vector3 cameraPosition = transform.position;
             cameraPosition.y += 0.2f; // y軸を+0.2
-            // --- 修正 ---
+            
             if (rabbitOVRCameraRig != null) // Nullチェックを追加してエラーを回避
             {
                 rabbitOVRCameraRig.transform.position = cameraPosition;
             }
-            // --- 修正ここまで ---
 
             // カメラの向きをうさぎの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, rabbitCamera.transform.eulerAngles.y, 0);

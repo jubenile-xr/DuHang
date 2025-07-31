@@ -43,16 +43,13 @@ public class BirdMoveController : MonoBehaviour
     
     private float xAngle = 0f;
     private float yAngle = 0f;
-
-    // --- 追加 ---
+    
     private Transform spawnPoint; // スポーン地点のTransform
-    // --- 追加ここまで ---
 
     void Start()
     {
         CharacterController = GetComponent<CharacterController>();
-
-        // --- 追加 ---
+        
         // "playerSpawn"タグを持つゲームオブジェクトを検索して登録
         GameObject spawnObject = GameObject.FindWithTag("playerSpawn");
         if (spawnObject != null)
@@ -64,7 +61,6 @@ public class BirdMoveController : MonoBehaviour
             // 見つからなかった場合にエラーメッセージを表示
             Debug.LogError("Error: 'playerSpawn' tag not found in the scene.");
         }
-        // --- 追加ここまで ---
     }
 
 
@@ -72,11 +68,8 @@ public class BirdMoveController : MonoBehaviour
 
     {
         if (!isInitialized) return;
-
-        // --- 追加 ---
-        // リスポーン処理
-        // キーボードの'R'キーか、Meta Questの右コントローラーの'A'ボタンが押された瞬間をチェック
-        if (Input.GetKeyDown(KeyCode.R) || OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
+        // キーボードの'R'キーか、Meta Questの左コントローラーの'X,Y'ボタンが押された瞬間をチェック
+        if (Input.GetKeyDown(KeyCode.R) || (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.Four)))
         {
             // spawnPointが設定されていれば、その位置に移動
             if (spawnPoint != null && CharacterController != null)
@@ -93,7 +86,6 @@ public class BirdMoveController : MonoBehaviour
                 return; // このフレームでは他の移動処理を行わない
             }
         }
-        // --- 追加ここまで ---
 
 
         if (Input.GetKeyDown(KeyCode.K))

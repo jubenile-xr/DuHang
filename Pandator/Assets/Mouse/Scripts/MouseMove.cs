@@ -26,9 +26,7 @@ public class MouseMove : MonoBehaviour
     private float xAngle = 0f;
     private float yAngle = 0f;
     
-    // --- 追加 ---
     private Transform spawnPoint; // スポーン地点のTransform
-    // --- 追加ここまで ---
     
 
     private void Start()
@@ -37,8 +35,7 @@ public class MouseMove : MonoBehaviour
         moveSpeed = normalSpeed; // 初期値を通常速度に設定
         InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
         floarValue = InitializeManager.GetLocalAnchorPosition().y;
-
-        // --- 追加 ---
+        
         // "playerSpawn"タグを持つゲームオブジェクトを検索して登録
         GameObject spawnObject = GameObject.FindWithTag("playerSpawn");
         if (spawnObject != null)
@@ -50,7 +47,6 @@ public class MouseMove : MonoBehaviour
             // 見つからなかった場合にエラーメッセージを表示
             Debug.LogError("Error: 'playerSpawn' tag not found in the scene.");
         }
-        // --- 追加ここまで ---
     }
 
     private void Update()
@@ -63,9 +59,8 @@ public class MouseMove : MonoBehaviour
         // IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
-            // --- 追加 ---
-            // キーボードの'R'キーか、Meta Questの右コントローラーの'A'ボタンが押された瞬間をチェック
-            if (Input.GetKeyDown(KeyCode.R) || OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
+            // キーボードの'R'キーか、Meta Questの左コントローラーの'X,Y'ボタンが押された瞬間をチェック
+            if (Input.GetKeyDown(KeyCode.R) || (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.Four)))
             {
                 // spawnPointが設定されていれば、その位置に移動
                 if (spawnPoint != null)
@@ -80,7 +75,6 @@ public class MouseMove : MonoBehaviour
                     return; // このフレームでは他の移動処理を行わない
                 }
             }
-            // --- 追加ここまで ---
 
             // 右手と左手の速度を取得
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
@@ -93,12 +87,11 @@ public class MouseMove : MonoBehaviour
             // カメラの位置をねずみの位置に合わせる
             Vector3 cameraPosition = transform.position;
             cameraPosition.y += 0.2f; // y軸を+0.2
-            // --- 修正 ---
+            
             if (mouseOVRCameraRig != null) // Nullチェックを追加してエラーを回避
             {
                 mouseOVRCameraRig.transform.position = cameraPosition;
             }
-            // --- 修正ここまで ---
 
             // カメラの向きをねずみの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, mouseCamera.transform.eulerAngles.y, 0);
