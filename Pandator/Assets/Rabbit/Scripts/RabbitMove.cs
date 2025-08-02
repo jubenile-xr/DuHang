@@ -23,6 +23,9 @@ public class RabbitMove : MonoBehaviour
     private float xAngle = 0f;
     private float yAngle = 0f;
     
+    [Header("スポーン地点")]
+    private Transform spawnPoint; // スポーン地点のTransform
+    
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,6 +33,17 @@ public class RabbitMove : MonoBehaviour
         InitializeManager = GameObject.FindWithTag("InitializeManager").GetComponent<InitializeManager>();
         floarValue = InitializeManager.GetLocalAnchorPosition().y;
         
+        // playerSpawnタグを持つゲームオブジェクトを検索して登録
+        GameObject spawnObject = GameObject.FindWithTag("playerSpawn");
+        if (spawnObject != null)
+        {
+            spawnPoint = spawnObject.transform;
+        }
+        else
+        {
+            // 見つからなかった場合にエラーメッセージを表示
+            Debug.LogError("Error: 'playerSpawn' tag not found in the scene.");
+        }
     }
 
     void Update()
@@ -43,6 +57,23 @@ public class RabbitMove : MonoBehaviour
         //IsMineで自分のキャラクターかどうかを判定
         if (GetComponent<PhotonView>().IsMine)
         {
+            // キーボードの'R'キーか、Meta Questの左コントローラーの'X,Y'ボタンが押された瞬間をチェック
+            if (Input.GetKeyDown(KeyCode.R) || (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.Four)))
+            {
+                // spawnPointが設定されていれば、その位置に移動
+                if (spawnPoint != null)
+                {
+                    transform.position = spawnPoint.position;
+                    // テレポート後の慣性をなくすため、Rigidbodyの速度をリセット
+                    if (rb != null)
+                    {
+                        rb.linearVelocity = Vector3.zero;
+                        rb.angularVelocity = Vector3.zero;
+                    }
+                    return; // このフレームでは他の移動処理を行わない
+                }
+            }
+
             // 左スティックの入力を0にする
             Vector2 leftStick = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
             leftStick = Vector2.zero; // 強引に0にする
@@ -51,17 +82,21 @@ public class RabbitMove : MonoBehaviour
             Vector3 velocityR = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
             Vector3 velocityL = OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
 
-            // 右手のAボタンが押されたかチェック
+            // 右手のAボタンが押され続けているかチェック (これは移動停止用なのでGetのまま)
             bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.RTouch);
 
-            // XZ平面上の速度の合計を計算
+            // Y軸方向の速度の絶対値を取得
             float speedR = Mathf.Abs(velocityR.y);
             float speedL = Mathf.Abs(velocityL.y);
 
             // カメラの位置をうさぎの位置に合わせる
             Vector3 cameraPosition = transform.position;
             cameraPosition.y += 0.2f; // y軸を+0.2
-            rabbitOVRCameraRig.transform.position = cameraPosition;
+            
+            if (rabbitOVRCameraRig != null) // Nullチェックを追加してエラーを回避
+            {
+                rabbitOVRCameraRig.transform.position = cameraPosition;
+            }
 
             // カメラの向きをうさぎの向きに合わせる
             Quaternion targetRotation = Quaternion.Euler(0, rabbitCamera.transform.eulerAngles.y, 0);
@@ -70,7 +105,7 @@ public class RabbitMove : MonoBehaviour
             // 速度が閾値以下の場合は移動しない
             if (speedR < speedThreshold && speedL < speedThreshold && !isKeybord)
             {
-                // 速度が閾値以下の場合は移動しない
+                // 速度が閾値以下で、さらにAボタンが押されている場合も移動しない
                 if (isAButtonPressed)
                 {
                     transform.Translate(Vector3.zero);
@@ -85,21 +120,18 @@ public class RabbitMove : MonoBehaviour
             Vector3 forwardDirection = headTransform.forward;
             forwardDirection.y = 0; // 水平移動のみ考慮
             forwardDirection.Normalize();
-
-            // 移動処理
+    
+            // 元のコードで重複していた条件分岐を修正
             if (!isAButtonPressed && !isKeybord)
             {
-                transform.Translate(forwardDirection * totalSpeed * Time.deltaTime, Space.World);
-            }else if(!isAButtonPressed && !isKeybord)
-            {
-                transform.Translate( JUMP_MOVE_SPEED * forwardDirection * totalSpeed * Time.deltaTime, Space.World);
-            }else if (isKeybord)
+                transform.Translate(forwardDirection * JUMP_MOVE_SPEED * totalSpeed * Time.deltaTime, Space.World);
+            }
+            else if (isKeybord)
             {
                 float moveX = Input.GetAxis("Horizontal");
                 float moveZ = Input.GetAxis("Vertical");
             
-
-                forwardDirection = Camera.main.transform.right* moveX + Camera.main.transform.forward * moveZ;
+                forwardDirection = Camera.main.transform.right * moveX + Camera.main.transform.forward * moveZ;
                 totalSpeed = 2f;
                 transform.Translate(forwardDirection.normalized * totalSpeed * Time.deltaTime, Space.World);
             }
@@ -112,7 +144,6 @@ public class RabbitMove : MonoBehaviour
                 xAngle -= mouseY;
                 xAngle = Mathf.Clamp(xAngle, -90f, 90f);
                 yAngle += mouseX;
-                // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
                 Camera.main.transform.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
             }
             

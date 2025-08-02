@@ -43,10 +43,24 @@ public class BirdMoveController : MonoBehaviour
     
     private float xAngle = 0f;
     private float yAngle = 0f;
+    
+    private Transform spawnPoint; // スポーン地点のTransform
 
     void Start()
     {
         CharacterController = GetComponent<CharacterController>();
+        
+        // "playerSpawn"タグを持つゲームオブジェクトを検索して登録
+        GameObject spawnObject = GameObject.FindWithTag("playerSpawn");
+        if (spawnObject != null)
+        {
+            spawnPoint = spawnObject.transform;
+        }
+        else
+        {
+            // 見つからなかった場合にエラーメッセージを表示
+            Debug.LogError("Error: 'playerSpawn' tag not found in the scene.");
+        }
     }
 
 
@@ -54,6 +68,25 @@ public class BirdMoveController : MonoBehaviour
 
     {
         if (!isInitialized) return;
+        // キーボードの'R'キーか、Meta Questの左コントローラーの'X,Y'ボタンが押された瞬間をチェック
+        if (Input.GetKeyDown(KeyCode.R) || (OVRInput.Get(OVRInput.Button.Three) && OVRInput.Get(OVRInput.Button.Four)))
+        {
+            // spawnPointが設定されていれば、その位置に移動
+            if (spawnPoint != null && CharacterController != null)
+            {
+                // CharacterControllerをテレポートさせるための推奨手順
+                CharacterController.enabled = false; // 一時的に無効化
+                transform.position = spawnPoint.position;
+                CharacterController.enabled = true;  // 再度有効化
+
+                // 飛行状態や速度などのステータスをリセット
+                isFlying = false;
+                verticalVelocity = 0f;
+                
+                return; // このフレームでは他の移動処理を行わない
+            }
+        }
+
 
         if (Input.GetKeyDown(KeyCode.K))
         {
@@ -82,7 +115,6 @@ public class BirdMoveController : MonoBehaviour
             xAngle -= mouseY;
             xAngle = Mathf.Clamp(xAngle, -90f, 90f);
             yAngle += mouseX;
-            // yAngle = Mathf.Clamp(yAngle, -90f, 90f);
             CenterEyeAnchor.localRotation = Quaternion.Euler(xAngle, yAngle, 0);
         }
     }
@@ -116,20 +148,6 @@ public class BirdMoveController : MonoBehaviour
                 isFlying = false;
             }
         }
-
-        //以下内容用于脱离VR环境使用
-
-        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
-        //if (isAButtonPressed)
-        //{
-        //    isFlying = true;
-        //    verticalVelocity = liftForce;
-        //}
-        //else
-        //{
-        //    isFlying = false;
-        //}
-
     }
     void HandleWalking()
     {
@@ -182,14 +200,6 @@ public class BirdMoveController : MonoBehaviour
 
     void HandleFlight()
     {
-        //// 刚刚按下 A
-        //bool isAButtonDown = OVRInput.GetDown(OVRInput.Button.One);
-
-        ////是否持续按住 A
-        //bool isAButtonPressed = OVRInput.Get(OVRInput.Button.One);
-        //这部分为后续添加的飞行控制或者技能代码提供接口，暂时不需要
-        //*this part is for the future flight control or skill code, not needed for now
-
         //根据是否按住飞行按钮来施加重力 //apply gravity based on the flight button // 飛行ボタンの押下状態に応じて重力を適用する
         if (!isFlying) return;
 
