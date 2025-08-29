@@ -5,7 +5,7 @@ public class TimeManager : MonoBehaviour
 {
     [Header("ゲーム中の時間")] private float gameTime;
 
-    private const float GAME_END_TIME = 120f; // ゲーム終了時間
+    private const float GAME_END_TIME = 60f; // ゲーム終了時間
     private GameManager gameManager;
     private GameObject canvas;
     private CanvasDispTime canvasDispTime;
