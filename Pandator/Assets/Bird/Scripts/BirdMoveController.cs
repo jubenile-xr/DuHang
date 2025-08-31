@@ -76,7 +76,7 @@ public class BirdMoveController : MonoBehaviour
             {
                 // CharacterControllerをテレポートさせるための推奨手順
                 CharacterController.enabled = false; // 一時的に無効化
-                transform.position = spawnPoint.position;
+                transform.position = spawnPoint.position + new Vector3(0, 0.5f, 0);
                 CharacterController.enabled = true;  // 再度有効化
 
                 // 飛行状態や速度などのステータスをリセット

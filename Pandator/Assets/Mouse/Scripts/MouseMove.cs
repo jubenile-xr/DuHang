@@ -65,7 +65,7 @@ public class MouseMove : MonoBehaviour
                 // spawnPointが設定されていれば、その位置に移動
                 if (spawnPoint != null)
                 {
-                    transform.position = spawnPoint.position;
+                    transform.position = spawnPoint.position + new Vector3(0, 0.5f, 0);
                     // テレポート後の慣性をなくすため、Rigidbodyの速度をリセット
                     if (rb != null)
                     {
