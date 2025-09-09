@@ -71,6 +71,11 @@ public class InitializeManager : MonoBehaviourPunCallbacks
     private bool isPlayerRigidbodyDestoryed = false;
 
     private List<GameObject> SmallAnimalPlayerObjects;
+
+    // 受信側（VR/GOD）で空の場合に使う固定アンカー値
+    [SerializeField] private bool useFixedAnchorTransform = true;
+    [SerializeField] private Vector3 fixedAnchorPosition = new Vector3(0f, 1.0f, 0f);
+    [SerializeField] private Vector3 fixedAnchorEulerAngles = Vector3.zero;
     void Start()
     {
         loadingTime = 0;
@@ -906,6 +911,14 @@ private IEnumerator WaitForGameManager()
         position = Vector3.zero;
         rotation = Quaternion.identity;
 
+        // ルームの値が無い場合、VR/GODでは固定値を返す
+        if (useFixedAnchorTransform && GetGameCharacter() != GameCharacter.PANDA)
+        {
+            position = fixedAnchorPosition;
+            rotation = Quaternion.Euler(fixedAnchorEulerAngles);
+            return true;
+        }
+
         if (PhotonNetwork.InRoom &&
             PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("spatialAnchorTransform", out object transformObj))
         {
@@ -956,8 +969,8 @@ private IEnumerator WaitForGameManager()
             Debug.Log($"isSpatialAnchorCreated updated to: {newValue}");
         }
 
-        // spatialAnchorTransformプロパティが更新された場合
-        if (propertiesThatChanged.ContainsKey("spatialAnchorTransform") &&
+        // spatialAnchorTransformプロパティが更新された場合（固定値モードでも入る）
+        if ((propertiesThatChanged.ContainsKey("spatialAnchorTransform") || (useFixedAnchorTransform && GetGameCharacter() != GameCharacter.PANDA)) &&
             GetGameCharacter() != GameCharacter.PANDA &&
             !spatialAnchor)
         {
