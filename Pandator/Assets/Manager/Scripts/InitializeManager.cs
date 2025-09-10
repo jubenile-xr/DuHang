@@ -74,7 +74,7 @@ public class InitializeManager : MonoBehaviourPunCallbacks
 
     // 受信側（VR/GOD）で空の場合に使う固定アンカー値
     [SerializeField] private bool useFixedAnchorTransform = true;
-    [SerializeField] private Vector3 fixedAnchorPosition = new Vector3(0f, 1.0f, 0f);
+    private Vector3 fixedAnchorPosition = new Vector3(-0.85f, 0.13f, 0.05f);
     [SerializeField] private Vector3 fixedAnchorEulerAngles = Vector3.zero;
     void Start()
     {
